@@ -1,0 +1,339 @@
+export type ProductCategory = 
+  | 'all'
+  | 'non-woven'
+  | 'biodegradable'
+  | 'gift-bags'
+  | 't-shirt'
+  | 'recycled-textiles'
+  | string;
+
+export interface Product {
+  id: string;
+  name: string;
+  category: ProductCategory;
+  categoryLabel: string;
+  subtitle: string;
+  pricePerUnit: number; // base bulk price for 1,000+ units
+  moq: number; // minimum order quantity
+  wholesaleMoq?: number; // wholesale minimum order quantity
+  gsm: number; // Grams per square meter
+  dimensions: string; // e.g., '12"W x 14"H x 4"D'
+  material: string; // e.g., 'Virgin & Recycled Non-Woven Polypropylene'
+  capacity: string; // e.g. 'Up to 25 lbs'
+  certifications: string[]; // e.g. ['GRS Certified', '100% Recyclable', 'FDA Compliant']
+  availableColors: { name: string; hex: string }[];
+  description: string;
+  features: string[];
+  bestFor: string;
+  ecoImpact: string;
+  inStock: boolean;
+  leadTime: string;
+  volumeTiers: { minQty: number; price: number }[];
+  image?: string;
+  badge?: string;
+}
+
+
+export interface CartItem {
+  id: string;
+  product: Product;
+  quantity: number;
+  selectedColor: string;
+  selectedHandle?: string;
+  customPrint?: boolean;
+  unitPrice: number;
+}
+
+export interface QuoteCalculation {
+  productId: string;
+  productName: string;
+  quantity: number;
+  printSides: '1-side' | '2-sides' | 'full-wrap' | 'blank';
+  colorCount: 1 | 2 | 4; // 1-color, 2-color, or 4-color process (CMYK)
+  estimatedUnitPrice: number;
+  totalCost: number;
+  plateFee: number;
+  estimatedDeliveryWeeks: number;
+  carbonSavedKg: number;
+}
+
+export interface ContactFormData {
+  fullName: string;
+  companyName: string;
+  email: string;
+  phone: string;
+  inquiryType: 'Wholesale Quote' | 'Custom Branding' | 'Sample Kit Request' | 'Distributor Partnership' | 'General';
+  estimatedVolume: string;
+  message: string;
+}
+
+export interface Order {
+  id: string;
+  buyerName?: string;
+  companyName?: string;
+  customerName?: string;
+  customerEmail?: string;
+  email?: string;
+  phone?: string;
+  customerCompany?: string;
+  shippingAddress?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  paymentTerms: string;
+  subtotal?: number;
+  shipping?: number;
+  total?: number;
+  totalAmount?: number;
+  status: 'Pending' | 'In Production' | 'Dispatched' | 'Completed' | 'Cancelled' | string;
+  date?: string;
+  items: {
+    productId?: string;
+    productName?: string;
+    name?: string;
+    quantity: number;
+    price?: number;
+    unitPrice?: number;
+    totalPrice?: number;
+    color?: string;
+  }[];
+}
+
+export interface QuoteSubmission {
+  id: string;
+  name: string;
+  company?: string;
+  email: string;
+  phone?: string;
+  category?: string;
+  volume?: string;
+  printing?: string;
+  message?: string;
+  bagType?: string;
+  quantity?: number;
+  status: 'New' | 'Reviewed' | 'Quotation Sent' | 'Closed' | string;
+  date?: string;
+}
+
+
+export interface LogoConfig {
+  wordmarkPrefix?: string;
+  wordmarkSuffix?: string;
+  badgeText?: string;
+  subtitle?: string;
+  customLogoUrl?: string;
+  faviconUrl?: string;
+}
+
+export interface NavbarConfig {
+  announcementText: string;
+  announcementActive: boolean;
+  ctaButtonText: string;
+  phoneDisplay: string;
+}
+
+export interface VersatilityCard {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface VersatilityConfig {
+  sustainableFashionTitle: string;
+  sustainableFashionSubtitle: string;
+  featureCards: VersatilityCard[];
+  bannerTitle: string;
+  bannerSubtitle: string;
+  bannerButtonText: string;
+  bannerImage: string;
+  bottomTrustBadges: string[];
+}
+
+export interface CircularStep {
+  step: string;
+  title: string;
+  desc: string;
+}
+
+export interface SustainabilityConfig {
+  metrics: {
+    plasticDisplaced: string;
+    carbonReduction: string;
+    reusableTrips: string;
+    recyclablePercent: string;
+  };
+  circularSteps: CircularStep[];
+}
+
+export interface TeamMemberConfig {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  email: string;
+  linkedin: string;
+  twitter?: string;
+}
+
+export interface AboutFeature {
+  title: string;
+  description: string;
+}
+
+export interface AboutConfig {
+  heroTitle: string;
+  heroSubtitle: string;
+  heroBgImage?: string;
+  missionQuote: string;
+  storyParagraph1: string;
+  storyParagraph2: string;
+  founderImage?: string;
+  workshopImage?: string;
+  whyChooseUsTitle: string;
+  whyChooseUsSubtitle: string;
+  whyChooseUsFeatures: AboutFeature[];
+  teamMembers: TeamMemberConfig[];
+}
+
+export interface ContactConfig {
+  headline: string;
+  email: string;
+  phone: string;
+  secondaryPhone: string;
+  facilityAddress: string;
+  plantAddress: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  twitterUrl: string;
+  linkedinUrl: string;
+  googleMapsUrl?: string;
+  googleMapsEmbedUrl?: string;
+}
+
+export interface FooterConfig {
+  newsletterTitle: string;
+  newsletterSubtitle?: string;
+  newsletterBgImage?: string;
+  tagline: string;
+  copyrightNotice: string;
+}
+
+export interface QuoteCalcConfig {
+  plateFee: number;
+  freeFreightThreshold: number;
+  leadTimeBlank: string;
+  leadTimeCustom: string;
+}
+
+export interface TestimonialConfig {
+  id: string;
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  rating: number;
+  avatar: string;
+}
+
+export interface ShopConfig {
+  catalogTitle: string;
+  catalogSubtitle: string;
+  testimonials: TestimonialConfig[];
+  galleryImages?: { url: string; caption: string }[];
+}
+
+export interface OrderNotificationsConfig {
+  emailEnabled: boolean;
+  notificationEmail: string;
+  whatsappEnabled: boolean;
+  whatsappNumber: string;
+  whatsappGreeting?: string;
+  autoOpenWhatsapp?: boolean;
+}
+
+export interface SiteSettings {
+  siteTitle?: string;
+  metaDescription?: string;
+  companyName: string;
+  tagline: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroButtonText?: string;
+  announcement: string;
+  announcementActive?: boolean;
+  phone: string;
+  secondaryPhone?: string;
+  whatsappNumber?: string;
+  email: string;
+  supportEmail?: string;
+  facilityAddress: string;
+  plantAddress?: string;
+  minOrderNotice: string;
+  leadTimeBlank?: string;
+  leadTimeCustom?: string;
+  aboutTitle?: string;
+  aboutMission?: string;
+  aboutStory?: string;
+  footerTagline?: string;
+  copyrightNotice?: string;
+  esgMetrics?: {
+    plasticDisplaced: string;
+    carbonReduction: string;
+    reusableTrips: string;
+    recyclablePercent: string;
+  };
+  logoConfig?: LogoConfig;
+  navbarConfig?: NavbarConfig;
+  versatilityConfig?: VersatilityConfig;
+  sustainabilityConfig?: SustainabilityConfig;
+  aboutConfig?: AboutConfig;
+  contactConfig?: ContactConfig;
+  footerConfig?: FooterConfig;
+  quoteCalcConfig?: QuoteCalcConfig;
+  shopConfig?: ShopConfig;
+  orderNotifications?: OrderNotificationsConfig;
+  [key: string]: any;
+}
+
+
+export interface CategoryItem {
+  id: string;
+  label: string;
+  subtitle: string;
+  tag: string;
+  count: string;
+  image: string;
+  description: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'customer' | 'admin' | 'bot';
+  senderName: string;
+  text: string;
+  timestamp: string;
+  channel?: 'web' | 'email' | 'whatsapp' | 'phone';
+  notifications?: {
+    whatsapp?: { target?: string | null; dispatched?: boolean; url?: string | null };
+    email?: { target?: string | null; dispatched?: boolean };
+  };
+}
+
+export interface CustomerThread {
+  id: string;
+  customerName: string;
+  company?: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  status: 'New' | 'In Discussion' | 'Quoted' | 'Resolved';
+  isUnread: boolean;
+  channel: 'Direct Web Inquiry' | 'Contact Form' | 'RFQ Quote' | 'Custom Request' | 'WhatsApp' | 'Live Web Chat';
+  lastUpdated: string;
+  messages: ChatMessage[];
+}
+
+export type ActiveSection = 'home' | 'about' | 'shop' | 'contact' | 'product-detail' | 'admin';
+
