@@ -303,3 +303,12 @@ export function subscribeToMessages(callback: (threads: CustomerThread[]) => voi
     window.removeEventListener('storage', handleStorage);
   };
 }
+
+export function deleteStoredThread(threadId: string): void {
+  const threads = getStoredThreads().filter(t => t.id !== threadId);
+  saveStoredThreads(threads);
+  try {
+    fetch(`${API_BASE}/messages/${threadId}`, { method: 'DELETE' }).catch(() => {});
+  } catch {}
+}
+

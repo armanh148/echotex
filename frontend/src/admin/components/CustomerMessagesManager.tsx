@@ -25,7 +25,8 @@ import {
   ShieldCheck,
   RefreshCw,
   Smartphone,
-  Settings
+  Settings,
+  Trash2
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { ChatMessage, CustomerThread } from '../../types';
@@ -36,6 +37,7 @@ import {
   subscribeToMessages, 
   sendAdminReply,
   fetchRemoteThreads,
+  deleteStoredThread,
   INITIAL_THREADS 
 } from '../../services/messageService';
 
