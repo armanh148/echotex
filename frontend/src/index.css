@@ -319,3 +319,110 @@ select option {
   font-weight: 500;
 }
 
+/* ========================================================
+   PREMIUM CMS & ADMIN DATA ENTRY CONTROLS
+   Makes entering data effortless, intuitive, and aesthetic
+   ======================================================== */
+.cms-input,
+.admin-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #fcfdfd;
+  color: #0f172a;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cms-input:hover,
+.admin-input:hover {
+  border-color: #cbd5e1;
+  background-color: #ffffff;
+}
+
+.cms-input:focus,
+.admin-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #4E9F76;
+  box-shadow: 0 0 0 3px rgba(78, 159, 118, 0.16), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+}
+
+.cms-input::placeholder,
+.admin-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.cms-label,
+.admin-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #334155;
+  margin-bottom: 0.375rem;
+}
+
+.cms-section-card {
+  background: #ffffff;
+  border: 1px solid rgba(178, 226, 197, 0.45);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.cms-section-card:hover {
+  border-color: rgba(78, 159, 118, 0.4);
+  box-shadow: 0 4px 12px 0 rgba(78, 159, 118, 0.05);
+}
+
+/* Elegant field group with subtle inset */
+.cms-field-group {
+  background: #f8faf9;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.cms-field-group:focus-within {
+  border-color: #86C59E;
+  background: #ffffff;
+}
+
+/* Universal Form & Input Elevation for effortless client data entry */
+main input[type="text"]:not([type="checkbox"]):not([type="radio"]),
+main input[type="number"]:not([type="checkbox"]):not([type="radio"]),
+main input[type="email"]:not([type="checkbox"]):not([type="radio"]),
+main input[type="tel"]:not([type="checkbox"]):not([type="radio"]),
+main textarea {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+}
+
+main input[type="text"]:not([type="checkbox"]):not([type="radio"]):hover,
+main input[type="number"]:not([type="checkbox"]):not([type="radio"]):hover,
+main input[type="email"]:not([type="checkbox"]):not([type="radio"]):hover,
+main input[type="tel"]:not([type="checkbox"]):not([type="radio"]):hover,
+main textarea:hover {
+  border-color: #cbd5e1;
+}
+
+main input[type="text"]:not([type="checkbox"]):not([type="radio"]):focus,
+main input[type="number"]:not([type="checkbox"]):not([type="radio"]):focus,
+main input[type="email"]:not([type="checkbox"]):not([type="radio"]):focus,
+main input[type="tel"]:not([type="checkbox"]):not([type="radio"]):focus,
+main textarea:focus {
+  outline: none !important;
+  border-color: #4E9F76 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(78, 159, 118, 0.16), 0 1px 2px 0 rgba(0, 0, 0, 0.04) !important;
+}
+

@@ -539,245 +539,295 @@ export const ProductCatalogManager: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
                 
                 {/* Left Column: Product Specifications (Col 1-7) */}
-                <div className="lg:col-span-7 space-y-3.5">
+                <div className="lg:col-span-7 space-y-4">
                   
-                  {/* Product Title */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Product Title *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-1 focus:ring-[#4E9F76] transition-all"
-                      placeholder="e.g. Heavy-Duty Gusseted Supermarket Tote"
-                    />
-                  </div>
-
-                  {/* Category & Highlight Badge */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Category *
-                      </label>
-                      <CustomSelect
-                        value={formData.category}
-                        onChange={(val) => {
-                          const cat = val as ProductCategory;
-                          const found = categoriesList.find(c => c.id === cat);
-                          setFormData({ 
-                            ...formData, 
-                            category: cat,
-                            categoryLabel: found ? found.label : 'Wholesale Packaging'
-                          });
-                        }}
-                        options={categoriesList.map(c => ({ value: c.id, label: c.label }))}
-                        className="w-full"
-                        buttonClassName="w-full bg-slate-50 border-slate-200 text-xs font-semibold"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Highlight Badge
-                      </label>
-                      <CustomSelect
-                        value={formData.badge}
-                        onChange={(val) => setFormData({ ...formData, badge: val })}
-                        options={badgesList.map(b => ({ value: b, label: b }))}
-                        className="w-full"
-                        buttonClassName="w-full bg-slate-50 border-slate-200 text-xs font-semibold"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Price, Pieces per Box, MOQ, GSM */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Price / Box ($) *
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
-                        <input
-                          type="number"
-                          step="0.01"
-                          required
-                          value={formData.pricePerUnit}
-                          onChange={(e) => setFormData({ ...formData, pricePerUnit: parseFloat(e.target.value) || 0 })}
-                          className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#4E9F76] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
-                        />
+                  {/* Card 1: General Information */}
+                  <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 space-y-3.5 shadow-2xs">
+                    <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60">
+                      <div className="w-6 h-6 rounded-lg bg-[#4E9F76]/15 text-[#4E9F76] flex items-center justify-center font-bold text-xs">
+                        1
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-amber-900 mb-1 flex items-center gap-1">
-                        <span>Pcs / Box *</span>
-                        <span className="text-[10px] text-amber-600 font-normal">(Capacity)</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          step="10"
-                          min="1"
-                          required
-                          value={formData.pcsPerBox || 200}
-                          onChange={(e) => setFormData({ ...formData, pcsPerBox: parseInt(e.target.value) || 200 })}
-                          className="w-full pl-3 pr-11 py-2 rounded-xl border border-amber-300 text-xs font-bold text-amber-900 bg-amber-50/40 focus:bg-white focus:outline-none focus:border-amber-500 transition-all"
-                          placeholder="e.g. 200"
-                        />
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-amber-700">pcs/box</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        MOQ (Boxes) *
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          step="1"
-                          min="1"
-                          required
-                          value={formData.moq}
-                          onChange={(e) => setFormData({ ...formData, moq: parseInt(e.target.value) || 5 })}
-                          className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
-                        />
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">box</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        GSM (Fabric)
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          value={formData.gsm}
-                          onChange={(e) => setFormData({ ...formData, gsm: parseInt(e.target.value) || 80 })}
-                          className="w-full pl-3 pr-9 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
-                        />
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">g/m²</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Stock Inventory Section with Quick Presets */}
-                  <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                       <div>
-                        <label className="block text-xs font-bold text-slate-800">
-                          Stock Quantity (Available Boxes) *
-                        </label>
+                        <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                          General Information
+                        </h4>
                         <p className="text-[10px] text-slate-500">
-                          Agar stock 0 ho ya item order ho kar khatam ho jaye, product store pr visible rahega magar buy nahi ho sakega.
+                          Product title, store category and storefront highlight badge
                         </p>
                       </div>
+                    </div>
 
-                      <div className="relative w-36">
-                        <input
-                          type="number"
-                          min="0"
-                          step="1"
-                          required
-                          value={formData.stockQuantity !== undefined ? formData.stockQuantity : 50}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            const finalVal = isNaN(val) ? 0 : Math.max(0, val);
-                            setFormData({
-                              ...formData,
-                              stockQuantity: finalVal,
-                              inStock: finalVal > 0
+                    {/* Product Title */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Product Title *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                        placeholder="e.g. Heavy-Duty Gusseted Supermarket Tote"
+                      />
+                    </div>
+
+                    {/* Category & Highlight Badge */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Category *
+                        </label>
+                        <CustomSelect
+                          value={formData.category}
+                          onChange={(val) => {
+                            const cat = val as ProductCategory;
+                            const found = categoriesList.find(c => c.id === cat);
+                            setFormData({ 
+                              ...formData, 
+                              category: cat,
+                              categoryLabel: found ? found.label : 'Wholesale Packaging'
                             });
                           }}
-                          className={`w-full pl-3 pr-12 py-1.5 rounded-xl border text-xs font-bold text-center transition-all ${
-                            (formData.stockQuantity || 0) > 0 && formData.inStock
-                              ? 'border-emerald-300 bg-white text-emerald-900 focus:border-emerald-500'
-                              : 'border-rose-300 bg-rose-50 text-rose-900 focus:border-rose-500'
-                          }`}
+                          options={categoriesList.map(c => ({ value: c.id, label: c.label }))}
+                          className="w-full"
+                          buttonClassName="w-full bg-white border-slate-200 text-xs font-semibold py-2.5 shadow-2xs"
                         />
-                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">boxes</span>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Highlight Badge
+                        </label>
+                        <CustomSelect
+                          value={formData.badge}
+                          onChange={(val) => setFormData({ ...formData, badge: val })}
+                          options={badgesList.map(b => ({ value: b, label: b }))}
+                          className="w-full"
+                          buttonClassName="w-full bg-white border-slate-200 text-xs font-semibold py-2.5 shadow-2xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Packaging, Pricing & Stock */}
+                  <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 space-y-3.5 shadow-2xs">
+                    <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60">
+                      <div className="w-6 h-6 rounded-lg bg-[#4E9F76]/15 text-[#4E9F76] flex items-center justify-center font-bold text-xs">
+                        2
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                          Pricing, Packaging & Stock
+                        </h4>
+                        <p className="text-[10px] text-slate-500">
+                          Configure wholesale box pricing, capacity spec and inventory limits
+                        </p>
                       </div>
                     </div>
 
-                    {/* Stock Quick Presets */}
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-200/60">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick:</span>
-                      {[
-                        { label: '0 (Out of Stock)', value: 0 },
-                        { label: '10 Boxes', value: 10 },
-                        { label: '25 Boxes', value: 25 },
-                        { label: '50 Boxes', value: 50 },
-                        { label: '100 Boxes', value: 100 },
-                        { label: '500 Boxes', value: 500 }
-                      ].map((preset) => (
-                        <button
-                          key={preset.value}
-                          type="button"
-                          onClick={() => setFormData({
-                            ...formData,
-                            stockQuantity: preset.value,
-                            inStock: preset.value > 0
-                          })}
-                          className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                            formData.stockQuantity === preset.value
-                              ? preset.value === 0 
-                                ? 'bg-rose-600 text-white shadow-2xs' 
-                                : 'bg-[#166534] text-white shadow-2xs'
-                              : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400'
-                          }`}
-                        >
-                          {preset.label}
-                        </button>
-                      ))}
+                    {/* Price, Pieces per Box, MOQ, GSM */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                          Price / Box ($) *
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            required
+                            value={formData.pricePerUnit}
+                            onChange={(e) => setFormData({ ...formData, pricePerUnit: parseFloat(e.target.value) || 0 })}
+                            className="w-full pl-6 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-[#166534] bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-amber-900 mb-1 flex items-center gap-1">
+                          <span>Pcs / Box *</span>
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            step="10"
+                            min="1"
+                            required
+                            value={formData.pcsPerBox || 200}
+                            onChange={(e) => setFormData({ ...formData, pcsPerBox: parseInt(e.target.value) || 200 })}
+                            className="w-full pl-3 pr-11 py-2.5 rounded-xl border border-amber-300 text-xs sm:text-sm font-bold text-amber-900 bg-amber-50/50 focus:bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15 transition-all shadow-2xs"
+                            placeholder="200"
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-amber-700">pcs/box</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                          MOQ (Boxes) *
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            step="1"
+                            min="1"
+                            required
+                            value={formData.moq}
+                            onChange={(e) => setFormData({ ...formData, moq: parseInt(e.target.value) || 5 })}
+                            className="w-full pl-3 pr-8 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">box</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                          Fabric GSM
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            value={formData.gsm}
+                            onChange={(e) => setFormData({ ...formData, gsm: parseInt(e.target.value) || 80 })}
+                            className="w-full pl-3 pr-9 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">g/m²</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stock Inventory Section with Quick Presets */}
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200/90 shadow-2xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-800">
+                            Available Stock (Boxes) *
+                          </label>
+                          <p className="text-[10px] text-slate-500">
+                            Customer is se zyada quantity select ya order nahi kar sakega.
+                          </p>
+                        </div>
+
+                        <div className="relative w-40">
+                          <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            required
+                            value={formData.stockQuantity !== undefined ? formData.stockQuantity : 50}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value);
+                              const finalVal = isNaN(val) ? 0 : Math.max(0, val);
+                              setFormData({
+                                ...formData,
+                                stockQuantity: finalVal,
+                                inStock: finalVal > 0
+                              });
+                            }}
+                            className={`w-full pl-3 pr-14 py-2 rounded-xl border text-sm font-bold text-center transition-all ${
+                              (formData.stockQuantity || 0) > 0 && formData.inStock
+                                ? 'border-emerald-300 bg-emerald-50/30 text-emerald-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15'
+                                : 'border-rose-300 bg-rose-50 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/15'
+                            }`}
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">boxes</span>
+                        </div>
+                      </div>
+
+                      {/* Stock Quick Presets */}
+                      <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick:</span>
+                        {[
+                          { label: '0 (Out of Stock)', value: 0 },
+                          { label: '10 Boxes', value: 10 },
+                          { label: '25 Boxes', value: 25 },
+                          { label: '50 Boxes', value: 50 },
+                          { label: '100 Boxes', value: 100 },
+                          { label: '500 Boxes', value: 500 }
+                        ].map((preset) => (
+                          <button
+                            key={preset.value}
+                            type="button"
+                            onClick={() => setFormData({
+                              ...formData,
+                              stockQuantity: preset.value,
+                              inStock: preset.value > 0
+                            })}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                              formData.stockQuantity === preset.value
+                                ? preset.value === 0 
+                                  ? 'bg-rose-600 text-white shadow-2xs' 
+                                  : 'bg-[#166534] text-white shadow-2xs'
+                                : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-white hover:border-slate-300'
+                            }`}
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Dimensions & Material */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Dimensions
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.dimensions}
-                        onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
-                        placeholder="e.g. 12W x 14H x 4D"
-                      />
+                  {/* Card 3: Dimensions & Description */}
+                  <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 space-y-3 shadow-2xs">
+                    <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60">
+                      <div className="w-6 h-6 rounded-lg bg-[#4E9F76]/15 text-[#4E9F76] flex items-center justify-center font-bold text-xs">
+                        3
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                          Specifications & Copy
+                        </h4>
+                        <p className="text-[10px] text-slate-500">
+                          Product dimensions, fabric materials and marketing description
+                        </p>
+                      </div>
                     </div>
 
+                    {/* Dimensions & Material */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Dimensions
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.dimensions}
+                          onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                          placeholder="e.g. 12W x 14H x 4D"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Material Specification
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.material}
+                          onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 transition-all shadow-2xs"
+                          placeholder="e.g. Virgin Non-Woven Polypropylene"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description */}
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Material Specification
+                        Product Description
                       </label>
-                      <input
-                        type="text"
-                        value={formData.material}
-                        onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
-                        placeholder="e.g. Virgin Non-Woven Polypropylene"
+                      <textarea
+                        rows={2}
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="Wholesale packaging details, retail application, and durability specifications..."
+                        className="w-full p-3 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 bg-white focus:outline-none focus:border-[#4E9F76] focus:ring-2 focus:ring-[#4E9F76]/15 resize-none transition-all shadow-2xs"
                       />
                     </div>
-                  </div>
-
-                  {/* Description */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Product Description
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Wholesale packaging details, retail application, and durability specifications..."
-                      className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] resize-none transition-all"
-                    />
                   </div>
 
                 </div>

@@ -263,16 +263,16 @@ export const PageContentEditor: React.FC = () => {
     setTimeout(() => setSaveSuccess(false), 2000);
   };
 
-  const tabs: { id: EditorTab; label: string; icon: React.ElementType }[] = [
-    { id: 'logo', label: 'Logo & Brand', icon: Recycle },
-    { id: 'navbar', label: 'Navbar & Banner', icon: Megaphone },
-    { id: 'versatility', label: 'Versatility & Cards', icon: Layers },
-    { id: 'sustainability', label: 'Sustainability & ESG', icon: TrendingUp },
-    { id: 'about', label: 'About Us & Team', icon: Users },
-    { id: 'contact', label: 'Contact & Facilities', icon: Phone },
-    { id: 'footer', label: 'Footer & Legal', icon: Globe },
-    { id: 'quote', label: 'Quote Calculator', icon: Calculator },
-    { id: 'shop', label: 'Shop & Gallery', icon: Star },
+  const tabs: { id: EditorTab; label: string; icon: React.ElementType; desc: string }[] = [
+    { id: 'logo', label: 'Logo & Brand', icon: Recycle, desc: 'Visual identity & favicon' },
+    { id: 'navbar', label: 'Navbar & Banner', icon: Megaphone, desc: 'Header bar & CTA' },
+    { id: 'versatility', label: 'Versatility & Cards', icon: Layers, desc: 'Feature value cards' },
+    { id: 'sustainability', label: 'Sustainability & ESG', icon: TrendingUp, desc: 'Eco metrics & stats' },
+    { id: 'about', label: 'About Us & Team', icon: Users, desc: 'Company story & leadership' },
+    { id: 'contact', label: 'Contact & Facilities', icon: Phone, desc: 'Locations & sales lines' },
+    { id: 'footer', label: 'Footer & Legal', icon: Globe, desc: 'Links, copyright & badges' },
+    { id: 'quote', label: 'Quote Calculator', icon: Calculator, desc: 'Step-by-step RFQ tool' },
+    { id: 'shop', label: 'Shop & Gallery', icon: Star, desc: 'Catalog headlines & trust' },
   ];
 
   return (
@@ -330,18 +330,18 @@ export const PageContentEditor: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         
         {/* Left Vertical Navigation Sidebar */}
-        <aside className="w-full lg:w-64 xl:w-72 shrink-0 lg:sticky lg:top-6">
-          <div className="bg-white rounded-3xl p-3 sm:p-4 border border-[#B2E2C5]/40 shadow-xs">
-            <div className="px-3 py-2.5 mb-2 border-b border-slate-100 flex items-center justify-between">
+        <aside className="w-full lg:w-72 xl:w-80 shrink-0 lg:sticky lg:top-6 space-y-3">
+          <div className="bg-white rounded-3xl p-3.5 sm:p-4 border border-[#B2E2C5]/50 shadow-xs">
+            <div className="px-3 py-2.5 mb-2.5 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
                   CMS Navigation
                 </span>
-                <span className="text-xs font-bold text-slate-800">
-                  Page Sections
+                <span className="text-xs font-bold text-slate-900">
+                  Storefront Sections
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#4E9F76] bg-[#B2E2C5]/25 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-mono font-bold text-[#166534] bg-emerald-100/80 border border-emerald-300/60 px-2.5 py-0.5 rounded-full shadow-2xs">
                 {tabs.length} Tabs
               </span>
             </div>
@@ -355,20 +355,27 @@ export const PageContentEditor: React.FC = () => {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer w-full text-left border ${
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer w-full text-left border group ${
                       isActive
-                        ? 'bg-[#4E9F76] text-white border-[#4E9F76] shadow-sm shadow-[#4E9F76]/25 lg:translate-x-1 font-extrabold'
-                        : 'bg-white text-slate-600 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-[#0f172a]'
+                        ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 lg:translate-x-1 font-extrabold'
+                        : 'bg-white text-slate-700 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-slate-900'
                     }`}
                   >
-                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                      isActive 
+                        ? 'bg-white/20 text-white shadow-2xs' 
+                        : 'bg-slate-100 text-slate-500 group-hover:bg-[#B2E2C5]/30 group-hover:text-[#166534]'
                     }`}>
-                      <Icon className="w-3.5 h-3.5" />
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <span className="truncate flex-1 whitespace-nowrap">{tab.label}</span>
+                    <div className="truncate flex-1 min-w-0">
+                      <span className="block truncate font-bold text-xs">{tab.label}</span>
+                      <span className={`block text-[10px] font-normal truncate mt-0.5 ${isActive ? 'text-emerald-100' : 'text-slate-400'}`}>
+                        {tab.desc}
+                      </span>
+                    </div>
                     {isActive && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0 hidden lg:block" />
+                      <div className="w-1.5 h-6 rounded-full bg-white shrink-0 hidden lg:block" />
                     )}
                   </button>
                 );
@@ -379,6 +386,43 @@ export const PageContentEditor: React.FC = () => {
 
         {/* Right Content Panel */}
         <div className="flex-1 min-w-0 w-full bg-white rounded-3xl p-6 sm:p-8 border border-[#B2E2C5]/40 shadow-xs">
+
+          {/* Active Section Context Header */}
+          {(() => {
+            const currentTab = tabs.find(t => t.id === activeTab);
+            const TabIcon = currentTab?.icon || FileText;
+            return (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-6 border-b border-slate-100 gap-3">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl bg-[#4E9F76]/15 text-[#4E9F76] flex items-center justify-center font-bold shadow-2xs shrink-0">
+                    <TabIcon className="w-5 h-5 text-[#4E9F76]" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#166534] bg-emerald-100/90 border border-emerald-300/60 px-2 py-0.5 rounded-md">
+                        Section Editor
+                      </span>
+                      <span className="text-[11px] text-slate-400 font-medium">· Live Real-Time Storefront Sync</span>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-black text-[#0f172a] mt-0.5">
+                      {currentTab?.label}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleSave()}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#166534] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save {currentTab?.label.split(' ')[0]}</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
 
         {/* ========================================================
             TAB 1: LOGO & BRAND IDENTITY

@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, type Variants } from 'motion/react';
 import { 
-  Star, 
-  Stethoscope, 
   ArrowRight,
   ChevronLeft,
   ChevronRight,
@@ -184,12 +182,6 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
   const jarX = useTransform(smoothMouseX, [-300, 300], [-10, 10]);
   const jarY = useTransform(smoothMouseY, [-300, 300], [-8, 8]);
 
-  const badge1X = useTransform(smoothMouseX, [-300, 300], [14, -14]);
-  const badge1Y = useTransform(smoothMouseY, [-300, 300], [10, -10]);
-
-  const badge2X = useTransform(smoothMouseX, [-300, 300], [-16, 16]);
-  const badge2Y = useTransform(smoothMouseY, [-300, 300], [-12, 12]);
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -203,15 +195,6 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
     mouseY.set(0);
     setIsHovered(false);
   };
-
-  // Live Counter Animation for Trusted People
-  const [trustedCount, setTrustedCount] = useState(20850);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTrustedCount((prev) => (prev < 21450 ? prev + 15 : prev));
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
 
   // Parse title for line breaks and highlighting
   const titleLines = (heroConfig.title || "It's time to\npack better.").split('\n');
@@ -392,75 +375,7 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
           onMouseLeave={() => setIsHovered(false)}
           className="lg:col-span-6 xl:col-span-7 relative flex flex-col items-center justify-center min-h-[520px] sm:min-h-[600px] lg:min-h-[680px] p-2 sm:p-6 lg:p-8 perspective-1000 select-none group"
         >
-          {/* ----------------------------------------------------
-              FLOATING BADGE 1: TOP-RIGHT (Recommended by doctors)
-             ---------------------------------------------------- */}
-          <motion.div 
-            style={{ x: badge1X, y: badge1Y }}
-            initial={{ opacity: 0, scale: 0.8, y: -20 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              y: [0, -10, 0],
-              rotate: [-0.6, 0.6, -0.6]
-            }}
-            transition={{
-              opacity: { duration: 0.8, delay: 0.4 },
-              scale: { duration: 0.8, delay: 0.4 },
-              y: { repeat: Infinity, duration: 4.5, ease: 'easeInOut' },
-              rotate: { repeat: Infinity, duration: 5, ease: 'easeInOut' }
-            }}
-            whileHover={{ scale: 1.04, rotate: 0 }}
-            className="absolute top-4 sm:top-8 lg:top-10 right-2 sm:right-6 lg:right-10 z-30 bg-white/70 backdrop-blur-2xl px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-white flex items-center gap-3 text-xs sm:text-sm font-bold text-[#0f172a] cursor-pointer select-none transition-shadow hover:shadow-[0_20px_50px_rgba(0,141,30,0.15)]"
-          >
-            <motion.div 
-              animate={{ scale: [1, 1.15, 1] }}
-              transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-[#008D1E] to-[#10b981] text-white flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(0,141,30,0.3)]"
-            >
-              <Stethoscope className="w-4 h-4 stroke-[2.4]" />
-            </motion.div>
-            <span className="tracking-tight">{heroConfig.badgeDoctor || 'Recommended by doctors'}</span>
-          </motion.div>
 
-          {/* ----------------------------------------------------
-              FLOATING BADGE 2: BOTTOM-LEFT (Trusted by 21,000+ People)
-             ---------------------------------------------------- */}
-          <motion.div 
-            style={{ x: badge2X, y: badge2Y }}
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              y: [0, 10, 0],
-              rotate: [0.6, -0.6, 0.6]
-            }}
-            transition={{
-              opacity: { duration: 0.8, delay: 0.55 },
-              scale: { duration: 0.8, delay: 0.55 },
-              y: { repeat: Infinity, duration: 5.2, ease: 'easeInOut' },
-              rotate: { repeat: Infinity, duration: 5.8, ease: 'easeInOut' }
-            }}
-            whileHover={{ scale: 1.04, rotate: 0 }}
-            className="absolute bottom-4 sm:bottom-8 lg:bottom-10 left-2 sm:left-6 lg:left-10 z-30 bg-white/70 backdrop-blur-2xl px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-white flex items-center gap-3 text-xs sm:text-sm font-bold text-[#0f172a] cursor-pointer select-none transition-shadow hover:shadow-[0_20px_50px_rgba(0,141,30,0.15)]"
-          >
-            <motion.div 
-              animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.25, 1] }}
-              transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-[#008D1E] to-[#10b981] text-white flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(0,141,30,0.3)]"
-            >
-              <Star className="w-4 h-4 fill-white" />
-            </motion.div>
-            <span className="tracking-tight">
-              {heroConfig.badgeTrust?.includes('21,000') ? (
-                <>
-                  Trusted by <span className="font-mono font-extrabold text-[#008D1E]">{trustedCount.toLocaleString()}+</span> People
-                </>
-              ) : (
-                heroConfig.badgeTrust || 'Trusted by 21,000+ People'
-              )}
-            </span>
-          </motion.div>
 
           {/* ----------------------------------------------------
               AMBIENT ADAPTIVE COLOR GLOW (Behind the product)
