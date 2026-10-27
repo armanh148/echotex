@@ -1,6 +1,66 @@
 {
   "products": [
     {
+      "id": "prod-1793086425671",
+      "gsm": 80,
+      "moq": 1000,
+      "name": "dv lhjdv eagh n",
+      "badge": "Factory Direct",
+      "image": "/images/bag-green.png",
+      "bestFor": "Supermarkets, Retail & Events",
+      "inStock": true,
+      "capacity": "Up to 25 lbs",
+      "category": "non-woven",
+      "features": [
+        "Ultrasonic welded stress-tested seams",
+        "Tear-resistant reinforced handles",
+        "Certified non-toxic eco inks",
+        "100% Recyclable polypropylene"
+      ],
+      "leadTime": "2-4 Business Days",
+      "material": "Virgin Non-Woven Polypropylene",
+      "subtitle": "Commercial Wholesale Series",
+      "createdAt": "2026-10-27T07:33:45.681Z",
+      "ecoImpact": "Displaces up to 250 single-use plastic carrier bags per unit lifetime.",
+      "dimensions": "12\"W x 14\"H x 4\"D",
+      "description": "High tensile enterprise carrier bag manufactured for supermarkets, boutique retail, and trade exhibitions.",
+      "volumeTiers": [
+        {
+          "price": 0.25,
+          "minQty": 1000
+        },
+        {
+          "price": 0.23,
+          "minQty": 5000
+        },
+        {
+          "price": 0.2,
+          "minQty": 10000
+        }
+      ],
+      "pricePerUnit": 0.25,
+      "categoryLabel": "Non-Woven Totes",
+      "certifications": [
+        "GRS Certified",
+        "100% Recyclable",
+        "FDA Compliant"
+      ],
+      "availableColors": [
+        {
+          "hex": "#86C59E",
+          "name": "Eco Green"
+        },
+        {
+          "hex": "#FFFFFF",
+          "name": "Pure White"
+        },
+        {
+          "hex": "#0f172a",
+          "name": "Deep Slate"
+        }
+      ]
+    },
+    {
       "id": "prod-1791786437631",
       "gsm": 80,
       "moq": 1000,
@@ -22,6 +82,7 @@
       "subtitle": "Commercial Wholesale Series",
       "createdAt": "2026-10-12T06:27:17.644Z",
       "ecoImpact": "Displaces up to 250 single-use plastic carrier bags per unit lifetime.",
+      "updatedAt": "2026-10-27T07:36:41.331Z",
       "dimensions": "12\"W x 14\"H x 4\"D",
       "description": "High tensile enterprise carrier bag manufactured for supermarkets, boutique retail, and trade exhibitions.",
       "volumeTiers": [
@@ -525,6 +586,16 @@
       "label": "Food Item Bags",
       "subtitle": "Cold-Chain & Fresh",
       "description": "Thermal insulated multi-layer foil bags and grease-resistant carriers tested for food-contact compliance and temperature retention."
+    },
+    {
+      "id": "hygv",
+      "tag": "NEW LINE",
+      "count": "0 Models",
+      "image": "/images/bag-green.png",
+      "label": "hygv",
+      "subtitle": "top",
+      "createdAt": "2026-10-27T07:52:43.398Z",
+      "description": "Certified wholesale packaging series for hygv."
     }
   ],
   "orders": [
@@ -1870,9 +1941,25 @@
     "tagline": "Certified Sustainable Wholesale Packaging Direct From Manufacturer",
     "heroTitle": "It's time to pack better.",
     "siteTitle": "Ecotex Inc. | Wholesale Sustainable Packaging & Polypropylene Bags",
-    "updatedAt": "2026-10-22T11:09:06.735Z",
+    "updatedAt": "2026-10-27T08:52:34.428Z",
     "aboutStory": "Founded with a dedication to manufacturing excellence, Ecotex operates state-of-the-art ultrasonic welding and automated flexographic printing facilities in California and Karachi.",
     "aboutTitle": "Engineered For Durability. Designed For Circularity.",
+    "dealConfig": {
+      "badge": "ECO CHOICE",
+      "title": "Grab It Before\nIt's Gone!",
+      "enabled": true,
+      "subtitle": "High-volume supermarket & retail carry-out bags engineered for high load bearing",
+      "productId": "eco-tshirt-grocery",
+      "stockText": "Ready for Immediate Dispatch",
+      "buttonText": "SHOP THE DEAL",
+      "offerPrice": 0.18,
+      "timerHours": 8,
+      "customImage": "/images/bag-green.png",
+      "timerMinutes": 12,
+      "timerSeconds": 45,
+      "originalPrice": 0.26,
+      "stockProgressPercent": 78
+    },
     "esgMetrics": {
       "reusableTrips": "125+",
       "carbonReduction": "-84%",
@@ -2034,6 +2121,12 @@
       ],
       "catalogSubtitle": "Explore our full manufacturing catalog of certified eco-friendly industrial & retail packaging with wholesale pricing tiers."
     },
+    "siteImages": {
+      "heroBag": "/images/bite-hero-product.png",
+      "aboutHero": "/images/versatility-banner-bg.jpg",
+      "shopBanner": "/images/bag-green.png",
+      "facilityPhoto": "/images/versatility-banner-bg.jpg"
+    },
     "aboutConfig": {
       "heroTitle": "About Us",
       "heroBgImage": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=85",
@@ -2119,6 +2212,7 @@
       "announcementActive": false
     },
     "plantAddress": "Sector 15, Korangi Industrial Area, Karachi, PK",
+    "supportEmail": "orders@ecotexinc.com",
     "contactConfig": {
       "email": "orders@ecotexinc.com",
       "phone": "(951) 555-ECOTEX",
@@ -2139,6 +2233,7 @@
     "leadTimeCustom": "10-14 Business Days",
     "minOrderNotice": "Free pallet freight on continental US orders over $1,000",
     "secondaryPhone": "+92 332 8784015",
+    "whatsappNumber": "+1 (951) 450-9773",
     "copyrightNotice": "Copyright 2026 © Ecotex Inc. All rights reserved.",
     "facilityAddress": "1200 Industrial Parkway, Corona, CA 92881",
     "metaDescription": "Vertically integrated manufacturer of circular non-woven polypropylene bags, compostable blends, and reusable commercial textiles. Direct from Corona, CA.",

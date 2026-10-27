@@ -51,7 +51,7 @@ export interface StoreState {
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
-  addToCart: (product: Product, selectedColor: string, quantity: number) => void;
+  addToCart: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
   updateCartQuantity: (itemId: string, delta: number) => void;
   removeFromCart: (itemId: string) => void;
   clearCart: () => void;
@@ -507,10 +507,16 @@ export const useStore = create<StoreState>((set, get) => ({
 
   setIsCartOpen: (isOpen: boolean) => set({ isCartOpen: isOpen }),
 
-  addToCart: (product: Product, selectedColor: string, quantity: number) => {
-    // Dynamic wholesale volume pricing
-    let unitPrice = product.pricePerUnit;
-    if (product.volumeTiers && product.volumeTiers.length > 0) {
+  addToCart: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => {
+    const determinedOrderType: 'retail' | 'wholesale' = orderType || (quantity > 5 ? 'wholesale' : 'retail');
+    const isRetail = determinedOrderType === 'retail';
+
+    // Pricing calculation
+    let unitPrice = isRetail
+      ? (product.pricePerUnit ? product.pricePerUnit * 1.45 : 0.45)
+      : (product.pricePerUnit || 0.25);
+
+    if (!isRetail && product.volumeTiers && product.volumeTiers.length > 0) {
       for (const tier of product.volumeTiers) {
         if (quantity >= tier.minQty) {
           unitPrice = tier.price;
@@ -520,31 +526,37 @@ export const useStore = create<StoreState>((set, get) => ({
 
     set((state) => {
       const existingIndex = state.cart.findIndex(
-        (item) => item.product.id === product.id && item.selectedColor === selectedColor
+        (item) => item.product.id === product.id && 
+                  item.selectedColor === selectedColor && 
+                  (item.orderType || (item.quantity > 5 ? 'wholesale' : 'retail')) === determinedOrderType
       );
 
       let updatedCart: CartItem[];
       if (existingIndex > -1) {
         updatedCart = state.cart.map((item, index) => {
           if (index === existingIndex) {
-            const newQty = item.quantity + quantity;
+            let newQty = item.quantity + quantity;
+            if (determinedOrderType === 'retail' && newQty > 5) {
+              newQty = 5;
+            }
             let updatedPrice = unitPrice;
-            if (product.volumeTiers) {
+            if (!isRetail && product.volumeTiers) {
               for (const tier of product.volumeTiers) {
                 if (newQty >= tier.minQty) updatedPrice = tier.price;
               }
             }
-            return { ...item, quantity: newQty, unitPrice: updatedPrice };
+            return { ...item, quantity: newQty, unitPrice: updatedPrice, orderType: determinedOrderType };
           }
           return item;
         });
       } else {
         const newItem: CartItem = {
-          id: `${product.id}-${selectedColor}-${Date.now()}`,
+          id: `${product.id}-${selectedColor}-${determinedOrderType}-${Date.now()}`,
           product,
-          quantity,
+          quantity: determinedOrderType === 'retail' ? Math.min(5, quantity) : quantity,
           selectedColor,
-          unitPrice
+          unitPrice,
+          orderType: determinedOrderType
         };
         updatedCart = [...state.cart, newItem];
       }

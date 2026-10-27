@@ -107,9 +107,9 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const handleQuickAdd = (product: Product, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     const color = product.availableColors?.[0]?.hex || '#4E9F76';
-    const qty = product.moq > 1 ? 10 : 1;
+    const qty = 1; // Retail quick-add defaults to 1 unit (retail limit: 1-5 pcs)
     onAddToCart(product, color, qty);
-    setCartToast(`Added "${product.name}" to Cart`);
+    setCartToast(`Added "${product.name}" (1 pc) to Cart`);
     setTimeout(() => setCartToast(null), 3000);
   };
 

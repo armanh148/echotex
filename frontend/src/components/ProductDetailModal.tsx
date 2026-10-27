@@ -21,9 +21,9 @@ import {
 interface ProductDetailModalProps {
   product: Product | null;
   onClose: () => void;
-  onAddToCart: (product: Product, selectedColor: string, quantity: number) => void;
+  onAddToCart: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
   onOpenQuote: (product: Product) => void;
-  onExpressCheckout?: (product: Product, selectedColor: string, quantity: number) => void;
+  onExpressCheckout?: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -59,13 +59,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     { url: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85', label: 'Production Detail' }
   ];
 
-  // Wholesale minimum order quantity:
-  // Fallback to 500 pcs if product.moq is 1 (retail) or undefined
-  const wholesaleMoq = (product.wholesaleMoq && product.wholesaleMoq >= 50)
-    ? product.wholesaleMoq
-    : (product.moq && product.moq >= 50 ? product.moq : 500);
+  // Wholesale minimum order quantity starts at 5 pcs and goes in multiples of 5
+  const wholesaleMoq = 5;
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
+  const maxQuantity = orderType === 'retail' ? 5 : 100000;
   const [moqWarning, setMoqWarning] = useState<string | null>(null);
 
   // Sync state when product changes or orderType toggles
@@ -91,42 +89,94 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const originalPrice = (currentPrice * 1.25);
 
   const handleIncrement = () => {
-    const step = orderType === 'wholesale' ? 250 : 1;
-    setQuantity(prev => prev + step);
+    if (orderType === 'retail') {
+      if (quantity >= 5) {
+        setMoqWarning('Retail orders are limited to a maximum of 5 units. For larger orders, please switch to Wholesale Order.');
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
+      setQuantity(prev => Math.min(5, prev + 1));
+    } else {
+      // Wholesale: step of 5
+      setQuantity(prev => {
+        if (prev < 5) return 5;
+        if (prev % 5 !== 0) return Math.floor(prev / 5) * 5 + 5;
+        return prev + 5;
+      });
+    }
     setMoqWarning(null);
   };
 
   const handleDecrement = () => {
-    const step = orderType === 'wholesale' ? 250 : 1;
-    setQuantity(prev => Math.max(minQuantity, prev - step));
+    if (orderType === 'retail') {
+      setQuantity(prev => Math.max(1, prev - 1));
+    } else {
+      // Wholesale: step of 5, minimum 5
+      setQuantity(prev => {
+        if (prev <= 5) return 5;
+        if (prev % 5 !== 0) return Math.max(5, Math.floor(prev / 5) * 5);
+        return Math.max(5, prev - 5);
+      });
+    }
+    setMoqWarning(null);
   };
 
   const handleAddToCartClick = () => {
-    if (orderType === 'wholesale' && quantity < wholesaleMoq) {
-      setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq.toLocaleString()} pcs. Order cannot be placed below this quantity.`);
-      setQuantity(wholesaleMoq);
+    if (orderType === 'wholesale') {
+      if (quantity < wholesaleMoq) {
+        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} pcs.`);
+        setQuantity(wholesaleMoq);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
+      if (quantity % 5 !== 0) {
+        const rounded = Math.ceil(quantity / 5) * 5;
+        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} pcs.`);
+        setQuantity(rounded);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
+    }
+    if (orderType === 'retail' && quantity > 5) {
+      setMoqWarning('Retail orders are limited to a maximum of 5 units. Please switch to Wholesale Order for larger quantities.');
+      setQuantity(5);
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
     setMoqWarning(null);
-    onAddToCart(product, product.availableColors[0]?.hex || '#166534', quantity);
+    onAddToCart(product, product.availableColors?.[0]?.hex || '#166534', quantity, orderType);
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 2500);
   };
 
   const handleExpressCheckout = () => {
-    if (orderType === 'wholesale' && quantity < wholesaleMoq) {
-      setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq.toLocaleString()} pcs. Order cannot be placed below this quantity.`);
-      setQuantity(wholesaleMoq);
+    if (orderType === 'wholesale') {
+      if (quantity < wholesaleMoq) {
+        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} pcs.`);
+        setQuantity(wholesaleMoq);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
+      if (quantity % 5 !== 0) {
+        const rounded = Math.ceil(quantity / 5) * 5;
+        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} pcs.`);
+        setQuantity(rounded);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
+    }
+    if (orderType === 'retail' && quantity > 5) {
+      setMoqWarning('Retail orders are limited to a maximum of 5 units. Please switch to Wholesale Order for larger quantities.');
+      setQuantity(5);
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
     setMoqWarning(null);
-    const selectedColor = product.availableColors[0]?.hex || '#166534';
+    const selectedColor = product.availableColors?.[0]?.hex || '#166534';
     if (onExpressCheckout) {
-      onExpressCheckout(product, selectedColor, quantity);
+      onExpressCheckout(product, selectedColor, quantity, orderType);
     } else {
-      onAddToCart(product, selectedColor, quantity);
+      onAddToCart(product, selectedColor, quantity, orderType);
       onClose();
     }
   };
@@ -314,7 +364,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </span>
                 {orderType === 'wholesale' && (
                   <span className="ml-auto text-[11px] font-bold text-[#166534] bg-[#dcfce7] px-2.5 py-0.5 rounded-full font-mono">
-                    MOQ: {wholesaleMoq.toLocaleString()} pcs
+                    MOQ: {wholesaleMoq} pcs (Multiples of 5)
                   </span>
                 )}
               </div>
@@ -324,9 +374,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
                     <span>Order Quantity</span>
-                    {orderType === 'wholesale' && (
+                    {orderType === 'retail' ? (
+                      <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                        RETAIL LIMIT: 1 – 5 PCS MAX
+                      </span>
+                    ) : (
                       <span className="text-[10px] font-bold text-[#166534] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        MOQ: {wholesaleMoq.toLocaleString()} PCS
+                        WHOLESALE MOQ: 5 PCS · MULTIPLES OF 5
                       </span>
                     )}
                   </label>
@@ -342,37 +396,48 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <button
                       type="button"
                       disabled={quantity <= minQuantity}
-                      onClick={() => {
-                        const step = orderType === 'wholesale' ? 250 : 1;
-                        setQuantity(prev => Math.max(minQuantity, prev - step));
-                        setMoqWarning(null);
-                      }}
+                      onClick={handleDecrement}
                       className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
                         quantity <= minQuantity
                           ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
                           : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                       }`}
                       aria-label="Decrease quantity"
-                      title={quantity <= minQuantity ? `Minimum order is ${minQuantity.toLocaleString()} pcs` : 'Decrease'}
+                      title={quantity <= minQuantity ? `Minimum order is ${minQuantity} pcs` : 'Decrease'}
                     >
                       <Minus className="w-4 h-4" />
                     </button>
                     <input
                       type="number"
+                      step={orderType === 'wholesale' ? 5 : 1}
                       min={minQuantity}
+                      max={maxQuantity}
                       value={quantity}
                       onChange={(e) => {
                         const val = parseInt(e.target.value);
                         if (isNaN(val)) {
                           setQuantity(minQuantity);
                         } else {
-                          setQuantity(Math.max(minQuantity, val));
+                          if (orderType === 'retail' && val > 5) {
+                            setQuantity(5);
+                            setMoqWarning('Retail orders are limited to a maximum of 5 units. For bulk orders, please select Wholesale Order.');
+                            setTimeout(() => setMoqWarning(null), 4000);
+                          } else {
+                            setQuantity(val);
+                            setMoqWarning(null);
+                          }
                         }
-                        setMoqWarning(null);
                       }}
                       onBlur={() => {
                         if (quantity < minQuantity) {
                           setQuantity(minQuantity);
+                        } else if (orderType === 'retail' && quantity > 5) {
+                          setQuantity(5);
+                        } else if (orderType === 'wholesale' && quantity % 5 !== 0) {
+                          const rounded = Math.max(5, Math.ceil(quantity / 5) * 5);
+                          setQuantity(rounded);
+                          setMoqWarning(`Wholesale orders must be in multiples of 5 (adjusted to ${rounded} pcs).`);
+                          setTimeout(() => setMoqWarning(null), 4000);
                         }
                       }}
                       className="w-20 text-center font-mono font-bold text-sm text-[#111827] focus:outline-none bg-transparent"
@@ -380,13 +445,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     />
                     <button
                       type="button"
-                      onClick={() => {
-                        const step = orderType === 'wholesale' ? 250 : 1;
-                        setQuantity(prev => prev + step);
-                        setMoqWarning(null);
-                      }}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 hover:text-black hover:bg-slate-100 transition-colors cursor-pointer"
+                      disabled={orderType === 'retail' && quantity >= 5}
+                      onClick={handleIncrement}
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                        orderType === 'retail' && quantity >= 5
+                          ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
+                          : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
+                      }`}
                       aria-label="Increase quantity"
+                      title={orderType === 'retail' && quantity >= 5 ? 'Retail order limit is 5 units' : (orderType === 'wholesale' ? 'Increase by 5' : 'Increase')}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -403,28 +470,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </button>
                 </div>
 
-                {/* Wholesale Quick Select Presets */}
+                {/* Wholesale Quick Select Presets (All Multiples of 5 starting from 5) */}
                 {orderType === 'wholesale' && (
                   <div className="flex flex-wrap items-center gap-2 mt-2.5">
                     <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Quick:</span>
-                    {Array.from(new Set([wholesaleMoq, 1000, 2500, 5000, 10000].filter(v => v >= wholesaleMoq)))
-                      .map((preset) => (
-                        <button
-                          key={preset}
-                          type="button"
-                          onClick={() => {
-                            setQuantity(preset);
-                            setMoqWarning(null);
-                          }}
-                          className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
-                            quantity === preset
-                              ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs'
-                              : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900'
-                          }`}
-                        >
-                          {preset.toLocaleString()}
-                        </button>
-                      ))}
+                    {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        onClick={() => {
+                          setQuantity(preset);
+                          setMoqWarning(null);
+                        }}
+                        className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
+                          quantity === preset
+                            ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs'
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900'
+                        }`}
+                      >
+                        {preset.toLocaleString()}
+                      </button>
+                    ))}
                   </div>
                 )}
 
@@ -436,11 +502,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                 )}
 
+                {/* Retail Policy Banner */}
+                {orderType === 'retail' && !moqWarning && (
+                  <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/70 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                    <span>Retail order policy: <strong>1 se 5 units maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</span>
+                  </div>
+                )}
+
                 {/* Wholesale Policy Banner */}
                 {orderType === 'wholesale' && !moqWarning && (
                   <div className="mt-2 text-[11px] text-emerald-800 bg-emerald-50/70 border border-emerald-200/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>Wholesale minimum: <strong>{wholesaleMoq.toLocaleString()} pcs</strong>. Is se kam quantity mein wholesale order place nahi ho sakta.</span>
+                    <span>Wholesale order: starting <strong>5 pcs</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</span>
                   </div>
                 )}
               </div>

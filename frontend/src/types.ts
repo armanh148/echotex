@@ -42,6 +42,7 @@ export interface CartItem {
   selectedHandle?: string;
   customPrint?: boolean;
   unitPrice: number;
+  orderType?: 'retail' | 'wholesale';
 }
 
 export interface QuoteCalculation {

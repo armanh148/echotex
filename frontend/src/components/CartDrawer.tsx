@@ -438,6 +438,17 @@ Notification automatically generated via EcoTex Storefront.`;
                                 <p className="text-xs text-[#777] font-light mt-0.5">
                                   {item.product.gsm} GSM · {item.product.dimensions}
                                 </p>
+                                <div className="mt-1">
+                                  {(item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))))) ? (
+                                    <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded">
+                                      Wholesale (Min 5 · Step 5)
+                                    </span>
+                                  ) : (
+                                    <span className="inline-block text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded">
+                                      Retail (1–5 pcs max)
+                                    </span>
+                                  )}
+                                </div>
                                 {/* Mobile Quantity Badge so it is NEVER hidden */}
                                 <div className="sm:hidden mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#FAF8F5] border border-[#cfc8bd]/60 text-[11px] font-mono font-bold text-[#166534]">
                                   <span>Quantity:</span>
@@ -447,12 +458,10 @@ Notification automatically generated via EcoTex Storefront.`;
 
                               {/* 3. Quantity: Responsive Stepper with high-contrast text */}
                               {(() => {
-                                const itemMoq = (item.product.wholesaleMoq && item.product.wholesaleMoq >= 50)
-                                  ? item.product.wholesaleMoq
-                                  : (item.product.moq && item.product.moq >= 50 ? item.product.moq : 500);
-                                const isWholesaleItem = item.quantity >= 250;
-                                const minQty = isWholesaleItem ? itemMoq : 1;
+                                const isWholesaleItem = item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))));
+                                const minQty = isWholesaleItem ? 5 : 1;
                                 const isAtMin = item.quantity <= minQty;
+                                const isAtMax = !isWholesaleItem && item.quantity >= 5;
 
                                 return (
                                   <div className="col-span-2 flex items-center justify-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-serif select-none">
@@ -461,8 +470,11 @@ Notification automatically generated via EcoTex Storefront.`;
                                       type="button"
                                       disabled={isAtMin}
                                       onClick={() => {
-                                        const step = isWholesaleItem ? 250 : 1;
-                                        onUpdateQuantity(item.id, Math.max(minQty, item.quantity - step));
+                                        if (isWholesaleItem) {
+                                          onUpdateQuantity(item.id, Math.max(5, item.quantity - 5));
+                                        } else {
+                                          onUpdateQuantity(item.id, Math.max(1, item.quantity - 1));
+                                        }
                                       }}
                                       className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full border flex items-center justify-center transition-colors text-sm leading-none font-bold ${
                                         isAtMin
@@ -470,7 +482,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                           : 'border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] cursor-pointer'
                                       }`}
                                       aria-label="Decrease quantity"
-                                      title={isAtMin ? `Wholesale minimum is ${minQty.toLocaleString()} units` : 'Decrease'}
+                                      title={isAtMin ? (isWholesaleItem ? 'Wholesale minimum is 5 units' : 'Minimum order is 1 unit') : 'Decrease'}
                                     >
                                       –
                                     </motion.button>
@@ -478,14 +490,24 @@ Notification automatically generated via EcoTex Storefront.`;
                                       {item.quantity < 1000 ? item.quantity : `${item.quantity.toLocaleString()}`}
                                     </span>
                                     <motion.button
-                                      whileTap={{ scale: 0.8 }}
+                                      whileTap={{ scale: isAtMax ? 1 : 0.8 }}
                                       type="button"
+                                      disabled={isAtMax}
                                       onClick={() => {
-                                        const step = isWholesaleItem ? 250 : 1;
-                                        onUpdateQuantity(item.id, item.quantity + step);
+                                        if (isAtMax) return;
+                                        if (isWholesaleItem) {
+                                          onUpdateQuantity(item.id, item.quantity + 5);
+                                        } else {
+                                          onUpdateQuantity(item.id, item.quantity + 1);
+                                        }
                                       }}
-                                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] flex items-center justify-center transition-colors cursor-pointer text-sm leading-none font-bold"
+                                      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full border flex items-center justify-center transition-colors text-sm leading-none font-bold ${
+                                        isAtMax
+                                          ? 'border-slate-200 text-slate-300 bg-slate-50 cursor-not-allowed'
+                                          : 'border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] cursor-pointer'
+                                      }`}
                                       aria-label="Increase quantity"
+                                      title={isAtMax ? 'Retail orders are limited to 5 units maximum' : (isWholesaleItem ? 'Increase by 5' : 'Increase quantity')}
                                     >
                                       +
                                     </motion.button>
