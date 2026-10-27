@@ -121,11 +121,11 @@ export const CategoriesManager: React.FC = () => {
     e.preventDefault();
     if (!formData.label.trim()) return;
 
-    if (editingCategory) {
       updateCategory(editingCategory.id, {
         label: formData.label.trim(),
         subtitle: formData.subtitle.trim(),
         tag: formData.tag.trim(),
+        count: formData.count.trim() || undefined,
         image: formData.image.trim() || '/images/bag-green.png',
         description: formData.description.trim(),
         size: formData.size.trim(),

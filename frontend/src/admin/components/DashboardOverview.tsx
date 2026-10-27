@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Users, 
   FileText, 
@@ -15,8 +13,13 @@ import {
   ArrowRight,
   ShieldCheck,
   ShoppingBag,
-  MessageSquare
+  MessageSquare,
+  Edit3,
+  X,
+  Save,
+  Check
 } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { useStore } from '../../store/useStore';
 import { AdminSection } from './AdminSidebar';
 import { StatusBadgeDropdown } from './ui/StatusBadgeDropdown';
@@ -28,18 +31,94 @@ interface DashboardOverviewProps {
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onNavigateToSection
 }) => {
-  const { analytics, products, orders, quotes, updateQuoteStatus, updateOrderStatus } = useStore();
+  const { 
+    analytics, 
+    products, 
+    orders, 
+    quotes, 
+    siteSettings, 
+    updateSiteSettings, 
+    updateAnalytics, 
+    updateQuoteStatus, 
+    updateOrderStatus 
+  } = useStore();
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const dashboardConfig = siteSettings?.dashboardConfig || {};
+  const welcomeBadge = dashboardConfig.welcomeBadge || 'Industrial Facility Direct · Sanity-Style CMS';
+  const welcomeTitle = dashboardConfig.welcomeTitle || 'Wholesale Operations & Dynamic CMS Studio';
+  const welcomeSubtitle = dashboardConfig.welcomeSubtitle || 'Real-time management for live hero colorways, wholesale product catalog, ESG metric counters, and incoming supermarket bag RFQs.';
+  const visitorsSubtext = dashboardConfig.activeVisitorsSubtext || '+18.4% from last week';
+  const catalogSubtext = dashboardConfig.catalogSubtext || 'Active production models';
+  const revenueSubtext = dashboardConfig.grossRevenueSubtext || 'Direct mill contracts';
+
+  // Form state for Dashboard & KPIs
+  const [formData, setFormData] = useState({
+    welcomeBadge,
+    welcomeTitle,
+    welcomeSubtitle,
+    activeVisitors: analytics.activeVisitors || 48,
+    activeVisitorsSubtext: visitorsSubtext,
+    catalogSubtext: catalogSubtext,
+    grossRevenueSubtext: revenueSubtext,
+  });
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleOpenEdit = () => {
+    setFormData({
+      welcomeBadge,
+      welcomeTitle,
+      welcomeSubtitle,
+      activeVisitors: analytics.activeVisitors || 48,
+      activeVisitorsSubtext: visitorsSubtext,
+      catalogSubtext: catalogSubtext,
+      grossRevenueSubtext: revenueSubtext,
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveConfig = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateSiteSettings({
+      dashboardConfig: {
+        welcomeBadge: formData.welcomeBadge.trim(),
+        welcomeTitle: formData.welcomeTitle.trim(),
+        welcomeSubtitle: formData.welcomeSubtitle.trim(),
+        activeVisitorsSubtext: formData.activeVisitorsSubtext.trim(),
+        catalogSubtext: formData.catalogSubtext.trim(),
+        grossRevenueSubtext: formData.grossRevenueSubtext.trim(),
+      }
+    });
+
+    updateAnalytics({
+      activeVisitors: Number(formData.activeVisitors) || 48
+    });
+
+    setIsEditModalOpen(false);
+    showToast('Dashboard & KPI configuration updated successfully!');
+  };
 
   const totalCatalogCount = products.length;
   const inStockCount = products.filter(p => p.inStock).length;
   const newQuotes = quotes.filter(q => q.status === 'New');
   const recentOrders = orders.slice(0, 4);
 
+  // Computed real gross pipeline from orders or analytics
+  const realGrossRevenue = orders.length > 0 
+    ? orders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0)
+    : analytics.grossRevenue;
+
   const statsCards = [
     {
       title: 'Active B2B Sessions',
-      value: analytics.activeVisitors.toLocaleString(),
-      subtext: '+18.4% from last week',
+      value: (analytics.activeVisitors || 48).toLocaleString(),
+      subtext: visitorsSubtext,
       icon: Users,
       trend: 'up',
       badgeColor: 'bg-[#B2E2C5]/20 text-[#4E9F76]'
@@ -55,15 +134,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     {
       title: 'Wholesale Catalog',
       value: `${inStockCount}/${totalCatalogCount}`,
-      subtext: 'Active production models',
+      subtext: catalogSubtext,
       icon: Package,
       trend: 'up',
       badgeColor: 'bg-[#86C59E]/15 text-[#4E9F76]'
     },
     {
       title: 'Gross Pipeline Value',
-      value: `$${analytics.grossRevenue.toLocaleString('en-US', { minimumFractionDigits: 0 })}`,
-      subtext: 'Direct mill contracts',
+      value: `$${realGrossRevenue.toLocaleString('en-US', { minimumFractionDigits: 0 })}`,
+      subtext: revenueSubtext,
       icon: DollarSign,
       trend: 'up',
       badgeColor: 'bg-[#4E9F76]/15 text-[#4E9F76]'
@@ -72,39 +151,58 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 
   return (
     <div className="space-y-8 animate-fadeInUp">
+      {/* Toast */}
+      {toastMessage && (
+        <div className="fixed top-6 right-6 z-50 bg-[#0f172a] text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-fadeIn">
+          <CheckCircle2 className="w-5 h-5 text-[#22c55e]" />
+          <span className="text-xs font-semibold">{toastMessage}</span>
+        </div>
+      )}
       
       {/* Welcome Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4E9F76] via-[#007018] to-[#0f172a] text-white p-6 sm:p-8 shadow-xl">
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-[#B2E2C5] mb-3">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#B2E2C5]" />
-            <span>Industrial Facility Direct · Sanity-Style CMS</span>
+        <div className="relative z-10 max-w-3xl">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-[#B2E2C5]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#B2E2C5]" />
+              <span>{welcomeBadge}</span>
+            </div>
+            
+            <button
+              onClick={handleOpenEdit}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs backdrop-blur-md border border-white/20 transition-all hover:scale-105 cursor-pointer"
+              title="Edit Dashboard Welcome Banner & KPI Subtexts"
+            >
+              <Edit3 className="w-3.5 h-3.5 text-[#B2E2C5]" />
+              <span>Edit Banner & KPIs</span>
+            </button>
           </div>
+
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
-            Wholesale Operations & Dynamic CMS Studio
+            {welcomeTitle}
           </h2>
           <p className="mt-2 text-sm sm:text-base text-white/80 leading-relaxed">
-            Real-time management for live hero colorways, wholesale product catalog, ESG metric counters, and incoming supermarket bag RFQs.
+            {welcomeSubtitle}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={() => onNavigateToSection('products')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#86C59E] hover:bg-[#B2E2C5] text-[#0f172a] font-bold text-xs transition-all shadow-md hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#86C59E] hover:bg-[#B2E2C5] text-[#0f172a] font-bold text-xs transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Product</span>
             </button>
             <button
               onClick={() => onNavigateToSection('hero')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all hover:scale-[1.02] cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-[#B2E2C5]" />
               <span>Customize Hero 3D Showcase</span>
             </button>
             <button
               onClick={() => onNavigateToSection('messages')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all hover:scale-[1.02] cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-[#B2E2C5]" />
               <span>Customer Messages</span>
@@ -123,7 +221,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           return (
             <div 
               key={i}
-              className="bg-white rounded-2xl p-5 border border-[#B2E2C5]/30 shadow-xs hover:shadow-md transition-all hover:border-[#86C59E]/60 group"
+              className="bg-white rounded-2xl p-5 border border-[#B2E2C5]/30 shadow-xs hover:shadow-md transition-all hover:border-[#86C59E]/60 group relative"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -147,6 +245,158 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           );
         })}
       </div>
+
+      {/* Edit Dashboard Config Modal */}
+      {isEditModalOpen && typeof document !== 'undefined' && createPortal(
+        <div 
+          onClick={() => setIsEditModalOpen(false)}
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn transition-all"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-7 shadow-2xl shadow-black/40 border border-slate-200/80 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
+          >
+            <button
+              onClick={() => setIsEditModalOpen(false)}
+              className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-[#4E9F76]/15 text-[#4E9F76] flex items-center justify-center font-bold">
+                <Edit3 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-[#0f172a]">
+                  Customize Dashboard & KPIs
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Edit welcome texts, B2B visitor counters, and KPI metric captions dynamically.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveConfig} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Welcome Banner Badge Label
+                </label>
+                <input
+                  type="text"
+                  value={formData.welcomeBadge}
+                  onChange={(e) => setFormData({ ...formData, welcomeBadge: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="e.g. Industrial Facility Direct · Sanity-Style CMS"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Welcome Banner Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.welcomeTitle}
+                  onChange={(e) => setFormData({ ...formData, welcomeTitle: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="e.g. Wholesale Operations & Dynamic CMS Studio"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Welcome Banner Subtitle / Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={formData.welcomeSubtitle}
+                  onChange={(e) => setFormData({ ...formData, welcomeSubtitle: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="Banner description..."
+                />
+              </div>
+
+              <div className="border-t border-slate-100 pt-3">
+                <h4 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-[11px]">
+                  KPI Card Customization
+                </h4>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Active B2B Sessions Count
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.activeVisitors}
+                      onChange={(e) => setFormData({ ...formData, activeVisitors: Number(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      B2B Sessions Subtext
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.activeVisitorsSubtext}
+                      onChange={(e) => setFormData({ ...formData, activeVisitorsSubtext: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                      placeholder="+18.4% from last week"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Wholesale Catalog Subtext
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.catalogSubtext}
+                      onChange={(e) => setFormData({ ...formData, catalogSubtext: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                      placeholder="Active production models"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Gross Pipeline Subtext
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.grossRevenueSubtext}
+                      onChange={(e) => setFormData({ ...formData, grossRevenueSubtext: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76]"
+                      placeholder="Direct mill contracts"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold transition-all shadow-md cursor-pointer"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>Save Dashboard Configuration</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* Two Column Layout: Recent RFQ Submissions & Recent Orders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
