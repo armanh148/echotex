@@ -506,7 +506,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {orderType === 'retail' && !moqWarning && (
                   <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/70 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                    <span>Retail order policy: <strong>1 se 5 units maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</span>
+                    <span>Retail order policy: <strong>1 se 5 boxes maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</span>
                   </div>
                 )}
 
@@ -514,7 +514,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {orderType === 'wholesale' && !moqWarning && (
                   <div className="mt-2 text-[11px] text-emerald-800 bg-emerald-50/70 border border-emerald-200/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>Wholesale order: starting <strong>5 pcs</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</span>
+                    <span>Wholesale order: starting <strong>5 boxes</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</span>
                   </div>
                 )}
               </div>

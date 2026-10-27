@@ -441,18 +441,18 @@ Notification automatically generated via EcoTex Storefront.`;
                                 <div className="mt-1">
                                   {(item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))))) ? (
                                     <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded">
-                                      Wholesale (Min 5 · Step 5)
+                                      Wholesale (Min 5 Boxes · Step 5)
                                     </span>
                                   ) : (
                                     <span className="inline-block text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded">
-                                      Retail (1–5 pcs max)
+                                      Retail (1–5 boxes max)
                                     </span>
                                   )}
                                 </div>
                                 {/* Mobile Quantity Badge so it is NEVER hidden */}
                                 <div className="sm:hidden mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#FAF8F5] border border-[#cfc8bd]/60 text-[11px] font-mono font-bold text-[#166534]">
                                   <span>Quantity:</span>
-                                  <span>{(item.quantity || 1).toLocaleString()}</span>
+                                  <span>{(item.quantity || 1).toLocaleString()} {(item.quantity || 1) === 1 ? 'box' : 'boxes'}</span>
                                 </div>
                               </div>
 
@@ -482,7 +482,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                           : 'border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] cursor-pointer'
                                       }`}
                                       aria-label="Decrease quantity"
-                                      title={isAtMin ? (isWholesaleItem ? 'Wholesale minimum is 5 units' : 'Minimum order is 1 unit') : 'Decrease'}
+                                      title={isAtMin ? (isWholesaleItem ? 'Wholesale minimum is 5 boxes' : 'Minimum order is 1 box') : 'Decrease'}
                                     >
                                       –
                                     </motion.button>
@@ -507,7 +507,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                           : 'border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] cursor-pointer'
                                       }`}
                                       aria-label="Increase quantity"
-                                      title={isAtMax ? 'Retail orders are limited to 5 units maximum' : (isWholesaleItem ? 'Increase by 5' : 'Increase quantity')}
+                                      title={isAtMax ? 'Retail orders are limited to 5 boxes maximum' : (isWholesaleItem ? 'Increase by 5 boxes' : 'Increase quantity')}
                                     >
                                       +
                                     </motion.button>

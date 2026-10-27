@@ -107,9 +107,9 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const handleQuickAdd = (product: Product, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     const color = product.availableColors?.[0]?.hex || '#4E9F76';
-    const qty = 1; // Retail quick-add defaults to 1 unit (retail limit: 1-5 pcs)
+    const qty = 1; // Retail quick-add defaults to 1 box (retail limit: 1-5 boxes)
     onAddToCart(product, color, qty);
-    setCartToast(`Added "${product.name}" (1 pc) to Cart`);
+    setCartToast(`Added "${product.name}" (1 Box) to Cart`);
     setTimeout(() => setCartToast(null), 3000);
   };
 
@@ -655,7 +655,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                           ${product.pricePerUnit.toFixed(2)}
                         </span>
                         <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md inline-block mt-1 border border-emerald-200/70">
-                          {product.moq > 1 ? `MOQ: ${product.moq.toLocaleString()} pcs` : 'Min Qty: 1 pc'}
+                          {product.moq > 1 ? `MOQ: ${product.moq.toLocaleString()} boxes` : 'Min Qty: 1 box'}
                         </span>
                       </div>
 
