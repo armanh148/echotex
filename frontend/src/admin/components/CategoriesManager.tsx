@@ -482,6 +482,20 @@ export const CategoriesManager: React.FC = () => {
                 </div>
               </div>
 
+              {/* Models Count Label */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Catalog Models Count Label
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 18 Models or 24 Styles"
+                  value={formData.count}
+                  onChange={(e) => setFormData({ ...formData, count: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+
               {/* Size & GSM Specification */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
