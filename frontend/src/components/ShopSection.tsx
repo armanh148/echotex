@@ -31,13 +31,17 @@ interface ShopSectionProps {
   onAddToCart: (product: Product, selectedColor: string, quantity: number) => void;
   onOpenQuoteForProduct: (product: Product) => void;
   showHero?: boolean;
+  showCategories?: boolean;
+  showDeal?: boolean;
 }
 
 export const ShopSection: React.FC<ShopSectionProps> = ({
   onQuickView,
   onAddToCart,
   onOpenQuoteForProduct,
-  showHero = true
+  showHero = true,
+  showCategories = true,
+  showDeal = true
 }) => {
   // Category & Filter State
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -372,7 +376,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
         {/* ========================================================
             3. SHOP BY CATEGORY (DYNAMIC REAL-TIME GRID FROM ADMIN)
            ======================================================== */}
-        <section ref={categoriesRef} id="shop-categories-section" className="mb-16 sm:mb-20">
+        {showCategories && (
+          <section ref={categoriesRef} id="shop-categories-section" className="mb-16 sm:mb-20">
           
           {/* Section Heading */}
           <div className="text-center mb-10 sm:mb-12">
@@ -449,12 +454,13 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
             </div>
           )}
 
-        </section>
+          </section>
+        )}
 
         {/* ========================================================
             4. DEAL OF THE DAY (FULL-WIDTH EXPANSIVE SPLIT CARD)
            ======================================================== */}
-        {isDealEnabled && dealProduct && (
+        {showDeal && isDealEnabled && dealProduct && (
           <section className="w-full rounded-[32px] sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-8 sm:p-12 lg:p-16 mb-16 sm:mb-20 shadow-xs overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 items-center">
               

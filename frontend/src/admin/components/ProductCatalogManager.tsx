@@ -22,6 +22,7 @@ import {
 import { useStore } from '../../store/useStore';
 import { Product, ProductCategory } from '../../types';
 import { ImageUploader } from './ImageUploader';
+import { CustomSelect } from './ui/CustomSelect';
 
 export const ProductCatalogManager: React.FC = () => {
   const { 
@@ -343,27 +344,25 @@ export const ProductCatalogManager: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Filter className="w-3.5 h-3.5 text-slate-400" />
-            <select
+            <CustomSelect
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:border-[#86C59E]"
-            >
-              <option value="all">All Categories</option>
-              {categoriesList.map(c => (
-                <option key={c.id} value={c.id}>{c.label}</option>
-              ))}
-            </select>
+              onChange={(val) => setSelectedCategory(val)}
+              options={[
+                { value: 'all', label: 'All Categories' },
+                ...categoriesList.map(c => ({ value: c.id, label: c.label }))
+              ]}
+            />
           </div>
 
-          <select
+          <CustomSelect
             value={stockFilter}
-            onChange={(e) => setStockFilter(e.target.value as any)}
-            className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:border-[#86C59E]"
-          >
-            <option value="all">All Stock Status</option>
-            <option value="in-stock">In Production / Stock</option>
-            <option value="out-of-stock">Backordered / Inactive</option>
-          </select>
+            onChange={(val) => setStockFilter(val as any)}
+            options={[
+              { value: 'all', label: 'All Stock Status' },
+              { value: 'in-stock', label: 'In Production / Stock', dot: 'bg-emerald-500' },
+              { value: 'out-of-stock', label: 'Backordered / Inactive', dot: 'bg-rose-500' }
+            ]}
+          />
         </div>
 
       </div>
@@ -563,10 +562,10 @@ export const ProductCatalogManager: React.FC = () => {
                       <label className="block text-xs font-bold text-slate-700 mb-1">
                         Category *
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.category}
-                        onChange={(e) => {
-                          const cat = e.target.value as ProductCategory;
+                        onChange={(val) => {
+                          const cat = val as ProductCategory;
                           const found = categoriesList.find(c => c.id === cat);
                           setFormData({ 
                             ...formData, 
@@ -574,27 +573,23 @@ export const ProductCatalogManager: React.FC = () => {
                             categoryLabel: found ? found.label : 'Wholesale Packaging'
                           });
                         }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] cursor-pointer transition-all"
-                      >
-                        {categoriesList.map(c => (
-                          <option key={c.id} value={c.id}>{c.label}</option>
-                        ))}
-                      </select>
+                        options={categoriesList.map(c => ({ value: c.id, label: c.label }))}
+                        className="w-full"
+                        buttonClassName="w-full bg-slate-50 border-slate-200 text-xs font-semibold"
+                      />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
                         Highlight Badge
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.badge}
-                        onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] cursor-pointer transition-all"
-                      >
-                        {badgesList.map(b => (
-                          <option key={b} value={b}>{b}</option>
-                        ))}
-                      </select>
+                        onChange={(val) => setFormData({ ...formData, badge: val })}
+                        options={badgesList.map(b => ({ value: b, label: b }))}
+                        className="w-full"
+                        buttonClassName="w-full bg-slate-50 border-slate-200 text-xs font-semibold"
+                      />
                     </div>
                   </div>
 

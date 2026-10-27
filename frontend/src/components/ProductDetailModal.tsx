@@ -17,8 +17,10 @@ import {
   Share2,
   AlertCircle,
   Package,
-  Lock
+  Lock,
+  Sparkles
 } from 'lucide-react';
+import { DYE_COLORS, DyeColor } from '../data/colors';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -45,13 +47,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'reviews'>('description');
   const [addedToast, setAddedToast] = useState(false);
 
-  // Gallery images list tailored for this product
-  const bagCutout = product.image || (
-    product.id.includes('tshirt') || product.id.includes('loop') ? '/images/bag-green.png' :
-    product.id.includes('dcut') || product.id.includes('punch') ? '/images/bag-orange.png' :
-    product.id.includes('box') || product.id.includes('heavy') ? '/images/bag-black.png' :
-    product.id.includes('laminated') || product.id.includes('boutique') ? '/images/bag-white.png' :
-    '/images/bag-blue.png'
+  const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
+    return DYE_COLORS.find(c => c.name.toLowerCase() === product.color?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
+  });
+
+  // Dynamic color-aware product bag cutout
+  const bagCutout = (
+    selectedColor.id === 'dark-green' ? '/images/bag-green.png' :
+    selectedColor.id === 'orange' || selectedColor.id === 'yellow' || selectedColor.id === 'red' ? '/images/bag-orange.png' :
+    selectedColor.id === 'black' || selectedColor.id === 'navy-blue' ? '/images/bag-black.png' :
+    selectedColor.id === 'white' || selectedColor.id === 'beige-cream' ? '/images/bag-white.png' :
+    selectedColor.id === 'royal-blue' || selectedColor.id === 'sky-blue' ? '/images/bag-blue.png' :
+    product.image || '/images/bag-green.png'
   );
 
   const galleryImages = [
@@ -154,7 +161,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       return;
     }
     setMoqWarning(null);
-    onAddToCart(product, product.availableColors?.[0]?.hex || '#166534', quantity, orderType);
+    onAddToCart(product, selectedColor.name, quantity, orderType);
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 2500);
   };
@@ -187,11 +194,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       return;
     }
     setMoqWarning(null);
-    const selectedColor = product.availableColors?.[0]?.hex || '#166534';
     if (onExpressCheckout) {
-      onExpressCheckout(product, selectedColor, quantity, orderType);
+      onExpressCheckout(product, selectedColor.name, quantity, orderType);
     } else {
-      onAddToCart(product, selectedColor, quantity, orderType);
+      onAddToCart(product, selectedColor.name, quantity, orderType);
       onClose();
     }
   };
@@ -357,6 +363,75 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <p className="mt-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-light">
                 {product.description || 'Discover the pinnacle of elegance with this masterfully crafted piece. Part of our exclusive Heritage Collection, it embodies the perfect blend of traditional artistry and modern sophistication.'}
               </p>
+
+              {/* Commercial Color Dye Variants (10 Industry Colors with Recommended Applications) */}
+              <div className="mt-5 pt-4 border-t border-slate-200/80">
+                <div className="flex items-center justify-between mb-2.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                    <span>Color Dye:</span>
+                    <span className="text-slate-900 font-extrabold capitalize text-xs sm:text-sm">{selectedColor.name}</span>
+                  </label>
+                  <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+                    10 Commercial Colors
+                  </span>
+                </div>
+
+                {/* 10 Swatch Circles */}
+                <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+                  {DYE_COLORS.map((c) => {
+                    const isSelected = selectedColor.id === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setSelectedColor(c)}
+                        title={`${c.name} - ${c.bestFor}`}
+                        className={`group relative aspect-square rounded-xl transition-all duration-200 cursor-pointer flex flex-col items-center justify-center ${
+                          isSelected 
+                            ? 'ring-2 ring-offset-2 ring-[#0f172a] scale-105 shadow-md z-10' 
+                            : 'hover:scale-105 opacity-90 hover:opacity-100 shadow-2xs'
+                        }`}
+                        style={{ 
+                          backgroundColor: c.hex,
+                          border: `1.5px solid ${c.borderColor || '#cbd5e1'}`
+                        }}
+                      >
+                        {isSelected ? (
+                          <Check 
+                            className="w-3.5 h-3.5 stroke-[3]" 
+                            style={{ color: c.textColor || '#ffffff' }}
+                          />
+                        ) : (
+                          <span className="text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: c.textColor || '#ffffff' }}>
+                            {c.name.slice(0, 3)}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Dynamic Color Guide: Best For & Recommended Print Spec Card */}
+                <div className="mt-2.5 p-3 bg-gradient-to-r from-slate-50 via-emerald-50/20 to-stone-50 rounded-xl border border-slate-200/90 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-slate-700">
+                    <div className="flex items-center gap-1.5">
+                      <span 
+                        className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs" 
+                        style={{ backgroundColor: selectedColor.hex, border: `1px solid ${selectedColor.borderColor || '#cbd5e1'}` }} 
+                      />
+                      <span className="text-slate-500 font-medium">Best For:</span>
+                      <strong className="text-slate-900">{selectedColor.bestFor}</strong>
+                    </div>
+                  </div>
+                  <div className="mt-1.5 pt-1.5 border-t border-slate-200/60 flex items-start sm:items-center gap-1.5 text-[10px] text-slate-600">
+                    <Sparkles className="w-3 h-3 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
+                    <div>
+                      <span className="text-slate-500 font-medium">Recommended Print: </span>
+                      <span className="font-bold text-slate-900">{selectedColor.recommendedPrint}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Segmented Switcher Pill: RETAIL ORDER vs WHOLESALE ORDER */}
               <div className="mt-5 p-1 bg-[#f3f4f6] rounded-xl inline-flex w-full sm:w-auto self-start border border-slate-200/60">

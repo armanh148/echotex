@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { QuoteSubmission, Order } from '../../types';
+import { StatusBadgeDropdown } from './ui/StatusBadgeDropdown';
+import { CustomSelect } from './ui/CustomSelect';
 
 export const RfqOrdersInbox: React.FC = () => {
   const { 
@@ -206,29 +208,26 @@ export const RfqOrdersInbox: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <select
+          <CustomSelect
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:border-[#86C59E]"
-          >
-            <option value="all">All Statuses</option>
-            {activeTab === 'quotes' ? (
-              <>
-                <option value="New">New</option>
-                <option value="In Review">In Review</option>
-                <option value="Quotation Sent">Quotation Sent</option>
-                <option value="Approved">Approved</option>
-                <option value="Declined">Declined</option>
-              </>
-            ) : (
-              <>
-                <option value="Pending">Pending</option>
-                <option value="In Production">In Production</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Completed">Completed</option>
-              </>
-            )}
-          </select>
+            onChange={(val) => setStatusFilter(val)}
+            options={
+              activeTab === 'quotes' ? [
+                { value: 'all', label: 'All Statuses' },
+                { value: 'New', label: 'New', dot: 'bg-emerald-500' },
+                { value: 'In Review', label: 'In Review', dot: 'bg-amber-500' },
+                { value: 'Quotation Sent', label: 'Quotation Sent', dot: 'bg-blue-500' },
+                { value: 'Approved', label: 'Approved', dot: 'bg-emerald-600' },
+                { value: 'Declined', label: 'Declined', dot: 'bg-rose-500' }
+              ] : [
+                { value: 'all', label: 'All Statuses' },
+                { value: 'Pending', label: 'Pending', dot: 'bg-amber-500' },
+                { value: 'In Production', label: 'In Production', dot: 'bg-purple-500' },
+                { value: 'Shipped', label: 'Shipped', dot: 'bg-sky-500' },
+                { value: 'Completed', label: 'Completed', dot: 'bg-emerald-500' }
+              ]
+            }
+          />
         </div>
       </div>
 
@@ -291,25 +290,11 @@ export const RfqOrdersInbox: React.FC = () => {
 
                       {/* Status Selector */}
                       <td className="py-4 px-6">
-                        <select
+                        <StatusBadgeDropdown
                           value={q.status}
-                          onChange={(e) => updateQuoteStatus(q.id, e.target.value)}
-                          className={`text-xs font-bold rounded-xl px-2.5 py-1 border transition-all ${
-                            q.status === 'New'
-                              ? 'bg-[#B2E2C5]/25 text-[#4E9F76] border-[#B2E2C5]'
-                              : q.status === 'Quotation Sent'
-                              ? 'bg-blue-50 text-blue-700 border-blue-200'
-                              : q.status === 'Approved'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                              : 'bg-slate-50 text-slate-600 border-slate-200'
-                          }`}
-                        >
-                          <option value="New">New</option>
-                          <option value="In Review">In Review</option>
-                          <option value="Quotation Sent">Quotation Sent</option>
-                          <option value="Approved">Approved</option>
-                          <option value="Declined">Declined</option>
-                        </select>
+                          onChange={(val) => updateQuoteStatus(q.id, val)}
+                          options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
+                        />
                       </td>
 
                       {/* Actions */}
@@ -392,24 +377,11 @@ export const RfqOrdersInbox: React.FC = () => {
                       </td>
 
                       <td className="py-4 px-6">
-                        <select
+                        <StatusBadgeDropdown
                           value={o.status}
-                          onChange={(e) => updateOrderStatus(o.id, e.target.value)}
-                          className={`text-xs font-bold rounded-xl px-2.5 py-1 border transition-all ${
-                            o.status === 'Completed'
-                              ? 'bg-[#B2E2C5]/20 text-[#4E9F76] border-[#B2E2C5]'
-                              : o.status === 'In Production'
-                              ? 'bg-amber-50 text-amber-800 border-amber-300'
-                              : o.status === 'Shipped'
-                              ? 'bg-blue-50 text-blue-700 border-blue-300'
-                              : 'bg-slate-50 text-slate-700 border-slate-200'
-                          }`}
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="In Production">In Production</option>
-                          <option value="Shipped">Shipped</option>
-                          <option value="Completed">Completed</option>
-                        </select>
+                          onChange={(val) => updateOrderStatus(o.id, val)}
+                          options={['Pending', 'In Production', 'Shipped', 'Completed']}
+                        />
                       </td>
 
                       <td className="py-4 px-6 text-right">
@@ -506,20 +478,14 @@ export const RfqOrdersInbox: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-              <select
+              <StatusBadgeDropdown
                 value={selectedQuote.status}
-                onChange={(e) => {
-                  updateQuoteStatus(selectedQuote.id, e.target.value);
-                  setSelectedQuote({ ...selectedQuote, status: e.target.value as any });
+                onChange={(val) => {
+                  updateQuoteStatus(selectedQuote.id, val);
+                  setSelectedQuote({ ...selectedQuote, status: val as any });
                 }}
-                className="text-xs font-bold px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"
-              >
-                <option value="New">New</option>
-                <option value="In Review">In Review</option>
-                <option value="Quotation Sent">Quotation Sent</option>
-                <option value="Approved">Approved</option>
-                <option value="Declined">Declined</option>
-              </select>
+                options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
+              />
 
               <button
                 onClick={() => setSelectedQuote(null)}
@@ -634,19 +600,14 @@ export const RfqOrdersInbox: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-              <select
+              <StatusBadgeDropdown
                 value={selectedOrder.status}
-                onChange={(e) => {
-                  updateOrderStatus(selectedOrder.id, e.target.value);
-                  setSelectedOrder({ ...selectedOrder, status: e.target.value as any });
+                onChange={(val) => {
+                  updateOrderStatus(selectedOrder.id, val);
+                  setSelectedOrder({ ...selectedOrder, status: val as any });
                 }}
-                className="text-xs font-bold px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"
-              >
-                <option value="Pending">Pending</option>
-                <option value="In Production">In Production</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Completed">Completed</option>
-              </select>
+                options={['Pending', 'In Production', 'Shipped', 'Completed']}
+              />
 
               <button
                 onClick={() => setSelectedOrder(null)}

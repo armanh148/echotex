@@ -58,7 +58,10 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ]
+      ],
+      "pcsPerBox": 201,
+      "stockQuantity": 50,
+      "updatedAt": "2026-10-27T10:50:13.332Z"
     },
     {
       "id": "prod-1791786437631",
@@ -238,7 +241,10 @@
           "hex": "#e8e2d5",
           "name": "Natural Sand"
         }
-      ]
+      ],
+      "pcsPerBox": 201,
+      "stockQuantity": 50,
+      "updatedAt": "2026-10-27T10:51:12.164Z"
     },
     {
       "id": "eco-tshirt-supermarket",

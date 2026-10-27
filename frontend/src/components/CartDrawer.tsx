@@ -20,6 +20,7 @@ import {
   MessageCircle,
   ExternalLink
 } from 'lucide-react';
+import { CustomSelect } from '../admin/components/ui/CustomSelect';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -805,15 +806,17 @@ Notification automatically generated via EcoTex Storefront.`;
                     <label className="block text-xs font-serif text-[#1c1b18] mb-1.5 uppercase tracking-wider">
                       Payment / Procurement Terms
                     </label>
-                    <select
+                    <CustomSelect
                       value={paymentTerms}
-                      onChange={(e) => setPaymentTerms(e.target.value)}
-                      className="w-full px-4 py-2.5 text-sm bg-white border border-[#cfc8bd] rounded-md focus:border-[#166534] focus:ring-1 focus:ring-[#166534] focus:outline-none cursor-pointer"
-                    >
-                      <option value="Credit Card / Instant ACH">Credit Card / Instant ACH</option>
-                      <option value="Corporate Net 30 Terms">Corporate Net 30 Terms (Approved Accounts)</option>
-                      <option value="Wire Transfer / Pro-Forma Invoice">Wire Transfer / Pro-Forma Invoice</option>
-                    </select>
+                      onChange={(val) => setPaymentTerms(val)}
+                      options={[
+                        { value: 'Credit Card / Instant ACH', label: 'Credit Card / Instant ACH' },
+                        { value: 'Corporate Net 30 Terms', label: 'Corporate Net 30 Terms (Approved Accounts)' },
+                        { value: 'Wire Transfer / Pro-Forma Invoice', label: 'Wire Transfer / Pro-Forma Invoice' }
+                      ]}
+                      className="w-full"
+                      buttonClassName="w-full bg-white border-[#cfc8bd] text-sm py-2.5 font-sans"
+                    />
                   </div>
 
                   {/* Total review bar */}

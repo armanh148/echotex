@@ -17,8 +17,10 @@ import {
   Share2,
   AlertCircle,
   Package,
-  Lock
+  Lock,
+  Sparkles
 } from 'lucide-react';
+import { DYE_COLORS, DyeColor } from '../data/colors';
 
 interface ProductDetailPageProps {
   product: Product;
@@ -52,7 +54,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
-  const maxQuantity = orderType === 'retail' ? 5 : 100000;
+  const maxQuantity = orderType === 'retail' ? Math.min(5, availableStock) : availableStock;
   const [moqWarning, setMoqWarning] = useState<string | null>(null);
 
   // Scroll to top on mount or when product changes
@@ -60,16 +62,21 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveImageIndex(0);
     setMoqWarning(null);
-    setQuantity(orderType === 'retail' ? 1 : wholesaleMoq);
-  }, [product, orderType, wholesaleMoq]);
+    setQuantity(orderType === 'retail' ? Math.min(1, availableStock) : Math.min(wholesaleMoq, availableStock));
+  }, [product, orderType, wholesaleMoq, availableStock]);
 
-  // Product transparent cutout bag
-  const bagCutout = product.image || (
-    product.id.includes('tshirt') || product.id.includes('loop') ? '/images/bag-green.png' :
-    product.id.includes('dcut') || product.id.includes('punch') ? '/images/bag-orange.png' :
-    product.id.includes('box') || product.id.includes('heavy') ? '/images/bag-black.png' :
-    product.id.includes('laminated') || product.id.includes('boutique') ? '/images/bag-white.png' :
-    '/images/bag-blue.png'
+  const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
+    return DYE_COLORS.find(c => c.name.toLowerCase() === product.color?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
+  });
+
+  // Dynamic color-aware product bag cutout
+  const bagCutout = (
+    selectedColor.id === 'dark-green' ? '/images/bag-green.png' :
+    selectedColor.id === 'orange' || selectedColor.id === 'yellow' || selectedColor.id === 'red' ? '/images/bag-orange.png' :
+    selectedColor.id === 'black' || selectedColor.id === 'navy-blue' ? '/images/bag-black.png' :
+    selectedColor.id === 'white' || selectedColor.id === 'beige-cream' ? '/images/bag-white.png' :
+    selectedColor.id === 'royal-blue' || selectedColor.id === 'sky-blue' ? '/images/bag-blue.png' :
+    product.image || '/images/bag-green.png'
   );
 
   // 4 Gallery images tailored for this product
@@ -104,18 +111,25 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   const handleIncrement = () => {
     if (orderType === 'retail') {
-      if (quantity >= 5) {
-        setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For larger orders, please switch to Wholesale Order.');
+      if (quantity >= maxQuantity) {
+        setMoqWarning(maxQuantity < 5 
+          ? `Stock limit reached: only ${availableStock} boxes available in stock.`
+          : 'Retail orders are limited to a maximum of 5 boxes. For larger orders, please switch to Wholesale Order.');
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
-      setQuantity(prev => Math.min(5, prev + 1));
+      setQuantity(prev => Math.min(maxQuantity, prev + 1));
     } else {
-      // Wholesale: step of 5
+      // Wholesale: step of 5 up to maxQuantity (availableStock)
+      if (quantity >= maxQuantity) {
+        setMoqWarning(`Stock limit reached: only ${availableStock} boxes available in stock.`);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
       setQuantity(prev => {
-        if (prev < 5) return 5;
-        if (prev % 5 !== 0) return Math.floor(prev / 5) * 5 + 5;
-        return prev + 5;
+        if (prev < 5) return Math.min(maxQuantity, 5);
+        const next = (prev % 5 !== 0) ? Math.floor(prev / 5) * 5 + 5 : prev + 5;
+        return Math.min(maxQuantity, next);
       });
     }
     setMoqWarning(null);
@@ -141,6 +155,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
+    if (quantity > availableStock) {
+      setMoqWarning(`Cannot add to cart: only ${availableStock} boxes available in stock.`);
+      setQuantity(availableStock);
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -149,7 +169,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         return;
       }
       if (quantity % 5 !== 0) {
-        const rounded = Math.ceil(quantity / 5) * 5;
+        const rounded = Math.min(availableStock, Math.ceil(quantity / 5) * 5);
         setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
@@ -158,12 +178,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     }
     if (orderType === 'retail' && quantity > 5) {
       setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(5);
+      setQuantity(Math.min(5, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
     setMoqWarning(null);
-    onAddToCart(product, product.availableColors?.[0]?.hex || '#166534', quantity, orderType);
+    onAddToCart(product, selectedColor.name, quantity, orderType);
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 2500);
   };
@@ -174,6 +194,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
+    if (quantity > availableStock) {
+      setMoqWarning(`Cannot order: only ${availableStock} boxes available in stock.`);
+      setQuantity(availableStock);
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -182,7 +208,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         return;
       }
       if (quantity % 5 !== 0) {
-        const rounded = Math.ceil(quantity / 5) * 5;
+        const rounded = Math.min(availableStock, Math.ceil(quantity / 5) * 5);
         setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
@@ -191,16 +217,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     }
     if (orderType === 'retail' && quantity > 5) {
       setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(5);
+      setQuantity(Math.min(5, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
     setMoqWarning(null);
-    const selectedColor = product.availableColors?.[0]?.hex || '#166534';
     if (onExpressCheckout) {
-      onExpressCheckout(product, selectedColor, quantity, orderType);
+      onExpressCheckout(product, selectedColor.name, quantity, orderType);
     } else {
-      onAddToCart(product, selectedColor, quantity, orderType);
+      onAddToCart(product, selectedColor.name, quantity, orderType);
     }
   };
 
@@ -377,6 +402,75 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {product.description || 'Discover the pinnacle of elegance with this masterfully crafted piece. Part of our exclusive Heritage Collection, it embodies the perfect blend of traditional artistry and modern sophistication.'}
             </p>
 
+            {/* Commercial Color Dye Variants (10 Industry Colors with Recommended Applications) */}
+            <div className="mt-6 pt-5 border-t border-slate-200/80">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                  <span>Color Dye:</span>
+                  <span className="text-slate-900 font-extrabold capitalize text-sm">{selectedColor.name}</span>
+                </label>
+                <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                  10 Commercial Options
+                </span>
+              </div>
+
+              {/* 10 Swatch Circles */}
+              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2.5">
+                {DYE_COLORS.map((c) => {
+                  const isSelected = selectedColor.id === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setSelectedColor(c)}
+                      title={`${c.name} - ${c.bestFor}`}
+                      className={`group relative aspect-square rounded-2xl transition-all duration-200 cursor-pointer flex flex-col items-center justify-center ${
+                        isSelected 
+                          ? 'ring-2 ring-offset-2 ring-[#0f172a] scale-105 shadow-md z-10' 
+                          : 'hover:scale-105 opacity-90 hover:opacity-100 shadow-2xs'
+                      }`}
+                      style={{ 
+                        backgroundColor: c.hex,
+                        border: `1.5px solid ${c.borderColor || '#cbd5e1'}`
+                      }}
+                    >
+                      {isSelected ? (
+                        <Check 
+                          className="w-4 h-4 stroke-[3]" 
+                          style={{ color: c.textColor || '#ffffff' }}
+                        />
+                      ) : (
+                        <span className="text-[9px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: c.textColor || '#ffffff' }}>
+                          {c.name.slice(0, 3)}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Dynamic Color Guide: Best For & Recommended Print Spec Card */}
+              <div className="mt-3 p-3.5 bg-gradient-to-r from-slate-50 via-emerald-50/20 to-stone-50 rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className="w-3 h-3 rounded-full shrink-0 shadow-2xs" 
+                      style={{ backgroundColor: selectedColor.hex, border: `1px solid ${selectedColor.borderColor || '#cbd5e1'}` }} 
+                    />
+                    <span className="text-slate-500 font-medium">Best For:</span>
+                    <strong className="text-slate-900">{selectedColor.bestFor}</strong>
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-slate-200/60 flex items-start sm:items-center gap-2 text-[11px] text-slate-600">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
+                  <div>
+                    <span className="text-slate-500 font-medium">Recommended Print: </span>
+                    <span className="font-bold text-slate-900">{selectedColor.recommendedPrint}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Segmented Switcher Pill: RETAIL ORDER vs WHOLESALE ORDER */}
             <div className="mt-6 p-1 bg-[#f3f4f6] rounded-xl inline-flex w-full sm:w-auto self-start border border-slate-200/60">
               <button
@@ -498,10 +592,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       if (isNaN(val)) {
                         setQuantity(minQuantity);
                       } else {
-                        if (orderType === 'retail' && val > 5) {
-                          setQuantity(5);
-                          setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.');
+                        if (val > maxQuantity) {
+                          setQuantity(maxQuantity);
+                          setMoqWarning(
+                            orderType === 'retail' && maxQuantity === 5
+                              ? 'Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.'
+                              : `Stock limit reached: only ${availableStock} boxes available in stock.`
+                          );
                           setTimeout(() => setMoqWarning(null), 4000);
+                        } else if (val < minQuantity) {
+                          setQuantity(minQuantity);
+                          setMoqWarning(null);
                         } else {
                           setQuantity(val);
                           setMoqWarning(null);
@@ -512,10 +613,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       if (isOutOfStock) return;
                       if (quantity < minQuantity) {
                         setQuantity(minQuantity);
-                      } else if (orderType === 'retail' && quantity > 5) {
-                        setQuantity(5);
+                      } else if (quantity > maxQuantity) {
+                        setQuantity(maxQuantity);
                       } else if (orderType === 'wholesale' && quantity % 5 !== 0) {
-                        const rounded = Math.max(5, Math.ceil(quantity / 5) * 5);
+                        const rounded = Math.min(maxQuantity, Math.max(5, Math.ceil(quantity / 5) * 5));
                         setQuantity(rounded);
                         setMoqWarning(`Wholesale orders must be in multiples of 5 (adjusted to ${rounded} boxes).`);
                         setTimeout(() => setMoqWarning(null), 4000);
@@ -526,15 +627,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   />
                   <button
                     type="button"
-                    disabled={isOutOfStock || (orderType === 'retail' && quantity >= 5)}
+                    disabled={isOutOfStock || quantity >= maxQuantity}
                     onClick={handleIncrement}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      isOutOfStock || (orderType === 'retail' && quantity >= 5)
+                      isOutOfStock || quantity >= maxQuantity
                         ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
                         : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                     }`}
                     aria-label="Increase quantity"
-                    title={orderType === 'retail' && quantity >= 5 ? 'Retail order limit is 5 boxes' : (orderType === 'wholesale' ? 'Increase by 5 boxes' : 'Increase')}
+                    title={
+                      quantity >= maxQuantity
+                        ? (quantity >= availableStock ? `Stock limit reached (${availableStock} boxes available)` : 'Retail order limit is 5 boxes')
+                        : (orderType === 'wholesale' ? 'Increase by 5 boxes' : 'Increase')
+                    }
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -562,27 +667,35 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
               </div>
 
-              {/* Wholesale Quick Select Presets (All Multiples of 5 starting from 5) */}
+              {/* Wholesale Quick Select Presets (Disabled if exceeds availableStock) */}
               {orderType === 'wholesale' && !isOutOfStock && (
                 <div className="flex flex-wrap items-center gap-2 mt-2.5">
                   <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Quick:</span>
-                  {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => {
-                        setQuantity(preset);
-                        setMoqWarning(null);
-                      }}
-                      className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
-                        quantity === preset
-                          ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs'
-                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900'
-                      }`}
-                    >
-                      {preset.toLocaleString()}
-                    </button>
-                  ))}
+                  {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => {
+                    const isExceedingStock = preset > availableStock;
+                    return (
+                      <button
+                        key={preset}
+                        type="button"
+                        disabled={isExceedingStock}
+                        onClick={() => {
+                          if (isExceedingStock) return;
+                          setQuantity(preset);
+                          setMoqWarning(null);
+                        }}
+                        title={isExceedingStock ? `Stock limit is ${availableStock} boxes (${preset} is unavailable)` : `Select ${preset} boxes`}
+                        className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all ${
+                          isExceedingStock
+                            ? 'opacity-35 cursor-not-allowed line-through bg-slate-100 text-slate-400 border-slate-200'
+                            : quantity === preset
+                            ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs cursor-pointer'
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900 cursor-pointer'
+                        }`}
+                      >
+                        {preset.toLocaleString()}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
 

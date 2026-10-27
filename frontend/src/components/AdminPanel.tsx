@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { apiService } from '../services/apiService';
 import { Product, CategoryItem, Order, QuoteSubmission, SiteSettings, ProductCategory } from '../types';
+import { StatusBadgeDropdown } from '../admin/components/ui/StatusBadgeDropdown';
+import { CustomSelect } from '../admin/components/ui/CustomSelect';
 import { 
   LayoutDashboard, 
   Package, 
@@ -763,18 +765,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     />
                   </div>
 
-                  <select
+                  <CustomSelect
                     value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    className="py-2.5 px-3 rounded-xl border border-[#d4ebd4] bg-[#fbfdfb] text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#008000] cursor-pointer"
-                  >
-                    <option value="all">All Categories</option>
-                    <option value="non-woven">Non-Woven Totes</option>
-                    <option value="t-shirt">T-Shirt Bags</option>
-                    <option value="d-cut">D-Cut Punch</option>
-                    <option value="slider">Slider Zipper</option>
-                    <option value="food">Food Item</option>
-                  </select>
+                    onChange={(val) => setFilterCategory(val)}
+                    options={[
+                      { value: 'all', label: 'All Categories' },
+                      { value: 'non-woven', label: 'Non-Woven Totes' },
+                      { value: 't-shirt', label: 'T-Shirt Bags' },
+                      { value: 'd-cut', label: 'D-Cut Punch' },
+                      { value: 'slider', label: 'Slider Zipper' },
+                      { value: 'food', label: 'Food Item' }
+                    ]}
+                  />
                 </div>
 
                 {/* Add Product Button */}
@@ -965,18 +967,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-slate-500 font-medium">Status Filter:</span>
-                  <select
+                  <CustomSelect
                     value={orderStatusFilter}
-                    onChange={(e) => setOrderStatusFilter(e.target.value)}
-                    className="py-2 px-3 rounded-xl border border-[#d4ebd4] bg-[#fbfdfb] text-xs font-semibold text-slate-700 cursor-pointer"
-                  >
-                    <option value="all">All Orders</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Production">In Production</option>
-                    <option value="Dispatched">Dispatched</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
+                    onChange={(val) => setOrderStatusFilter(val)}
+                    options={[
+                      { value: 'all', label: 'All Orders' },
+                      { value: 'Pending', label: 'Pending', dot: 'bg-amber-500' },
+                      { value: 'In Production', label: 'In Production', dot: 'bg-purple-500' },
+                      { value: 'Dispatched', label: 'Dispatched', dot: 'bg-sky-500' },
+                      { value: 'Completed', label: 'Completed', dot: 'bg-emerald-500' },
+                      { value: 'Cancelled', label: 'Cancelled', dot: 'bg-rose-500' }
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -1026,20 +1028,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                           {/* Status Switcher Dropdown */}
                           <td className="py-3.5 px-4 text-center">
-                            <select
+                            <StatusBadgeDropdown
                               value={order.status}
-                              onChange={async (e) => {
-                                await changeOrderStatus(order.id, e.target.value);
-                                showToast(`Order ${order.id} status updated to "${e.target.value}"`);
+                              onChange={async (val) => {
+                                await changeOrderStatus(order.id, val);
+                                showToast(`Order ${order.id} status updated to "${val}"`);
                               }}
-                              className="py-1 px-2.5 rounded-lg border border-[#d4ebd4] bg-[#fbfdfb] text-[11px] font-bold text-slate-700 cursor-pointer focus:border-[#008000]"
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="In Production">In Production</option>
-                              <option value="Dispatched">Dispatched</option>
-                              <option value="Completed">Completed</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
+                              options={['Pending', 'In Production', 'Dispatched', 'Completed', 'Cancelled']}
+                            />
                           </td>
 
                           <td className="py-3.5 px-4 text-right">
@@ -1094,19 +1090,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           {quote.id}
                         </span>
                         
-                        <select
+                        <StatusBadgeDropdown
                           value={quote.status}
-                          onChange={async (e) => {
-                            await changeQuoteStatus(quote.id, e.target.value);
-                            showToast(`Quote ${quote.id} status updated to ${e.target.value}`);
+                          onChange={async (val) => {
+                            await changeQuoteStatus(quote.id, val);
+                            showToast(`Quote ${quote.id} status updated to ${val}`);
                           }}
-                          className="py-1 px-2.5 rounded-lg border border-[#d4ebd4] bg-[#fbfdfb] text-xs font-bold text-slate-700 cursor-pointer"
-                        >
-                          <option value="New">New</option>
-                          <option value="Reviewed">Reviewed</option>
-                          <option value="Quotation Sent">Quotation Sent</option>
-                          <option value="Closed">Closed</option>
-                        </select>
+                          options={['New', 'Reviewed', 'Quotation Sent', 'Closed']}
+                        />
                       </div>
 
                       <h4 className="text-base font-bold text-[#142918]">{quote.name}</h4>
@@ -1686,18 +1677,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Category *
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value as ProductCategory })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4ebd4] bg-[#fbfdfb] text-slate-900 font-medium focus:border-[#008000] focus:outline-none cursor-pointer"
-                  >
-                    <option value="non-woven">Non-Woven Totes</option>
-                    <option value="t-shirt">T-Shirt Bags</option>
-                    <option value="d-cut">D-Cut Punch</option>
-                    <option value="slider">Slider Zipper</option>
-                    <option value="food">Food Item</option>
-                    <option value="biodegradable">Biodegradable PLA</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, category: val as ProductCategory })}
+                    options={[
+                      { value: 'non-woven', label: 'Non-Woven Totes' },
+                      { value: 't-shirt', label: 'T-Shirt Bags' },
+                      { value: 'd-cut', label: 'D-Cut Punch' },
+                      { value: 'slider', label: 'Slider Zipper' },
+                      { value: 'food', label: 'Food Item' },
+                      { value: 'biodegradable', label: 'Biodegradable PLA' }
+                    ]}
+                    className="w-full"
+                    buttonClassName="w-full bg-[#fbfdfb] border-[#d4ebd4] text-slate-900 py-2.5 font-medium"
+                  />
                 </div>
               </div>
 

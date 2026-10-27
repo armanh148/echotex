@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { AdminSection } from './AdminSidebar';
+import { StatusBadgeDropdown } from './ui/StatusBadgeDropdown';
 
 interface DashboardOverviewProps {
   onNavigateToSection: (section: AdminSection) => void;
@@ -193,16 +194,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2 self-end sm:self-center">
-                    <select
+                    <StatusBadgeDropdown
                       value={q.status}
-                      onChange={(e) => updateQuoteStatus(q.id, e.target.value)}
-                      className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none focus:border-[#86C59E]"
-                    >
-                      <option value="New">New</option>
-                      <option value="In Review">In Review</option>
-                      <option value="Quotation Sent">Quotation Sent</option>
-                      <option value="Approved">Approved</option>
-                    </select>
+                      onChange={(val) => updateQuoteStatus(q.id, val)}
+                      options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
+                    />
                   </div>
                 </div>
               ))}

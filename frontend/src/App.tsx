@@ -224,6 +224,8 @@ export default function App() {
           {/* SHOP SECTION */}
           {activeSection === 'shop' && (
             <ShopSection
+              showCategories={false}
+              showDeal={false}
               onQuickView={handleOpenProductDetail}
               onAddToCart={(p, color, qty) => addToCart(p, color, qty)}
               onOpenQuoteForProduct={handleOpenQuoteForProduct}

@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { ChatMessage, CustomerThread } from '../../types';
+import { StatusBadgeDropdown } from './ui/StatusBadgeDropdown';
 import { 
   getStoredThreads, 
   saveStoredThreads, 
@@ -665,16 +666,12 @@ export const CustomerMessagesManager: React.FC = () => {
                   </a>
 
                   {/* Status Dropdown */}
-                  <select
+                  <StatusBadgeDropdown
                     value={activeThread.status}
-                    onChange={(e) => handleUpdateStatus(e.target.value as CustomerThread['status'])}
-                    className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4E9F76] cursor-pointer"
-                  >
-                    <option value="New">🟡 New</option>
-                    <option value="In Discussion">🔵 In Discussion</option>
-                    <option value="Quoted">🟣 Quoted</option>
-                    <option value="Resolved">🟢 Resolved</option>
-                  </select>
+                    onChange={(val) => handleUpdateStatus(val as CustomerThread['status'])}
+                    options={['New', 'In Discussion', 'Quoted', 'Resolved']}
+                    size="md"
+                  />
 
                 </div>
               </div>
