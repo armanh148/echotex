@@ -326,30 +326,59 @@ export const PageContentEditor: React.FC = () => {
         </div>
       </div>
 
-      {/* Tabs Navigation Strip */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${isActive
-                ? 'bg-[#4E9F76] text-white border-[#4E9F76] shadow-sm shadow-[#4E9F76]/20'
-                : 'bg-white text-slate-600 border-slate-200 hover:border-[#B2E2C5] hover:text-[#4E9F76]'
-                }`}
-            >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* 2-Column Responsive Layout: Left Sticky Vertical Sidebar + Right Content Area */}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        
+        {/* Left Vertical Navigation Sidebar */}
+        <aside className="w-full lg:w-64 xl:w-72 shrink-0 lg:sticky lg:top-6">
+          <div className="bg-white rounded-3xl p-3 sm:p-4 border border-[#B2E2C5]/40 shadow-xs">
+            <div className="px-3 py-2.5 mb-2 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                  CMS Navigation
+                </span>
+                <span className="text-xs font-bold text-slate-800">
+                  Page Sections
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#4E9F76] bg-[#B2E2C5]/25 px-2 py-0.5 rounded-full">
+                {tabs.length} Tabs
+              </span>
+            </div>
 
-      {/* Tab Panels */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#B2E2C5]/40 shadow-xs">
+            <nav className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-thin">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer w-full text-left border ${
+                      isActive
+                        ? 'bg-[#4E9F76] text-white border-[#4E9F76] shadow-sm shadow-[#4E9F76]/25 lg:translate-x-1 font-extrabold'
+                        : 'bg-white text-slate-600 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-[#0f172a]'
+                    }`}
+                  >
+                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="truncate flex-1 whitespace-nowrap">{tab.label}</span>
+                    {isActive && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0 hidden lg:block" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+
+        {/* Right Content Panel */}
+        <div className="flex-1 min-w-0 w-full bg-white rounded-3xl p-6 sm:p-8 border border-[#B2E2C5]/40 shadow-xs">
 
         {/* ========================================================
             TAB 1: LOGO & BRAND IDENTITY
@@ -1857,6 +1886,7 @@ export const PageContentEditor: React.FC = () => {
           </div>
         )}
 
+        </div>
       </div>
 
       {/* Floating Save Actions Bar at Bottom */}
