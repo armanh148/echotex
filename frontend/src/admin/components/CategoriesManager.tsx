@@ -62,7 +62,9 @@ export const CategoriesManager: React.FC = () => {
     tag: '',
     count: '',
     image: '',
-    description: ''
+    description: '',
+    size: '',
+    gsm: ''
   });
 
   const showToast = (msg: string) => {
@@ -90,7 +92,9 @@ export const CategoriesManager: React.FC = () => {
       tag: 'NEW LINE',
       count: '0 Models',
       image: '/images/bag-green.png',
-      description: ''
+      description: '',
+      size: '12" x 15"',
+      gsm: '70 GSM'
     });
     setIsModalOpen(true);
   };
@@ -105,7 +109,9 @@ export const CategoriesManager: React.FC = () => {
       tag: cat.tag || '',
       count: cat.count || '',
       image: cat.image || '/images/bag-green.png',
-      description: cat.description || ''
+      description: cat.description || '',
+      size: cat.size || '',
+      gsm: cat.gsm ? String(cat.gsm) : ''
     });
     setIsModalOpen(true);
   };
@@ -121,7 +127,9 @@ export const CategoriesManager: React.FC = () => {
         subtitle: formData.subtitle.trim(),
         tag: formData.tag.trim(),
         image: formData.image.trim() || '/images/bag-green.png',
-        description: formData.description.trim()
+        description: formData.description.trim(),
+        size: formData.size.trim(),
+        gsm: formData.gsm.trim()
       });
       showToast(`Category "${formData.label}" updated successfully`);
     } else {
@@ -133,7 +141,9 @@ export const CategoriesManager: React.FC = () => {
         tag: formData.tag.trim() || 'NEW',
         count: formData.count.trim() || '0 Models',
         image: formData.image.trim() || '/images/bag-green.png',
-        description: formData.description.trim() || `Certified wholesale packaging series for ${formData.label}.`
+        description: formData.description.trim() || `Certified wholesale packaging series for ${formData.label}.`,
+        size: formData.size.trim() || '12" x 15"',
+        gsm: formData.gsm.trim() || '70 GSM'
       });
       showToast(`New category "${formData.label}" created successfully`);
     }
@@ -467,6 +477,34 @@ export const CategoriesManager: React.FC = () => {
                     placeholder="e.g. BESTSELLER, 100% ORGANIC"
                     value={formData.tag}
                     onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#4E9F76]"
+                  />
+                </div>
+              </div>
+
+              {/* Size & GSM Specification */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Standard Size / Dimensions
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 11.5&quot; x 21&quot; or 12&quot; x 15&quot;"
+                    value={formData.size}
+                    onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#4E9F76]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Material GSM Weight
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 45 GSM, 80 GSM"
+                    value={formData.gsm}
+                    onChange={(e) => setFormData({ ...formData, gsm: e.target.value })}
                     className="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#4E9F76]"
                   />
                 </div>

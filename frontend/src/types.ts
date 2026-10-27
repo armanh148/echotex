@@ -327,6 +327,8 @@ export interface CategoryItem {
   count: string;
   image: string;
   description: string;
+  size?: string;
+  gsm?: string | number;
 }
 
 export interface ChatMessage {

@@ -52,7 +52,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: '64 STYLES',
     count: '64 Models',
     image: '/images/bag-green.png',
-    description: 'Explore our full manufacturing catalog of certified eco-friendly industrial & retail packaging with wholesale pricing tiers.'
+    description: 'Explore our full manufacturing catalog of certified eco-friendly industrial & retail packaging with wholesale pricing tiers.',
+    size: 'Custom Sizes',
+    gsm: '40 - 140 GSM'
   },
   {
     id: 't-shirt',
@@ -61,7 +63,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: 'REUSABLE',
     count: '12 Models',
     image: '/images/bag-green.png',
-    description: 'High-tensile vest-handle grocery & supermarket bags engineered for high load bearing and fast automated packaging.'
+    description: 'High-tensile vest-handle grocery & supermarket bags engineered for high load bearing and fast automated packaging.',
+    size: '11.5" x 21"',
+    gsm: '45 GSM'
   },
   {
     id: 'non-woven',
@@ -70,7 +74,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: 'HEAVY DUTY',
     count: '18 Models',
     image: '/images/bag-white.png',
-    description: 'Ultrasonic-welded & cross-stitched shopping carriers with optional gloss/matte lamination and custom flexo printing.'
+    description: 'Ultrasonic-welded & cross-stitched shopping carriers with optional gloss/matte lamination and custom flexo printing.',
+    size: '12" x 15"',
+    gsm: '80 GSM'
   },
   {
     id: 'd-cut',
@@ -79,7 +85,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: 'BIO-PLA / POLY',
     count: '14 Models',
     image: '/images/bag-orange.png',
-    description: 'Clean oval die-cut handle bags ideal for fashion apparel, trade exhibitions, and luxury retail counters.'
+    description: 'Clean oval die-cut handle bags ideal for fashion apparel, trade exhibitions, and luxury retail counters.',
+    size: '12" x 15"',
+    gsm: '55 GSM'
   },
   {
     id: 'slider',
@@ -88,7 +96,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: 'WATERPROOF',
     count: '9 Models',
     image: '/images/bag-blue.png',
-    description: 'Resealable frosted EVA and transparent PE slider zipper pouches for garment protection, dry goods, and cosmetics.'
+    description: 'Resealable frosted EVA and transparent PE slider zipper pouches for garment protection, dry goods, and cosmetics.',
+    size: '10" x 13"',
+    gsm: '70 GSM'
   },
   {
     id: 'food',
@@ -97,7 +107,9 @@ const DEFAULT_CATEGORIES: CategoryItem[] = [
     tag: 'FDA FOOD-GRADE',
     count: '11 Models',
     image: '/images/bag-black.png',
-    description: 'Thermal insulated multi-layer foil bags and grease-resistant carriers tested for food-contact compliance and temperature retention.'
+    description: 'Thermal insulated multi-layer foil bags and grease-resistant carriers tested for food-contact compliance and temperature retention.',
+    size: '12" x 14"',
+    gsm: '90 GSM'
   }
 ];
 

@@ -361,12 +361,13 @@ const INITIAL_SETTINGS: SiteSettings = {
 };
 
 const INITIAL_CATEGORIES: CategoryItem[] = [
-  { id: 'all', label: 'All Collections', subtitle: 'Complete Catalog', tag: '64 STYLES', count: '64 Models', image: '/images/bag-green.png', description: 'Explore our full manufacturing catalog of certified eco-friendly industrial & retail packaging.' },
-  { id: 'non-woven', label: 'Non-Woven Totes', subtitle: 'Heavy Duty Reusable', tag: 'BESTSELLER', count: '24 Models', image: '/images/bag-green.png', description: 'Virgin & recycled polypropylene totes with ultrasonic welded seams.' },
-  { id: 'laminated', label: 'Laminated Carriers', subtitle: 'Waterproof Full-Color', tag: 'HIGH TENSILE', count: '16 Models', image: '/images/bag-blue.png', description: 'Glossy and matte laminated woven polypropylene with photorealistic gravure print.' },
-  { id: 'slider', label: 'Slider Zipper Bags', subtitle: 'Airtight Garment & Parts', tag: 'AIRTIGHT', count: '12 Models', image: '/images/bag-white.png', description: 'Smooth slide-lock closure bags for e-commerce apparel and food items.' },
-  { id: 'd-cut', label: 'D-Cut Punch Handle', subtitle: 'Boutique & Retail', tag: 'RETAIL READY', count: '18 Models', image: '/images/bag-orange.png', description: 'Reinforced die-cut oval handle carrier bags for fashion retail.' },
-  { id: 'biodegradable', label: 'Biodegradable PLA', subtitle: '100% Compostable', tag: 'ZERO PLASTIC', count: '8 Models', image: '/images/bite-hero-product.png', description: 'Certified ASTM D6400 compostable plant-starch packaging.' }
+  { id: 'all', label: 'All Collections', subtitle: 'Complete Catalog', tag: '64 STYLES', count: '64 Models', image: '/images/bag-green.png', description: 'Explore our full manufacturing catalog of certified eco-friendly industrial & retail packaging.', size: 'Custom Sizes', gsm: '40 - 140 GSM' },
+  { id: 't-shirt', label: 'T-Shirt Bags', subtitle: 'High-Volume Retail', tag: 'REUSABLE', count: '12 Models', image: '/images/bag-green.png', description: 'High-tensile vest-handle grocery & supermarket bags engineered for high load bearing.', size: '11.5" x 21"', gsm: '45 GSM' },
+  { id: 'non-woven', label: 'Non-Woven Totes', subtitle: 'Heavy Duty Reusable', tag: 'BESTSELLER', count: '24 Models', image: '/images/bag-green.png', description: 'Virgin & recycled polypropylene totes with ultrasonic welded seams.', size: '12" x 15"', gsm: '80 GSM' },
+  { id: 'laminated', label: 'Laminated Carriers', subtitle: 'Waterproof Full-Color', tag: 'HIGH TENSILE', count: '16 Models', image: '/images/bag-blue.png', description: 'Glossy and matte laminated woven polypropylene with photorealistic gravure print.', size: '14" x 16"', gsm: '120 GSM' },
+  { id: 'slider', label: 'Slider Zipper Bags', subtitle: 'Airtight Garment & Parts', tag: 'AIRTIGHT', count: '12 Models', image: '/images/bag-white.png', description: 'Smooth slide-lock closure bags for e-commerce apparel and food items.', size: '10" x 13"', gsm: '70 GSM' },
+  { id: 'd-cut', label: 'D-Cut Punch Handle', subtitle: 'Boutique & Retail', tag: 'RETAIL READY', count: '18 Models', image: '/images/bag-orange.png', description: 'Reinforced die-cut oval handle carrier bags for fashion retail.', size: '12" x 15"', gsm: '55 GSM' },
+  { id: 'biodegradable', label: 'Biodegradable PLA', subtitle: '100% Compostable', tag: 'ZERO PLASTIC', count: '8 Models', image: '/images/bite-hero-product.png', description: 'Certified ASTM D6400 compostable plant-starch packaging.', size: '12" x 15"', gsm: '55 GSM' }
 ];
 
 const INITIAL_MEDIA: MediaAsset[] = [
