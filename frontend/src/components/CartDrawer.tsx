@@ -438,7 +438,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                 <p className="text-xs text-[#777] font-light mt-0.5">
                                   {item.product.gsm} GSM · {item.product.dimensions}
                                 </p>
-                                <div className="mt-1">
+                                <div className="mt-1 flex flex-wrap items-center gap-1.5">
                                   {(item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))))) ? (
                                     <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded">
                                       Wholesale (Min 5 Boxes · Step 5)
@@ -448,6 +448,9 @@ Notification automatically generated via EcoTex Storefront.`;
                                       Retail (1–5 boxes max)
                                     </span>
                                   )}
+                                  <span className="inline-block text-[10px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
+                                    📦 {item.product.pcsPerBox || 200} pcs/box ({((item.quantity || 1) * (item.product.pcsPerBox || 200)).toLocaleString()} pcs)
+                                  </span>
                                 </div>
                                 {/* Mobile Quantity Badge so it is NEVER hidden */}
                                 <div className="sm:hidden mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#FAF8F5] border border-[#cfc8bd]/60 text-[11px] font-mono font-bold text-[#166534]">

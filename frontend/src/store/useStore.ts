@@ -508,6 +508,13 @@ export const useStore = create<StoreState>((set, get) => ({
   setIsCartOpen: (isOpen: boolean) => set({ isCartOpen: isOpen }),
 
   addToCart: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => {
+    // Guard: Out of stock check - visible on storefront but cannot be purchased
+    const isOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
+    if (isOutOfStock) {
+      alert(`"${product.name}" is currently out of stock and cannot be added to cart.`);
+      return;
+    }
+
     const determinedOrderType: 'retail' | 'wholesale' = orderType || (quantity > 5 ? 'wholesale' : 'retail');
     const isRetail = determinedOrderType === 'retail';
 
@@ -882,7 +889,19 @@ export const useStore = create<StoreState>((set, get) => ({
 
   updateProduct: (id: string, updates: Partial<Product>) => {
     set((state) => {
-      const updated = state.products.map((p) => (p.id === id ? { ...p, ...updates } : p));
+      const updated = state.products.map((p) => {
+        if (p.id !== id) return p;
+        const merged = { ...p, ...updates };
+        if (updates.stockQuantity !== undefined) {
+          if (updates.stockQuantity <= 0) {
+            merged.inStock = false;
+            merged.stockQuantity = 0;
+          } else if (updates.inStock === undefined) {
+            merged.inStock = true;
+          }
+        }
+        return merged;
+      });
       saveLocal('products', updated);
       fetch(`${BASE_URL}/products/${id}`, {
         method: 'PUT',
@@ -904,7 +923,16 @@ export const useStore = create<StoreState>((set, get) => ({
 
   toggleProductStock: (id: string) => {
     set((state) => {
-      const updated = state.products.map((p) => (p.id === id ? { ...p, inStock: !p.inStock } : p));
+      const updated = state.products.map((p) => {
+        if (p.id !== id) return p;
+        const willBeInStock = !p.inStock;
+        const newStockQty = willBeInStock ? ((typeof p.stockQuantity === 'number' && p.stockQuantity > 0) ? p.stockQuantity : 50) : 0;
+        return {
+          ...p,
+          inStock: willBeInStock,
+          stockQuantity: newStockQty
+        };
+      });
       saveLocal('products', updated);
       fetch(`${BASE_URL}/products/${id}/toggle-stock`, { method: 'PATCH' }).catch(() => {});
       return { products: updated };
@@ -1068,8 +1096,29 @@ export const useStore = create<StoreState>((set, get) => ({
         ? state.orders.map(o => o.id === orderId ? newOrder : o)
         : [newOrder, ...state.orders];
       saveLocal('orders', updated);
+
+      // Automatically deduct ordered stock from products inventory
+      const updatedProducts = state.products.map((prod) => {
+        const orderedItem = (newOrder.items || []).find(
+          (it) => (it.productId || it.id) === prod.id
+        );
+        if (orderedItem) {
+          const currentStock = typeof prod.stockQuantity === 'number' ? prod.stockQuantity : (prod.inStock !== false ? 50 : 0);
+          const orderedBoxes = Number(orderedItem.quantity) || 1;
+          const newStock = Math.max(0, currentStock - orderedBoxes);
+          return {
+            ...prod,
+            stockQuantity: newStock,
+            inStock: newStock > 0
+          };
+        }
+        return prod;
+      });
+      saveLocal('products', updatedProducts);
+
       return { 
         orders: updated,
+        products: updatedProducts,
         analytics: {
           ...state.analytics,
           totalOrdersCount: updated.length,

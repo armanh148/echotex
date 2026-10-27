@@ -72,13 +72,15 @@ export async function createProduct(req, res) {
       subtitle: body.subtitle || '',
       pricePerUnit,
       moq,
+      pcsPerBox: Number(body.pcsPerBox) || 200,
+      stockQuantity: body.stockQuantity !== undefined ? Number(body.stockQuantity) : 50,
       gsm: Number(body.gsm) || 80,
       dimensions: body.dimensions || '12"W x 15"H',
       material: body.material || 'Virgin Polypropylene',
       capacity: body.capacity || 'Up to 25 lbs',
       badge: body.badge || 'New Model',
       image: body.image || '/images/bag-green.png',
-      inStock: body.inStock !== false,
+      inStock: body.inStock !== false && (body.stockQuantity === undefined || Number(body.stockQuantity) > 0),
       description: body.description || '',
       availableColors: Array.isArray(body.availableColors) && body.availableColors.length > 0
         ? body.availableColors
@@ -119,12 +121,23 @@ export async function updateProduct(req, res) {
       }
 
       const existing = db.products[idx];
+      const stockQuantity = req.body.stockQuantity !== undefined 
+        ? Number(req.body.stockQuantity) 
+        : existing.stockQuantity;
+      
+      const inStock = req.body.inStock !== undefined 
+        ? req.body.inStock 
+        : (stockQuantity !== undefined ? stockQuantity > 0 : existing.inStock);
+
       updatedItem = {
         ...existing,
         ...req.body,
         id, // Keep immutable ID
         pricePerUnit: req.body.pricePerUnit !== undefined ? Number(req.body.pricePerUnit) : existing.pricePerUnit,
         moq: req.body.moq !== undefined ? Number(req.body.moq) : existing.moq,
+        pcsPerBox: req.body.pcsPerBox !== undefined ? Number(req.body.pcsPerBox) : (existing.pcsPerBox || 200),
+        stockQuantity: stockQuantity !== undefined ? Math.max(0, stockQuantity) : existing.stockQuantity,
+        inStock: inStock && (stockQuantity === undefined || stockQuantity > 0),
         gsm: req.body.gsm !== undefined ? Number(req.body.gsm) : existing.gsm,
         updatedAt: new Date().toISOString(),
       };
@@ -155,7 +168,15 @@ export async function toggleStock(req, res) {
         return db;
       }
 
-      db.products[idx].inStock = !db.products[idx].inStock;
+      const willBeInStock = !db.products[idx].inStock;
+      db.products[idx].inStock = willBeInStock;
+      if (willBeInStock) {
+        db.products[idx].stockQuantity = (typeof db.products[idx].stockQuantity === 'number' && db.products[idx].stockQuantity > 0)
+          ? db.products[idx].stockQuantity
+          : 50;
+      } else {
+        db.products[idx].stockQuantity = 0;
+      }
       updatedItem = db.products[idx];
       return db;
     });

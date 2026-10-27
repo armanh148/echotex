@@ -16,6 +16,8 @@ export interface Product {
   pricePerUnit: number; // base bulk price for 1,000+ units
   moq: number; // minimum order quantity
   wholesaleMoq?: number; // wholesale minimum order quantity
+  pcsPerBox?: number; // number of pieces inside 1 box (dynamic pack size e.g. 200, 500 pcs/box)
+  stockQuantity?: number; // Available inventory count in boxes (0 means out of stock)
   gsm: number; // Grams per square meter
   dimensions: string; // e.g., '12"W x 14"H x 4"D'
   material: string; // e.g., 'Virgin & Recycled Non-Woven Polypropylene'

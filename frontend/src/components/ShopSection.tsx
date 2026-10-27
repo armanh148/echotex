@@ -651,12 +651,20 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-black text-xl sm:text-2xl text-stone-900 block leading-tight">
-                          ${product.pricePerUnit.toFixed(2)}
-                        </span>
-                        <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md inline-block mt-1 border border-emerald-200/70">
-                          {product.moq > 1 ? `MOQ: ${product.moq.toLocaleString()} boxes` : 'Min Qty: 1 box'}
-                        </span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="font-black text-xl sm:text-2xl text-stone-900 block leading-tight">
+                            ${product.pricePerUnit.toFixed(2)}
+                          </span>
+                          <span className="text-xs text-stone-500 font-bold">/ box</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                          <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/80">
+                            📦 {product.pcsPerBox || 200} pcs/box
+                          </span>
+                          <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200/70">
+                            {product.moq > 1 ? `MOQ: ${product.moq.toLocaleString()} boxes` : 'Min: 1 box'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Outline Shopping Cart Button */}

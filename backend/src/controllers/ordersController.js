@@ -177,6 +177,23 @@ export async function createOrder(req, res) {
       } else {
         db.orders.unshift(newOrder);
       }
+
+      // Deduct stock for ordered products
+      if (Array.isArray(db.products) && Array.isArray(newOrder.items)) {
+        for (const item of newOrder.items) {
+          const prod = db.products.find((p) => p.id === (item.productId || item.id));
+          if (prod) {
+            const currentStock = typeof prod.stockQuantity === 'number' ? prod.stockQuantity : (prod.inStock !== false ? 50 : 0);
+            const orderedBoxes = Number(item.quantity) || 1;
+            const newStock = Math.max(0, currentStock - orderedBoxes);
+            prod.stockQuantity = newStock;
+            if (newStock === 0) {
+              prod.inStock = false;
+            }
+          }
+        }
+      }
+
       return db;
     });
 

@@ -15,7 +15,8 @@ import {
   Minus, 
   Plus,
   Share2,
-  AlertCircle
+  AlertCircle,
+  Package
 } from 'lucide-react';
 
 interface ProductDetailPageProps {
@@ -45,6 +46,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   // Wholesale minimum order quantity starts at 5 boxes and goes in multiples of 5
   const wholesaleMoq = 5;
+  const pcsPerBox = product.pcsPerBox || 200;
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
   const maxQuantity = orderType === 'retail' ? 5 : 100000;
@@ -374,18 +376,42 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
 
             {/* Price Box */}
-            <div className="mt-4 py-3.5 px-6 bg-[#f8faf9] rounded-2xl border border-slate-200/80 flex items-baseline gap-3">
-              <span className="font-bold text-3xl sm:text-4xl text-[#d97706] font-mono tracking-tight">
-                ${currentPrice.toFixed(2)}
-              </span>
-              <span className="text-base font-mono text-slate-400 line-through">
-                ${originalPrice.toFixed(2)}
-              </span>
-              {orderType === 'wholesale' && (
-                <span className="ml-auto text-xs font-bold text-[#166534] bg-[#dcfce7] px-3 py-1 rounded-full font-mono">
-                  MOQ: {wholesaleMoq} Boxes (Multiples of 5)
+            <div className="mt-4 py-3.5 px-6 bg-[#f8faf9] rounded-2xl border border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-baseline gap-2.5">
+                <span className="font-bold text-3xl sm:text-4xl text-[#d97706] font-mono tracking-tight">
+                  ${currentPrice.toFixed(2)}
                 </span>
-              )}
+                <span className="text-base font-mono text-slate-400 line-through">
+                  ${originalPrice.toFixed(2)}
+                </span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  / Box
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
+                  <Package className="w-3.5 h-3.5 text-emerald-600" />
+                  <span><strong>{pcsPerBox.toLocaleString()}</strong> pcs / box</span>
+                </span>
+                {orderType === 'wholesale' && (
+                  <span className="text-xs font-bold text-[#166534] bg-[#dcfce7] px-3 py-1 rounded-full font-mono">
+                    MOQ: {wholesaleMoq} Boxes
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Dynamic Pieces Breakdown Banner (Retail & Wholesale) */}
+            <div className="mt-2.5 px-4 py-2 bg-gradient-to-r from-emerald-50/70 via-amber-50/40 to-slate-50 rounded-xl border border-emerald-200/60 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-slate-700">
+                <Package className="w-4 h-4 text-emerald-700 shrink-0" />
+                <span>
+                  <strong>Packaging Spec:</strong> 1 Box = <strong>{pcsPerBox.toLocaleString()} Pieces</strong>
+                </span>
+              </div>
+              <span className="font-mono font-bold text-emerald-800 text-[11px] bg-white/80 px-2 py-0.5 rounded-md border border-emerald-200/50">
+                ≈ ${(currentPrice / pcsPerBox).toFixed(3)} / pc
+              </span>
             </div>
 
             {/* Explicit Quantity Label & Selector */}
@@ -404,7 +430,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   )}
                 </label>
                 <span className="font-mono text-xs font-bold text-[#166534]">
-                  Total: {quantity.toLocaleString()} {quantity === 1 ? 'box' : 'boxes'}
+                  Total: {quantity.toLocaleString()} {quantity === 1 ? 'box' : 'boxes'} ({((quantity || 1) * pcsPerBox).toLocaleString()} pcs)
                 </span>
               </div>
 
@@ -485,7 +511,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   className="w-full sm:flex-1 h-12 bg-[#0f172a] hover:bg-[#166534] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all duration-300 shadow-md active:scale-98 cursor-pointer"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Add To Cart ({quantity.toLocaleString()} {quantity === 1 ? 'Box' : 'Boxes'})</span>
+                  <span>Add To Cart ({quantity.toLocaleString()} {quantity === 1 ? 'Box' : 'Boxes'} · {((quantity || 1) * pcsPerBox).toLocaleString()} pcs)</span>
                 </button>
               </div>
 

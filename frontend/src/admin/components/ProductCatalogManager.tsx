@@ -94,6 +94,7 @@ export const ProductCatalogManager: React.FC = () => {
     subtitle: '',
     pricePerUnit: 0.25,
     moq: 1000,
+    pcsPerBox: 200,
     gsm: 80,
     dimensions: '12"W x 14"H x 4"D',
     material: 'Virgin Non-Woven Polypropylene',
@@ -150,6 +151,7 @@ export const ProductCatalogManager: React.FC = () => {
       subtitle: 'Commercial Wholesale Series',
       pricePerUnit: 0.25,
       moq: 1000,
+      pcsPerBox: 200,
       gsm: 80,
       dimensions: '12"W x 14"H x 4"D',
       material: 'Virgin Non-Woven Polypropylene',
@@ -171,6 +173,7 @@ export const ProductCatalogManager: React.FC = () => {
       subtitle: p.subtitle || '',
       pricePerUnit: p.pricePerUnit,
       moq: p.moq,
+      pcsPerBox: p.pcsPerBox || 200,
       gsm: p.gsm,
       dimensions: p.dimensions,
       material: p.material,
@@ -199,6 +202,7 @@ export const ProductCatalogManager: React.FC = () => {
         subtitle: formData.subtitle,
         pricePerUnit: formData.pricePerUnit,
         moq: formData.moq,
+        pcsPerBox: formData.pcsPerBox || 200,
         gsm: formData.gsm,
         dimensions: formData.dimensions,
         material: formData.material,
@@ -216,6 +220,7 @@ export const ProductCatalogManager: React.FC = () => {
         subtitle: formData.subtitle,
         pricePerUnit: formData.pricePerUnit,
         moq: formData.moq,
+        pcsPerBox: formData.pcsPerBox || 200,
         gsm: formData.gsm,
         dimensions: formData.dimensions,
         material: formData.material,
@@ -410,10 +415,10 @@ export const ProductCatalogManager: React.FC = () => {
                     <td className="py-4 px-6">
                       <div className="font-black text-[#4E9F76]">
                         ${p.pricePerUnit.toFixed(2)}
-                        <span className="text-[10px] font-normal text-slate-400"> / pc</span>
+                        <span className="text-[10px] font-normal text-slate-400"> / box</span>
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        MOQ: {p.moq.toLocaleString()} pcs
+                      <div className="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200/80 rounded px-1.5 py-0.5 inline-block mt-0.5">
+                        📦 {p.pcsPerBox || 200} pcs / box
                       </div>
                     </td>
 
@@ -573,11 +578,11 @@ export const ProductCatalogManager: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Price, MOQ, GSM with Unit Badges */}
-                  <div className="grid grid-cols-3 gap-2.5">
+                  {/* Price, Pieces per Box, MOQ, GSM */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Price / Unit ($) *
+                        Price / Box ($) *
                       </label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
@@ -593,25 +598,46 @@ export const ProductCatalogManager: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        MOQ (Min Order) *
+                      <label className="block text-xs font-bold text-amber-900 mb-1 flex items-center gap-1">
+                        <span>Pcs / Box *</span>
+                        <span className="text-[10px] text-amber-600 font-normal">(Capacity)</span>
                       </label>
                       <div className="relative">
                         <input
                           type="number"
-                          step="100"
+                          step="10"
+                          min="1"
                           required
-                          value={formData.moq}
-                          onChange={(e) => setFormData({ ...formData, moq: parseInt(e.target.value) || 1000 })}
-                          className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
+                          value={formData.pcsPerBox || 200}
+                          onChange={(e) => setFormData({ ...formData, pcsPerBox: parseInt(e.target.value) || 200 })}
+                          className="w-full pl-3 pr-11 py-2 rounded-xl border border-amber-300 text-xs font-bold text-amber-900 bg-amber-50/40 focus:bg-white focus:outline-none focus:border-amber-500 transition-all"
+                          placeholder="e.g. 200"
                         />
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">pcs</span>
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-amber-700">pcs/box</span>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        GSM (Grammage)
+                        MOQ (Boxes) *
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          step="1"
+                          min="1"
+                          required
+                          value={formData.moq}
+                          onChange={(e) => setFormData({ ...formData, moq: parseInt(e.target.value) || 5 })}
+                          className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0f172a] bg-slate-50 focus:bg-white focus:outline-none focus:border-[#4E9F76] transition-all"
+                        />
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">box</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        GSM (Fabric)
                       </label>
                       <div className="relative">
                         <input
