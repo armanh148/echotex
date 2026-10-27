@@ -22,7 +22,8 @@ import {
   Search,
   Sparkles,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Lock
 } from 'lucide-react';
 
 interface ShopSectionProps {
@@ -106,6 +107,11 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
 
   const handleQuickAdd = (product: Product, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    const isOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
+    if (isOutOfStock) {
+      alert(`"${product.name}" is currently out of stock and cannot be added to cart.`);
+      return;
+    }
     const color = product.availableColors?.[0]?.hex || '#4E9F76';
     const qty = 1; // Retail quick-add defaults to 1 box (retail limit: 1-5 boxes)
     onAddToCart(product, color, qty);
@@ -609,6 +615,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {featuredArrivals.map((product) => {
               const isWishlisted = !!wishlist[product.id];
+              const isProdOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
+
               return (
                 <div
                   key={product.id}
@@ -616,11 +624,17 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                   className="group relative flex flex-col bg-white rounded-3xl border border-stone-200/90 p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer"
                 >
                   
-                  {/* Top Bar inside Card: NEW Badge on left, Heart Icon on right */}
+                  {/* Top Bar inside Card: NEW/SOLD OUT Badge on left, Heart Icon on right */}
                   <div className="flex items-center justify-between w-full mb-4 relative z-10">
-                    <span className="px-3 py-1 rounded-full bg-stone-900 text-white text-[11px] font-black uppercase tracking-wider shadow-2xs">
-                      NEW
-                    </span>
+                    {isProdOutOfStock ? (
+                      <span className="px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                        SOLD OUT
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full bg-stone-900 text-white text-[11px] font-black uppercase tracking-wider shadow-2xs">
+                        NEW
+                      </span>
+                    )}
 
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
@@ -667,14 +681,24 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                         </div>
                       </div>
 
-                      {/* Outline Shopping Cart Button */}
-                      <button
-                        onClick={(e) => handleQuickAdd(product, e)}
-                        aria-label={`Add ${product.name} to cart`}
-                        className="w-11 h-11 rounded-2xl border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors shadow-2xs active:scale-95 cursor-pointer shrink-0"
-                      >
-                        <ShoppingCart className="w-5 h-5 stroke-[2]" />
-                      </button>
+                      {/* Outline Shopping Cart Button or Disabled Out of Stock */}
+                      {isProdOutOfStock ? (
+                        <button
+                          disabled={true}
+                          title="Sold Out / Out of Stock"
+                          className="w-11 h-11 rounded-2xl border border-stone-200 bg-stone-100 text-stone-400 flex items-center justify-center cursor-not-allowed shrink-0"
+                        >
+                          <Lock className="w-4 h-4 text-stone-400" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => handleQuickAdd(product, e)}
+                          aria-label={`Add ${product.name} to cart`}
+                          className="w-11 h-11 rounded-2xl border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors shadow-2xs active:scale-95 cursor-pointer shrink-0"
+                        >
+                          <ShoppingCart className="w-5 h-5 stroke-[2]" />
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -825,6 +849,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {sortedProducts.map((prod) => {
                   const isWishlisted = !!wishlist[prod.id];
+                  const isProdOutOfStock = prod.inStock === false || (typeof prod.stockQuantity === 'number' && prod.stockQuantity <= 0);
+
                   return (
                     <div
                       key={prod.id}
@@ -833,8 +859,10 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     >
                       {/* Top Bar */}
                       <div className="flex items-center justify-between w-full mb-3">
-                        <span className="px-2.5 py-0.5 rounded-full bg-[#0d3419] text-white text-[9px] font-black uppercase tracking-wider">
-                          {prod.badge || 'FACTORY DIRECT'}
+                        <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                          isProdOutOfStock ? 'bg-rose-600 text-white' : 'bg-[#0d3419] text-white'
+                        }`}>
+                          {isProdOutOfStock ? 'SOLD OUT' : (prod.badge || 'FACTORY DIRECT')}
                         </span>
                         <button
                           onClick={(e) => toggleWishlist(prod.id, e)}
@@ -885,12 +913,22 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                               Quote
                             </button>
                           )}
-                          <button
-                            onClick={(e) => handleQuickAdd(prod, e)}
-                            className="w-8 h-8 rounded-lg border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors"
-                          >
-                            <ShoppingCart className="w-3.5 h-3.5 stroke-[2]" />
-                          </button>
+                          {isProdOutOfStock ? (
+                            <button
+                              disabled={true}
+                              title="Sold Out / Out of Stock"
+                              className="w-8 h-8 rounded-lg border border-stone-200 bg-stone-100 text-stone-400 flex items-center justify-center cursor-not-allowed"
+                            >
+                              <Lock className="w-3.5 h-3.5 text-stone-400" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={(e) => handleQuickAdd(prod, e)}
+                              className="w-8 h-8 rounded-lg border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors cursor-pointer"
+                            >
+                              <ShoppingCart className="w-3.5 h-3.5 stroke-[2]" />
+                            </button>
+                          )}
                         </div>
                       </div>
 

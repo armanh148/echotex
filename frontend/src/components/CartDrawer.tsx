@@ -451,6 +451,11 @@ Notification automatically generated via EcoTex Storefront.`;
                                   <span className="inline-block text-[10px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
                                     📦 {item.product.pcsPerBox || 200} pcs/box ({((item.quantity || 1) * (item.product.pcsPerBox || 200)).toLocaleString()} pcs)
                                   </span>
+                                  {(item.product.inStock === false || (typeof item.product.stockQuantity === 'number' && item.product.stockQuantity <= 0)) && (
+                                    <span className="inline-block text-[10px] font-bold text-rose-700 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded">
+                                      ⚠️ Out of Stock
+                                    </span>
+                                  )}
                                 </div>
                                 {/* Mobile Quantity Badge so it is NEVER hidden */}
                                 <div className="sm:hidden mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#FAF8F5] border border-[#cfc8bd]/60 text-[11px] font-mono font-bold text-[#166534]">
@@ -601,16 +606,37 @@ Notification automatically generated via EcoTex Storefront.`;
                         </div>
 
                         {/* Checkout CTA */}
-                        <motion.button
-                          whileHover={{ scale: 1.02, backgroundColor: '#166534' }}
-                          whileTap={{ scale: 0.98 }}
-                          type="button"
-                          onClick={() => setCheckoutStep('checkout')}
-                          className="w-full bg-[#000000] text-white py-4 px-6 text-xs sm:text-sm font-serif tracking-widest uppercase transition-all duration-300 mt-4 cursor-pointer text-center flex items-center justify-center gap-2 group shadow-sm hover:shadow-md rounded-md"
-                        >
-                          <span>Proceed to Checkout</span>
-                          <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-                        </motion.button>
+                        {(() => {
+                          const hasOutOfStockItems = items.some(item => item.product.inStock === false || (typeof item.product.stockQuantity === 'number' && item.product.stockQuantity <= 0));
+                          if (hasOutOfStockItems) {
+                            return (
+                              <div className="mt-4">
+                                <button
+                                  type="button"
+                                  disabled={true}
+                                  className="w-full bg-slate-200 text-slate-500 py-3.5 px-4 text-xs font-serif tracking-wider uppercase cursor-not-allowed text-center flex items-center justify-center gap-2 rounded-md"
+                                >
+                                  <span>Cannot Checkout · Out of Stock Item</span>
+                                </button>
+                                <p className="text-[11px] text-rose-600 mt-1.5 text-center font-medium">
+                                  Barah-e-karam out of stock items ko remove karein phir checkout karein.
+                                </p>
+                              </div>
+                            );
+                          }
+                          return (
+                            <motion.button
+                              whileHover={{ scale: 1.02, backgroundColor: '#166534' }}
+                              whileTap={{ scale: 0.98 }}
+                              type="button"
+                              onClick={() => setCheckoutStep('checkout')}
+                              className="w-full bg-[#000000] text-white py-4 px-6 text-xs sm:text-sm font-serif tracking-widest uppercase transition-all duration-300 mt-4 cursor-pointer text-center flex items-center justify-center gap-2 group shadow-sm hover:shadow-md rounded-md"
+                            >
+                              <span>Proceed to Checkout</span>
+                              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                            </motion.button>
+                          );
+                        })()}
 
                         {/* Trust Assurance */}
                         <div className="mt-4 pt-3 border-t border-[#cfc8bd]/30 flex items-center justify-center gap-1.5 text-[11px] text-[#777]">

@@ -16,7 +16,8 @@ import {
   Plus,
   Share2,
   AlertCircle,
-  Package
+  Package,
+  Lock
 } from 'lucide-react';
 
 interface ProductDetailPageProps {
@@ -47,6 +48,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // Wholesale minimum order quantity starts at 5 boxes and goes in multiples of 5
   const wholesaleMoq = 5;
   const pcsPerBox = product.pcsPerBox || 200;
+  const isOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
+  const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
   const maxQuantity = orderType === 'retail' ? 5 : 100000;
@@ -133,6 +136,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   const handleAddToCartClick = () => {
+    if (isOutOfStock) {
+      setMoqWarning('This product is currently out of stock and cannot be added to cart.');
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -161,6 +169,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   const handleExpressCheckout = () => {
+    if (isOutOfStock) {
+      setMoqWarning('This product is currently out of stock and cannot be ordered.');
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -307,11 +320,26 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
              ======================================================== */}
           <div className="lg:col-span-6 flex flex-col justify-start">
             
-            {/* Category Label & Rating */}
-            <div className="flex items-center gap-3 mb-2.5">
+            {/* Category Label, Stock Status & Rating */}
+            <div className="flex items-center gap-2.5 mb-2.5 flex-wrap">
               <span className="text-xs uppercase font-semibold tracking-[0.25em] text-[#d97706]">
                 {product.categoryLabel || 'SUSTAINABLE NON-WOVEN'}
               </span>
+              <span className="text-slate-300 font-light">—</span>
+              
+              {/* Dynamic Stock Availability Badge */}
+              {isOutOfStock ? (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-bold uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
+                  <span>Out of Stock · Sold Out</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>In Stock {typeof product.stockQuantity === 'number' ? `(${product.stockQuantity} boxes available)` : ''}</span>
+                </div>
+              )}
+
               <span className="text-slate-300 font-light">—</span>
               <div className="flex items-center gap-1 text-xs font-bold text-[#d97706]">
                 <Star className="w-3.5 h-3.5 fill-[#d97706] text-[#d97706]" />
@@ -375,75 +403,80 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </button>
             </div>
 
-            {/* Price Box */}
-            <div className="mt-4 py-3.5 px-6 bg-[#f8faf9] rounded-2xl border border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-baseline gap-2.5">
-                <span className="font-bold text-3xl sm:text-4xl text-[#d97706] font-mono tracking-tight">
-                  ${currentPrice.toFixed(2)}
-                </span>
-                <span className="text-base font-mono text-slate-400 line-through">
-                  ${originalPrice.toFixed(2)}
-                </span>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  / Box
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-2xs">
-                  <Package className="w-3.5 h-3.5 text-emerald-600" />
-                  <span><strong>{pcsPerBox.toLocaleString()}</strong> pcs / box</span>
-                </span>
-                {orderType === 'wholesale' && (
-                  <span className="text-xs font-bold text-[#166534] bg-[#dcfce7] px-3 py-1 rounded-full font-mono">
-                    MOQ: {wholesaleMoq} Boxes
+            {/* Unified Price & Packaging Specification Card */}
+            <div className="mt-4 rounded-2xl border border-slate-200/90 bg-[#f8faf9] p-4 shadow-xs">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-baseline gap-2.5">
+                  <span className="font-bold text-3xl sm:text-4xl text-[#d97706] font-mono tracking-tight">
+                    ${currentPrice.toFixed(2)}
                   </span>
-                )}
+                  <span className="text-base font-mono text-slate-400 line-through">
+                    ${originalPrice.toFixed(2)}
+                  </span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    / Box
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {orderType === 'wholesale' ? (
+                    <span className="text-xs font-bold text-[#166534] bg-emerald-100/90 border border-emerald-300/80 px-3 py-1 rounded-full font-mono shadow-2xs">
+                      MOQ: {wholesaleMoq} Boxes
+                    </span>
+                  ) : (
+                    <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-2xs">
+                      Retail Order
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Dynamic Pieces Breakdown Banner (Retail & Wholesale) */}
-            <div className="mt-2.5 px-4 py-2 bg-gradient-to-r from-emerald-50/70 via-amber-50/40 to-slate-50 rounded-xl border border-emerald-200/60 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-slate-700">
-                <Package className="w-4 h-4 text-emerald-700 shrink-0" />
-                <span>
-                  <strong>Packaging Spec:</strong> 1 Box = <strong>{pcsPerBox.toLocaleString()} Pieces</strong>
+              {/* Sub-divider & Box Capacity Breakdown */}
+              <div className="mt-3 pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <Package className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="text-slate-600">Packaging Spec:</span>
+                  <span className="font-bold text-slate-900 bg-white border border-slate-200/90 px-2 py-0.5 rounded-md font-mono text-[11px] shadow-2xs">
+                    1 Box = {pcsPerBox.toLocaleString()} Pcs
+                  </span>
+                </div>
+                <span className="font-mono font-bold text-emerald-800 text-[11px] bg-emerald-50 border border-emerald-200/70 px-2.5 py-0.5 rounded-md shadow-2xs">
+                  ≈ ${(currentPrice / pcsPerBox).toFixed(3)} / pc
                 </span>
               </div>
-              <span className="font-mono font-bold text-emerald-800 text-[11px] bg-white/80 px-2 py-0.5 rounded-md border border-emerald-200/50">
-                ≈ ${(currentPrice / pcsPerBox).toFixed(3)} / pc
-              </span>
             </div>
 
             {/* Explicit Quantity Label & Selector */}
             <div className="mt-5">
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
-                  <span>Order Quantity</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-800 whitespace-nowrap">
+                    Order Quantity
+                  </span>
                   {orderType === 'retail' ? (
-                    <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
-                      RETAIL LIMIT: 1 – 5 BOXES MAX
+                    <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                      1 – 5 Boxes
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold text-[#166534] bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                      WHOLESALE MOQ: 5 BOXES · MULTIPLES OF 5
+                    <span className="text-[10px] font-semibold text-[#166534] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                      Multiples of 5
                     </span>
                   )}
-                </label>
-                <span className="font-mono text-xs font-bold text-[#166534]">
-                  Total: {quantity.toLocaleString()} {quantity === 1 ? 'box' : 'boxes'} ({((quantity || 1) * pcsPerBox).toLocaleString()} pcs)
+                </div>
+                <span className={`font-mono text-xs font-bold whitespace-nowrap ${isOutOfStock ? 'text-rose-600' : 'text-[#166534]'}`}>
+                  {isOutOfStock ? '🔴 Out of Stock' : `Total: ${quantity.toLocaleString()} ${quantity === 1 ? 'box' : 'boxes'} (${((quantity || 1) * pcsPerBox).toLocaleString()} pcs)`}
                 </span>
               </div>
 
               {/* Quantity Stepper & ADD TO CART Row */}
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 {/* Stepper with Editable Input */}
-                <div className="w-full sm:w-44 h-12 rounded-xl border border-slate-300 bg-white flex items-center justify-between px-2 shadow-xs">
+                <div className={`w-full sm:w-44 h-12 rounded-xl border border-slate-300 bg-white flex items-center justify-between px-2 shadow-xs ${isOutOfStock ? 'opacity-50 pointer-events-none bg-slate-50' : ''}`}>
                   <button
                     type="button"
-                    disabled={quantity <= minQuantity}
+                    disabled={isOutOfStock || quantity <= minQuantity}
                     onClick={handleDecrement}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      quantity <= minQuantity
+                      isOutOfStock || quantity <= minQuantity
                         ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
                         : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                     }`}
@@ -454,11 +487,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </button>
                   <input
                     type="number"
+                    disabled={isOutOfStock}
                     step={orderType === 'wholesale' ? 5 : 1}
                     min={minQuantity}
                     max={maxQuantity}
-                    value={quantity}
+                    value={isOutOfStock ? 0 : quantity}
                     onChange={(e) => {
+                      if (isOutOfStock) return;
                       const val = parseInt(e.target.value);
                       if (isNaN(val)) {
                         setQuantity(minQuantity);
@@ -474,6 +509,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       }
                     }}
                     onBlur={() => {
+                      if (isOutOfStock) return;
                       if (quantity < minQuantity) {
                         setQuantity(minQuantity);
                       } else if (orderType === 'retail' && quantity > 5) {
@@ -490,10 +526,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   />
                   <button
                     type="button"
-                    disabled={orderType === 'retail' && quantity >= 5}
+                    disabled={isOutOfStock || (orderType === 'retail' && quantity >= 5)}
                     onClick={handleIncrement}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      orderType === 'retail' && quantity >= 5
+                      isOutOfStock || (orderType === 'retail' && quantity >= 5)
                         ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
                         : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                     }`}
@@ -504,19 +540,30 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </button>
                 </div>
 
-                {/* ADD TO CART Button (Solid Black with ShoppingBag icon) */}
-                <button
-                  type="button"
-                  onClick={handleAddToCartClick}
-                  className="w-full sm:flex-1 h-12 bg-[#0f172a] hover:bg-[#166534] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all duration-300 shadow-md active:scale-98 cursor-pointer"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add To Cart ({quantity.toLocaleString()} {quantity === 1 ? 'Box' : 'Boxes'} · {((quantity || 1) * pcsPerBox).toLocaleString()} pcs)</span>
-                </button>
+                {/* ADD TO CART Button (Disabled if Out of Stock, Solid Black if active) */}
+                {isOutOfStock ? (
+                  <button
+                    type="button"
+                    disabled={true}
+                    className="w-full sm:flex-1 h-12 bg-slate-200 text-slate-500 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-not-allowed shadow-none"
+                  >
+                    <Lock className="w-4 h-4 text-slate-400" />
+                    <span>Out Of Stock (Sold Out)</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddToCartClick}
+                    className="w-full sm:flex-1 h-12 bg-[#0f172a] hover:bg-[#166534] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all duration-300 shadow-md active:scale-98 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>Add To Cart ({quantity.toLocaleString()} {quantity === 1 ? 'Box' : 'Boxes'} · {((quantity || 1) * pcsPerBox).toLocaleString()} pcs)</span>
+                  </button>
+                )}
               </div>
 
               {/* Wholesale Quick Select Presets (All Multiples of 5 starting from 5) */}
-              {orderType === 'wholesale' && (
+              {orderType === 'wholesale' && !isOutOfStock && (
                 <div className="flex flex-wrap items-center gap-2 mt-2.5">
                   <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Quick:</span>
                   {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => (
@@ -539,6 +586,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               )}
 
+              {/* Out of Stock Notice Banner */}
+              {isOutOfStock && (
+                <div className="mt-3 p-3.5 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5 text-xs text-rose-800 animate-fadeIn">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold">Yeh item abhi out of stock ho chuka hai</p>
+                    <p className="mt-0.5 text-rose-700/90 leading-relaxed">
+                      Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Validation Warning Alert */}
               {moqWarning && (
                 <div className="mt-2.5 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-3 py-2 rounded-xl flex items-center gap-2 animate-fadeIn">
@@ -548,7 +608,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
 
               {/* Retail Policy Banner */}
-              {orderType === 'retail' && !moqWarning && (
+              {orderType === 'retail' && !moqWarning && !isOutOfStock && (
                 <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/70 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                   <span>Retail order policy: <strong>1 se 5 boxes maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</span>
@@ -556,7 +616,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
 
               {/* Wholesale Policy Banner */}
-              {orderType === 'wholesale' && !moqWarning && (
+              {orderType === 'wholesale' && !moqWarning && !isOutOfStock && (
                 <div className="mt-2 text-[11px] text-emerald-800 bg-emerald-50/70 border border-emerald-200/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>Wholesale order: starting <strong>5 boxes</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</span>
@@ -566,13 +626,24 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
             {/* EXPRESS CHECKOUT Button */}
             <div className="mt-3">
-              <button
-                type="button"
-                onClick={handleExpressCheckout}
-                className="w-full h-12 rounded-xl border-2 border-[#0f172a] hover:bg-[#0f172a] hover:text-white text-[#0f172a] font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 active:scale-98 cursor-pointer"
-              >
-                <span>→ Express Checkout</span>
-              </button>
+              {isOutOfStock ? (
+                <button
+                  type="button"
+                  disabled={true}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 cursor-not-allowed"
+                >
+                  <Lock className="w-4 h-4 text-slate-300" />
+                  <span>Purchases Temporarily Closed (Sold Out)</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleExpressCheckout}
+                  className="w-full h-12 rounded-xl border-2 border-[#0f172a] hover:bg-[#0f172a] hover:text-white text-[#0f172a] font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 active:scale-98 cursor-pointer"
+                >
+                  <span>→ Express Checkout</span>
+                </button>
+              )}
             </div>
 
             {/* 3 Trust Badges Row */}

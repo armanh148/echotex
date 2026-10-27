@@ -95,6 +95,7 @@ export const ProductCatalogManager: React.FC = () => {
     pricePerUnit: 0.25,
     moq: 1000,
     pcsPerBox: 200,
+    stockQuantity: 50,
     gsm: 80,
     dimensions: '12"W x 14"H x 4"D',
     material: 'Virgin Non-Woven Polypropylene',
@@ -133,10 +134,11 @@ export const ProductCatalogManager: React.FC = () => {
     const matchesCategory = selectedCategory === 'all' || 
       p.category === selectedCategory || 
       (p.categoryLabel && p.categoryLabel.toLowerCase() === selectedCategory.toLowerCase());
+    const isProdInStock = p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0);
     const matchesStock = 
       stockFilter === 'all' || 
-      (stockFilter === 'in-stock' && p.inStock) || 
-      (stockFilter === 'out-of-stock' && !p.inStock);
+      (stockFilter === 'in-stock' && isProdInStock) || 
+      (stockFilter === 'out-of-stock' && !isProdInStock);
 
     return matchesSearch && matchesCategory && matchesStock;
   });
@@ -152,6 +154,7 @@ export const ProductCatalogManager: React.FC = () => {
       pricePerUnit: 0.25,
       moq: 1000,
       pcsPerBox: 200,
+      stockQuantity: 50,
       gsm: 80,
       dimensions: '12"W x 14"H x 4"D',
       material: 'Virgin Non-Woven Polypropylene',
@@ -166,6 +169,7 @@ export const ProductCatalogManager: React.FC = () => {
 
   const handleOpenEditModal = (p: Product) => {
     setEditingProduct(p);
+    const currentStockQty = p.stockQuantity !== undefined ? p.stockQuantity : (p.inStock ? 50 : 0);
     setFormData({
       name: p.name,
       category: p.category,
@@ -174,13 +178,14 @@ export const ProductCatalogManager: React.FC = () => {
       pricePerUnit: p.pricePerUnit,
       moq: p.moq,
       pcsPerBox: p.pcsPerBox || 200,
+      stockQuantity: currentStockQty,
       gsm: p.gsm,
       dimensions: p.dimensions,
       material: p.material,
       capacity: p.capacity,
       badge: p.badge || 'Factory Direct',
       image: p.image || '/images/bag-green.png',
-      inStock: p.inStock,
+      inStock: p.inStock && currentStockQty > 0,
       description: p.description
     });
     setIsModalOpen(true);
@@ -194,6 +199,9 @@ export const ProductCatalogManager: React.FC = () => {
       return;
     }
 
+    const finalStockQuantity = Math.max(0, Number(formData.stockQuantity) || 0);
+    const finalInStock = formData.inStock && finalStockQuantity > 0;
+
     if (editingProduct) {
       updateProduct(editingProduct.id, {
         name: formData.name,
@@ -203,13 +211,14 @@ export const ProductCatalogManager: React.FC = () => {
         pricePerUnit: formData.pricePerUnit,
         moq: formData.moq,
         pcsPerBox: formData.pcsPerBox || 200,
+        stockQuantity: finalStockQuantity,
         gsm: formData.gsm,
         dimensions: formData.dimensions,
         material: formData.material,
         capacity: formData.capacity,
         badge: formData.badge,
         image: formData.image,
-        inStock: formData.inStock,
+        inStock: finalInStock,
         description: formData.description
       });
     } else {
@@ -221,13 +230,14 @@ export const ProductCatalogManager: React.FC = () => {
         pricePerUnit: formData.pricePerUnit,
         moq: formData.moq,
         pcsPerBox: formData.pcsPerBox || 200,
+        stockQuantity: finalStockQuantity,
         gsm: formData.gsm,
         dimensions: formData.dimensions,
         material: formData.material,
         capacity: formData.capacity,
         badge: formData.badge,
         image: formData.image,
-        inStock: formData.inStock,
+        inStock: finalInStock,
         description: formData.description,
         certifications: ['GRS Certified', '100% Recyclable', 'FDA Compliant'],
         availableColors: [
@@ -434,19 +444,29 @@ export const ProductCatalogManager: React.FC = () => {
                       )}
                     </td>
 
-                    {/* In-Stock Toggle */}
+                    {/* In-Stock / Inventory Column */}
                     <td className="py-4 px-6">
-                      <button
-                        onClick={() => toggleProductStock(p.id)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all ${
-                          p.inStock
-                            ? 'bg-[#86C59E]/15 text-[#4E9F76] hover:bg-[#86C59E]/25'
-                            : 'bg-red-50 text-red-600 hover:bg-red-100'
-                        }`}
-                      >
-                        <span className={`w-2 h-2 rounded-full ${p.inStock ? 'bg-[#86C59E]' : 'bg-red-500'}`} />
-                        <span>{p.inStock ? 'In Production' : 'Inactive'}</span>
-                      </button>
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => toggleProductStock(p.id)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all w-fit cursor-pointer ${
+                            p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0)
+                              ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                              : 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200'
+                          }`}
+                          title="Click to toggle Stock Status"
+                        >
+                          <span className={`w-2 h-2 rounded-full ${p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0) ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                          <span>
+                            {p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0)
+                              ? `${typeof p.stockQuantity === 'number' ? `${p.stockQuantity} boxes` : 'In Stock'}`
+                              : '0 boxes (Sold Out)'}
+                          </span>
+                        </button>
+                        <span className="text-[10px] text-slate-400 pl-1">
+                          {p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0) ? 'Purchases Active' : 'Visible · Purchasing Disabled'}
+                        </span>
+                      </div>
                     </td>
 
                     {/* Actions */}
@@ -651,6 +671,77 @@ export const ProductCatalogManager: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Stock Inventory Section with Quick Presets */}
+                  <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-800">
+                          Stock Quantity (Available Boxes) *
+                        </label>
+                        <p className="text-[10px] text-slate-500">
+                          Agar stock 0 ho ya item order ho kar khatam ho jaye, product store pr visible rahega magar buy nahi ho sakega.
+                        </p>
+                      </div>
+
+                      <div className="relative w-36">
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          required
+                          value={formData.stockQuantity !== undefined ? formData.stockQuantity : 50}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            const finalVal = isNaN(val) ? 0 : Math.max(0, val);
+                            setFormData({
+                              ...formData,
+                              stockQuantity: finalVal,
+                              inStock: finalVal > 0
+                            });
+                          }}
+                          className={`w-full pl-3 pr-12 py-1.5 rounded-xl border text-xs font-bold text-center transition-all ${
+                            (formData.stockQuantity || 0) > 0 && formData.inStock
+                              ? 'border-emerald-300 bg-white text-emerald-900 focus:border-emerald-500'
+                              : 'border-rose-300 bg-rose-50 text-rose-900 focus:border-rose-500'
+                          }`}
+                        />
+                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">boxes</span>
+                      </div>
+                    </div>
+
+                    {/* Stock Quick Presets */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-200/60">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick:</span>
+                      {[
+                        { label: '0 (Out of Stock)', value: 0 },
+                        { label: '10 Boxes', value: 10 },
+                        { label: '25 Boxes', value: 25 },
+                        { label: '50 Boxes', value: 50 },
+                        { label: '100 Boxes', value: 100 },
+                        { label: '500 Boxes', value: 500 }
+                      ].map((preset) => (
+                        <button
+                          key={preset.value}
+                          type="button"
+                          onClick={() => setFormData({
+                            ...formData,
+                            stockQuantity: preset.value,
+                            inStock: preset.value > 0
+                          })}
+                          className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                            formData.stockQuantity === preset.value
+                              ? preset.value === 0 
+                                ? 'bg-rose-600 text-white shadow-2xs' 
+                                : 'bg-[#166534] text-white shadow-2xs'
+                              : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Dimensions & Material */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -775,35 +866,47 @@ export const ProductCatalogManager: React.FC = () => {
 
                   {/* Stock Availability Toggle Card */}
                   <div
-                    onClick={() => setFormData({ ...formData, inStock: !formData.inStock })}
-                    className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                      formData.inStock
+                    onClick={() => {
+                      const newInStock = !formData.inStock;
+                      setFormData({ 
+                        ...formData, 
+                        inStock: newInStock,
+                        stockQuantity: newInStock ? ((formData.stockQuantity && formData.stockQuantity > 0) ? formData.stockQuantity : 50) : 0
+                      });
+                    }}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                      formData.inStock && (formData.stockQuantity || 0) > 0
                         ? 'bg-emerald-50/70 border-emerald-200'
-                        : 'bg-slate-50 border-slate-200'
+                        : 'bg-rose-50/70 border-rose-200'
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold ${
-                        formData.inStock ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-400'
+                        formData.inStock && (formData.stockQuantity || 0) > 0 ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
                       }`}>
-                        <Check className="w-3.5 h-3.5" />
+                        {formData.inStock && (formData.stockQuantity || 0) > 0 ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
                       </div>
                       <div>
                         <div className="text-xs font-bold text-[#0f172a]">
-                          {formData.inStock ? 'In Production & Live' : 'Paused / Inactive'}
+                          {formData.inStock && (formData.stockQuantity || 0) > 0
+                            ? `In Stock & Live (${formData.stockQuantity} boxes)` 
+                            : 'Out of Stock / Sold Out (0 boxes)'}
                         </div>
-                        <div className="text-[10px] text-slate-400">
-                          {formData.inStock ? 'Ready for wholesale ordering' : 'Hidden from active catalog'}
+                        <div className="text-[10px] text-slate-500">
+                          {formData.inStock && (formData.stockQuantity || 0) > 0
+                            ? 'Ready for retail & wholesale ordering' 
+                            : 'Product store pr visible rahega magar buy / cart option disabled hoga'}
                         </div>
                       </div>
                     </div>
 
-                    <input
-                      type="checkbox"
-                      checked={formData.inStock}
-                      onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
-                      className="w-4 h-4 text-[#4E9F76] rounded-md focus:ring-[#4E9F76] pointer-events-none"
-                    />
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                      formData.inStock && (formData.stockQuantity || 0) > 0
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
+                        : 'bg-rose-100 text-rose-800 border border-rose-200'
+                    }`}>
+                      {formData.inStock && (formData.stockQuantity || 0) > 0 ? 'Buy Active' : 'Sold Out'}
+                    </span>
                   </div>
 
                 </div>
