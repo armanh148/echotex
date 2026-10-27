@@ -50,15 +50,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     return DYE_COLORS.find(c => c.name.toLowerCase() === product.color?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
   });
 
-  // Dynamic color-aware product bag cutout
-  const bagCutout = (
-    selectedColor.id === 'dark-green' ? '/images/bag-green.png' :
-    selectedColor.id === 'orange' || selectedColor.id === 'yellow' || selectedColor.id === 'red' ? '/images/bag-orange.png' :
-    selectedColor.id === 'black' || selectedColor.id === 'navy-blue' ? '/images/bag-black.png' :
-    selectedColor.id === 'white' || selectedColor.id === 'beige-cream' ? '/images/bag-white.png' :
-    selectedColor.id === 'royal-blue' || selectedColor.id === 'sky-blue' ? '/images/bag-blue.png' :
-    product.image || '/images/bag-green.png'
-  );
+  // Fixed product bag image (does not change on color swatch selection)
+  const bagCutout = product.image || '/images/bag-green.png';
 
   const galleryImages = [
     { url: bagCutout, label: 'Front Product Shot' },
