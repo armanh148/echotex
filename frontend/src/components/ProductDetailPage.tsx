@@ -118,7 +118,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       return;
     }
     setMoqWarning(null);
-    onAddToCart(product, product.availableColors[0]?.hex || '#166534', quantity);
+    onAddToCart(product, product.availableColors?.[0]?.hex || '#166534', quantity);
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 2500);
   };
@@ -131,7 +131,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       return;
     }
     setMoqWarning(null);
-    const selectedColor = product.availableColors[0]?.hex || '#166534';
+    const selectedColor = product.availableColors?.[0]?.hex || '#166534';
     if (onExpressCheckout) {
       onExpressCheckout(product, selectedColor, quantity);
     } else {

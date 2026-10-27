@@ -8,6 +8,7 @@ import { DashboardOverview } from './DashboardOverview';
 import { HeroBannerManager } from './HeroBannerManager';
 import { CategoriesManager } from './CategoriesManager';
 import { ProductCatalogManager } from './ProductCatalogManager';
+import { OffersDealsManager } from './OffersDealsManager';
 import { PageContentEditor } from './PageContentEditor';
 import { RfqOrdersInbox } from './RfqOrdersInbox';
 import { CustomerMessagesManager } from './CustomerMessagesManager';
@@ -50,6 +51,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case 'hero': return 'Homepage Banner & 3D Showcase';
       case 'categories': return 'Product Categories & Taxonomy';
       case 'products': return 'Products & Wholesale Catalog';
+      case 'offers': return 'Special Offers & Flash Deals';
       case 'content': return 'Website Pages & Content Editor';
       case 'rfq-orders': return 'Customer Orders & Quote Inquiries';
       case 'messages': return 'Customer Messages & Live Connect';
@@ -144,6 +146,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {activeSection === 'products' && (
             <ProductCatalogManager />
+          )}
+
+          {activeSection === 'offers' && (
+            <OffersDealsManager />
           )}
 
           {activeSection === 'content' && (

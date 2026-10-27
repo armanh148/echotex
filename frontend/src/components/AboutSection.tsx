@@ -165,7 +165,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
 
             {/* Large Section Title */}
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0f172a] uppercase leading-[1.08] mb-8">
-              We Are Ecotex
+              {aConfig?.storyTitle || 'We Are Ecotex'}
             </h2>
 
             {/* Intro Quote / Lead Paragraph */}
@@ -202,10 +202,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
                 />
               </svg>
               <span className="mt-2 text-sm font-bold uppercase tracking-wider text-[#0f172a]">
-                Rashid Mahmood
+                {aConfig?.founderName || 'Rashid Mahmood'}
               </span>
               <span className="text-xs font-semibold text-[#166534] tracking-wide">
-                Managing Director & Founder, Ecotex Inc.
+                {aConfig?.founderRole || 'Managing Director & Founder, Ecotex Inc.'}
               </span>
             </div>
 
@@ -282,11 +282,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
               </span>
               
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0f172a] uppercase leading-tight mb-4">
-                Why Choose Us
+                {aConfig?.whyChooseUsTitle || 'Why Choose Us'}
               </h2>
 
               <p className="text-sm sm:text-base lg:text-lg text-[#475569] leading-relaxed mb-8 max-w-4xl">
-                We combine German ultrasonic welding machinery, ISO 9001 certified batch audits, and non-toxic soy formulations to deliver high-capacity packaging engineered to outlast disposable plastic.
+                {aConfig?.whyChooseUsSubtitle || 'We combine German ultrasonic welding machinery, ISO 9001 certified batch audits, and non-toxic soy formulations to deliver high-capacity packaging engineered to outlast disposable plastic.'}
               </p>
 
               {/* 6-Item Grid (2 cols x 3 rows - Full Spacious Layout) */}
@@ -331,10 +331,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
             | LEADERSHIP & VISION |
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0f172a] uppercase">
-            Meet Our Team
+            {aConfig?.teamSectionTitle || 'Meet Our Team'}
           </h2>
           <p className="mt-3 text-sm sm:text-base lg:text-lg text-[#475569]">
-            The experts behind global sustainable packaging.
+            {aConfig?.teamSectionSubtitle || 'The experts behind global sustainable packaging.'}
           </p>
         </div>
 

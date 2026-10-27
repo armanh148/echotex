@@ -342,6 +342,21 @@ const INITIAL_SETTINGS: SiteSettings = {
         avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
       }
     ]
+  },
+  dealConfig: {
+    enabled: true,
+    productId: '',
+    badge: 'ECO CHOICE',
+    title: "Grab It Before\nIt's Gone!",
+    subtitle: 'Commercial Wholesale Series',
+    buttonText: 'SHOP THE DEAL',
+    offerPrice: 0.25,
+    originalPrice: 0.36,
+    stockText: 'Ready for Immediate Dispatch',
+    stockProgressPercent: 78,
+    timerHours: 8,
+    timerMinutes: 12,
+    timerSeconds: 45
   }
 };
 

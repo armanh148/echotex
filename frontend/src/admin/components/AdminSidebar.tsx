@@ -15,7 +15,8 @@ import {
   ExternalLink,
   Layers,
   Settings,
-  FolderTree
+  FolderTree,
+  Flame
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
@@ -24,6 +25,7 @@ export type AdminSection =
   | 'hero'
   | 'categories'
   | 'products'
+  | 'offers'
   | 'content'
   | 'rfq-orders'
   | 'messages'
@@ -88,6 +90,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'hero', label: 'Homepage Banner', icon: Sliders, badge: 'Live' },
     { id: 'categories', label: 'Categories', icon: FolderTree, badge: categories.filter(c => c.id !== 'all').length || categories.length },
     { id: 'products', label: 'Products Catalog', icon: Package, badge: products.length },
+    { id: 'offers', label: 'Special Offers & Deals', icon: Flame, badge: 'HOT' },
     { id: 'content', label: 'Website Content', icon: FileText, badge: '9 Sections' },
     { id: 'rfq-orders', label: 'Orders & Quotes', icon: Inbox, badge: (quotes.filter(q => q.status === 'New').length + orders.filter(o => o.status === 'Pending').length) || undefined },
     { id: 'messages', label: 'Customer Messages', icon: MessageSquare, badge: unreadMessagesCount || undefined },

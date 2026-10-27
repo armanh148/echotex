@@ -244,6 +244,23 @@ export interface ShopConfig {
   galleryImages?: { url: string; caption: string }[];
 }
 
+export interface DealConfig {
+  enabled: boolean;
+  productId: string;
+  badge: string;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  offerPrice?: number;
+  originalPrice?: number;
+  stockText: string;
+  stockProgressPercent: number;
+  timerHours: number;
+  timerMinutes: number;
+  timerSeconds: number;
+  customImage?: string;
+}
+
 export interface OrderNotificationsConfig {
   emailEnabled: boolean;
   notificationEmail: string;
@@ -293,6 +310,7 @@ export interface SiteSettings {
   footerConfig?: FooterConfig;
   quoteCalcConfig?: QuoteCalcConfig;
   shopConfig?: ShopConfig;
+  dealConfig?: DealConfig;
   orderNotifications?: OrderNotificationsConfig;
   [key: string]: any;
 }

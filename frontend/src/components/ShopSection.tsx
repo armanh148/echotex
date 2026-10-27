@@ -43,7 +43,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const [sortBy, setSortBy] = useState<'featured' | 'price' | 'moq'>('featured');
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [cartToast, setCartToast] = useState<string | null>(null);
-  const [showFullCatalog, setShowFullCatalog] = useState<boolean>(false);
+  const [showFullCatalog, setShowFullCatalog] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const catalogRef = useRef<HTMLDivElement>(null);
@@ -65,17 +65,25 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     return rawCategories.filter(c => c.id !== 'all');
   }, [rawCategories]);
 
+  // Dynamic Deal of the Day Product from Catalog or Admin Offer Settings
+  const dealConfig = siteSettings?.dealConfig;
+  const isDealEnabled = dealConfig?.enabled !== false;
+
+  const timerH = dealConfig?.timerHours !== undefined ? dealConfig.timerHours : 8;
+  const timerM = dealConfig?.timerMinutes !== undefined ? dealConfig.timerMinutes : 12;
+  const timerS = dealConfig?.timerSeconds !== undefined ? dealConfig.timerSeconds : 45;
+
   // Live Real-Time Flash Deal Countdown Timer (Hours, Minutes, Seconds, Milliseconds)
   const [timeLeft, setTimeLeft] = useState({
-    hours: 8,
-    minutes: 12,
-    seconds: 45,
+    hours: timerH,
+    minutes: timerM,
+    seconds: timerS,
     milliseconds: 30
   });
 
   useEffect(() => {
-    // 8h 12m 45s countdown anchor
-    const targetTime = Date.now() + (8 * 3600 + 12 * 60 + 45) * 1000;
+    const totalDurationSeconds = (timerH * 3600 + timerM * 60 + timerS);
+    const targetTime = Date.now() + Math.max(300, totalDurationSeconds) * 1000;
 
     const interval = setInterval(() => {
       const now = Date.now();
@@ -89,7 +97,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     }, 42); // 24fps smooth update
 
     return () => clearInterval(interval);
-  }, []);
+  }, [timerH, timerM, timerS]);
 
   const toggleWishlist = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -105,9 +113,13 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     setTimeout(() => setCartToast(null), 3000);
   };
 
-  // Dynamic Deal of the Day Product from Catalog
+  // Dynamic Deal of the Day Product from Catalog (explicitly chosen in admin or auto-picked)
   const dealProduct: Product | null = React.useMemo(() => {
     if (!allProducts || allProducts.length === 0) return null;
+    if (dealConfig?.productId) {
+      const explicit = allProducts.find(p => p.id === dealConfig.productId);
+      if (explicit) return explicit;
+    }
     const foundDeal = allProducts.find(p => 
       p.badge?.toLowerCase().includes('off') || 
       p.badge?.toLowerCase().includes('deal') ||
@@ -115,19 +127,13 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
       p.badge?.toLowerCase().includes('choice')
     );
     return foundDeal || allProducts[0];
-  }, [allProducts]);
+  }, [allProducts, dealConfig?.productId]);
 
-  // Dynamic Featured / New Arrivals from Catalog (Real products from admin)
+  // Dynamic Featured / New Arrivals: Real newest products from catalog (newest added first)
   const featuredArrivals: Product[] = React.useMemo(() => {
     if (!allProducts || allProducts.length === 0) return [];
-    const prioritized = allProducts.filter(p => 
-      p.badge?.toLowerCase().includes('new') || 
-      p.badge?.toLowerCase().includes('choice') || 
-      p.badge?.toLowerCase().includes('bestseller') ||
-      p.badge?.toLowerCase().includes('recycled')
-    );
-    if (prioritized.length >= 4) return prioritized.slice(0, 4);
-    return allProducts.slice(0, 4);
+    // Show newest products at index 0 immediately so user edits are instantly visible
+    return allProducts.slice(0, 8);
   }, [allProducts]);
 
   // Dynamic Filtering for Full Catalog
@@ -442,28 +448,27 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
         {/* ========================================================
             4. DEAL OF THE DAY (FULL-WIDTH EXPANSIVE SPLIT CARD)
            ======================================================== */}
-        {dealProduct && (
+        {isDealEnabled && dealProduct && (
           <section className="w-full rounded-[32px] sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-8 sm:p-12 lg:p-16 mb-16 sm:mb-20 shadow-xs overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 items-center">
               
               {/* Left Column: Deal Copy & CTA */}
               <div className="lg:col-span-5 flex flex-col text-left">
                 <span className="text-xs sm:text-sm font-black tracking-widest uppercase text-[#FF5722] mb-3 block">
-                  {dealProduct.badge || 'DEAL OF THE DAY'}
+                  {dealConfig?.badge || dealProduct.badge || 'ECO CHOICE'}
                 </span>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.08] mb-4">
-                  Grab It Before<br />
-                  It's Gone!
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.08] mb-4 whitespace-pre-line">
+                  {dealConfig?.title || "Grab It Before\nIt's Gone!"}
                 </h2>
                 <p className="text-base sm:text-lg text-stone-600 mb-8 font-medium max-w-md">
-                  {dealProduct.subtitle || 'Hurry! Limited stock available from current production run.'}
+                  {dealConfig?.subtitle || dealProduct.subtitle || 'Commercial Wholesale Series'}
                 </p>
                 <div>
                   <button
                     onClick={(e) => handleQuickAdd(dealProduct, e)}
                     className="bg-[#FF5722] hover:bg-[#e64a19] text-white font-bold text-xs sm:text-sm tracking-wider uppercase px-8 py-4 rounded-full inline-flex items-center gap-3 shadow-lg shadow-[#FF5722]/35 transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
                   >
-                    <span>SHOP THE DEAL</span>
+                    <span>{dealConfig?.buttonText || 'SHOP THE DEAL'}</span>
                     <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
                   </button>
                 </div>
@@ -479,7 +484,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                   {/* Product Thumbnail */}
                   <div className="w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 bg-stone-50 rounded-2xl flex items-center justify-center p-4 shrink-0 overflow-hidden border border-stone-100">
                     <img
-                      src={dealProduct.image || '/images/bag-blue.png'}
+                      src={dealConfig?.customImage || dealProduct.image || '/images/bag-blue.png'}
                       alt={dealProduct.name}
                       className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-105 transition-transform duration-300 select-none"
                       draggable={false}
@@ -501,20 +506,23 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     {/* Pricing */}
                     <div className="flex items-baseline gap-3 mb-5">
                       <span className="text-3xl sm:text-4xl font-black text-[#FF5722]">
-                        ${dealProduct.pricePerUnit.toFixed(2)}
+                        ${(typeof dealConfig?.offerPrice === 'number' && dealConfig.offerPrice > 0 ? dealConfig.offerPrice : dealProduct.pricePerUnit).toFixed(2)}
                       </span>
                       <span className="text-base sm:text-lg font-medium text-stone-400 line-through">
-                        ${(dealProduct.pricePerUnit * 1.45).toFixed(2)}
+                        ${(typeof dealConfig?.originalPrice === 'number' && dealConfig.originalPrice > 0 ? dealConfig.originalPrice : (dealProduct.pricePerUnit * 1.45)).toFixed(2)}
                       </span>
                     </div>
 
                     {/* Stock Bar */}
                     <div className="mb-6">
                       <p className="text-xs sm:text-sm font-bold text-stone-700 mb-2">
-                        {dealProduct.inStock ? 'Ready for Immediate Dispatch' : 'Backordered'}
+                        {dealConfig?.stockText || (dealProduct.inStock ? 'Ready for Immediate Dispatch' : 'Backordered')}
                       </p>
                       <div className="w-full h-2.5 rounded-full bg-stone-100 overflow-hidden">
-                        <div className="h-full bg-[#FF5722] rounded-full w-[78%]" />
+                        <div 
+                          className="h-full bg-[#FF5722] rounded-full transition-all duration-500" 
+                          style={{ width: `${dealConfig?.stockProgressPercent ? dealConfig.stockProgressPercent : 78}%` }}
+                        />
                       </div>
                     </div>
 

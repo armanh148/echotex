@@ -1,6 +1,66 @@
 {
   "products": [
     {
+      "id": "prod-1793086425671",
+      "name": "dv lhjdv eagh n",
+      "category": "non-woven",
+      "categoryLabel": "Non-Woven Totes",
+      "subtitle": "Commercial Wholesale Series",
+      "pricePerUnit": 0.25,
+      "moq": 1000,
+      "gsm": 80,
+      "dimensions": "12\"W x 14\"H x 4\"D",
+      "material": "Virgin Non-Woven Polypropylene",
+      "capacity": "Up to 25 lbs",
+      "badge": "Factory Direct",
+      "image": "/images/bag-green.png",
+      "inStock": true,
+      "description": "High tensile enterprise carrier bag manufactured for supermarkets, boutique retail, and trade exhibitions.",
+      "availableColors": [
+        {
+          "name": "Eco Green",
+          "hex": "#86C59E"
+        },
+        {
+          "name": "Pure White",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "Deep Slate",
+          "hex": "#0f172a"
+        }
+      ],
+      "volumeTiers": [
+        {
+          "minQty": 1000,
+          "price": 0.25
+        },
+        {
+          "minQty": 5000,
+          "price": 0.23
+        },
+        {
+          "minQty": 10000,
+          "price": 0.2
+        }
+      ],
+      "features": [
+        "Ultrasonic welded stress-tested seams",
+        "Tear-resistant reinforced handles",
+        "Certified non-toxic eco inks",
+        "100% Recyclable polypropylene"
+      ],
+      "certifications": [
+        "GRS Certified",
+        "100% Recyclable",
+        "FDA Compliant"
+      ],
+      "leadTime": "2-4 Business Days",
+      "bestFor": "Supermarkets, Retail & Events",
+      "ecoImpact": "Displaces up to 250 single-use plastic carrier bags per unit lifetime.",
+      "createdAt": "2026-10-27T07:33:45.681Z"
+    },
+    {
       "id": "prod-1791786437631",
       "gsm": 80,
       "moq": 1000,
@@ -58,7 +118,8 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ]
+      ],
+      "updatedAt": "2026-10-27T07:36:41.331Z"
     },
     {
       "id": "prod-1791183909856",
@@ -525,6 +586,16 @@
       "label": "Food Item Bags",
       "subtitle": "Cold-Chain & Fresh",
       "description": "Thermal insulated multi-layer foil bags and grease-resistant carriers tested for food-contact compliance and temperature retention."
+    },
+    {
+      "id": "hygv",
+      "label": "hygv",
+      "subtitle": "top",
+      "tag": "NEW LINE",
+      "count": "0 Models",
+      "image": "/images/bag-green.png",
+      "description": "Certified wholesale packaging series for hygv.",
+      "createdAt": "2026-10-27T07:52:43.398Z"
     }
   ],
   "orders": [
@@ -1870,7 +1941,7 @@
     "tagline": "Certified Sustainable Wholesale Packaging Direct From Manufacturer",
     "heroTitle": "It's time to pack better.",
     "siteTitle": "Ecotex Inc. | Wholesale Sustainable Packaging & Polypropylene Bags",
-    "updatedAt": "2026-10-22T11:09:06.735Z",
+    "updatedAt": "2026-10-27T07:54:19.556Z",
     "aboutStory": "Founded with a dedication to manufacturing excellence, Ecotex operates state-of-the-art ultrasonic welding and automated flexographic printing facilities in California and Karachi.",
     "aboutTitle": "Engineered For Durability. Designed For Circularity.",
     "esgMetrics": {
@@ -1881,8 +1952,14 @@
     },
     "heroConfig": {
       "title": "It's time to\npack better.",
-      "ctaText": "Shop Now",
       "subtitle": "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
+      "ctaText": "Shop Now",
+      "badgeDoctor": "Recommended by doctors",
+      "badgeTrust": "Trusted by 21,000+ People",
+      "productImage": "/images/bag-black.png",
+      "backgroundImage": "/uploads/Gemini_Generated_Image_733cid7-1793087618466-l817k.webp",
+      "showcasePrice": 0.25,
+      "casePackSize": 1000,
       "variants": [
         {
           "id": "v1",
@@ -1932,13 +2009,7 @@
           "image": "/images/bag-green.png",
           "colorName": "New Custom Colorway"
         }
-      ],
-      "badgeTrust": "Trusted by 21,000+ People",
-      "badgeDoctor": "Recommended by doctors",
-      "casePackSize": 1000,
-      "productImage": "/images/bag-black.png",
-      "showcasePrice": 0.25,
-      "backgroundImage": "/uploads/syed-1792658598418-d00l0.png"
+      ]
     },
     "logoConfig": {
       "subtitle": "Sustainable Packaging",
@@ -2234,6 +2305,30 @@
           "title": "Pure Mechanical & Biological Recovery"
         }
       ]
+    },
+    "whatsappNumber": "+1 (951) 450-9773",
+    "supportEmail": "orders@ecotexinc.com",
+    "dealConfig": {
+      "enabled": true,
+      "productId": "prod-1791183909856",
+      "badge": "ECO CHOICE",
+      "title": "Grab It Before\nIt's Gone!",
+      "subtitle": "Commercial Wholesale Series",
+      "buttonText": "SHOP THE DEAL",
+      "offerPrice": 0.25,
+      "originalPrice": 0.36,
+      "stockText": "Ready for Immediate Dispatch",
+      "stockProgressPercent": 78,
+      "timerHours": 8,
+      "timerMinutes": 12,
+      "timerSeconds": 45,
+      "customImage": "/uploads/upload-1791183915012-gqccb.webp"
+    },
+    "siteImages": {
+      "heroBag": "/images/bite-hero-product.png",
+      "facilityPhoto": "/images/versatility-banner-bg.jpg",
+      "shopBanner": "/images/bag-green.png",
+      "aboutHero": "/images/versatility-banner-bg.jpg"
     }
   },
   "testimonials": [
