@@ -22,6 +22,8 @@
       "subtitle": "Commercial Wholesale Series",
       "createdAt": "2026-10-27T07:33:45.681Z",
       "ecoImpact": "Displaces up to 250 single-use plastic carrier bags per unit lifetime.",
+      "pcsPerBox": 201,
+      "updatedAt": "2026-10-27T10:50:13.332Z",
       "dimensions": "12\"W x 14\"H x 4\"D",
       "description": "High tensile enterprise carrier bag manufactured for supermarkets, boutique retail, and trade exhibitions.",
       "volumeTiers": [
@@ -40,6 +42,7 @@
       ],
       "pricePerUnit": 0.25,
       "categoryLabel": "Non-Woven Totes",
+      "stockQuantity": 50,
       "certifications": [
         "GRS Certified",
         "100% Recyclable",
@@ -58,10 +61,7 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ],
-      "pcsPerBox": 201,
-      "stockQuantity": 50,
-      "updatedAt": "2026-10-27T10:50:13.332Z"
+      ]
     },
     {
       "id": "prod-1791786437631",
@@ -210,6 +210,8 @@
       "category": "t-shirt",
       "material": "Virgin & Pre-Consumer Recycled Polypropylene (Non-Woven)",
       "subtitle": "High-volume supermarket & retail carry-out bags engineered for high load bearing",
+      "pcsPerBox": 201,
+      "updatedAt": "2026-10-27T10:51:12.164Z",
       "dimensions": "11.5\"W x 21\"H x 6.5\" Gusset",
       "description": "Engineered specifically for supermarkets, convenience chains, and retail grocers aiming to comply with single-use plastic bans without blowing operating budgets. Ultrasonic heat-sealed handles offer extraordinary tensile strength.",
       "volumeTiers": [
@@ -228,6 +230,7 @@
       ],
       "pricePerUnit": 0.18,
       "categoryLabel": "T-Shirt Bags",
+      "stockQuantity": 50,
       "availableColors": [
         {
           "hex": "#1b4329",
@@ -241,10 +244,7 @@
           "hex": "#e8e2d5",
           "name": "Natural Sand"
         }
-      ],
-      "pcsPerBox": 201,
-      "stockQuantity": 50,
-      "updatedAt": "2026-10-27T10:51:12.164Z"
+      ]
     },
     {
       "id": "eco-tshirt-supermarket",

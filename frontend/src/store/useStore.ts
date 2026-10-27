@@ -498,7 +498,7 @@ export const useStore = create<StoreState>((set, get) => ({
     {
       id: 'initial-sample-1',
       product: PRODUCTS[0],
-      quantity: 1000,
+      quantity: 25,
       selectedColor: '#4E9F76',
       unitPrice: 0.22
     }
@@ -515,8 +515,11 @@ export const useStore = create<StoreState>((set, get) => ({
       return;
     }
 
+    const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
     const determinedOrderType: 'retail' | 'wholesale' = orderType || (quantity > 5 ? 'wholesale' : 'retail');
     const isRetail = determinedOrderType === 'retail';
+    const maxAllowed = isRetail ? Math.min(5, availableStock) : availableStock;
+    const clampedQty = Math.max(1, Math.min(quantity, maxAllowed));
 
     // Pricing calculation
     let unitPrice = isRetail
@@ -525,7 +528,7 @@ export const useStore = create<StoreState>((set, get) => ({
 
     if (!isRetail && product.volumeTiers && product.volumeTiers.length > 0) {
       for (const tier of product.volumeTiers) {
-        if (quantity >= tier.minQty) {
+        if (clampedQty >= tier.minQty) {
           unitPrice = tier.price;
         }
       }
@@ -542,9 +545,9 @@ export const useStore = create<StoreState>((set, get) => ({
       if (existingIndex > -1) {
         updatedCart = state.cart.map((item, index) => {
           if (index === existingIndex) {
-            let newQty = item.quantity + quantity;
-            if (determinedOrderType === 'retail' && newQty > 5) {
-              newQty = 5;
+            let newQty = item.quantity + clampedQty;
+            if (newQty > maxAllowed) {
+              newQty = maxAllowed;
             }
             let updatedPrice = unitPrice;
             if (!isRetail && product.volumeTiers) {
@@ -560,7 +563,7 @@ export const useStore = create<StoreState>((set, get) => ({
         const newItem: CartItem = {
           id: `${product.id}-${selectedColor}-${determinedOrderType}-${Date.now()}`,
           product,
-          quantity: determinedOrderType === 'retail' ? Math.min(5, quantity) : quantity,
+          quantity: clampedQty,
           selectedColor,
           unitPrice,
           orderType: determinedOrderType
@@ -578,8 +581,16 @@ export const useStore = create<StoreState>((set, get) => ({
       const updatedCart = state.cart
         .map((item) => {
           if (item.id === itemId) {
-            const newQty = item.quantity + delta;
+            let newQty = item.quantity + delta;
             if (newQty <= 0) return null;
+
+            const availableStock = typeof item.product.stockQuantity === 'number' ? item.product.stockQuantity : (item.product.inStock !== false ? 50 : 0);
+            const isRetail = item.orderType === 'retail' || (!item.orderType && item.quantity <= 5);
+            const maxAllowed = isRetail ? Math.min(5, availableStock) : availableStock;
+            if (newQty > maxAllowed) {
+              newQty = maxAllowed;
+            }
+
             // Recalculate tier
             let unitPrice = item.product.pricePerUnit;
             if (item.product.volumeTiers) {

@@ -468,9 +468,11 @@ Notification automatically generated via EcoTex Storefront.`;
                               {/* 3. Quantity: Responsive Stepper with high-contrast text */}
                               {(() => {
                                 const isWholesaleItem = item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))));
+                                const availableStock = typeof item.product.stockQuantity === 'number' ? item.product.stockQuantity : (item.product.inStock !== false ? 50 : 0);
                                 const minQty = isWholesaleItem ? 5 : 1;
+                                const maxQty = isWholesaleItem ? availableStock : Math.min(5, availableStock);
                                 const isAtMin = item.quantity <= minQty;
-                                const isAtMax = !isWholesaleItem && item.quantity >= 5;
+                                const isAtMax = item.quantity >= maxQty;
 
                                 return (
                                   <div className="col-span-2 flex items-center justify-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-serif select-none">
@@ -495,7 +497,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                     >
                                       –
                                     </motion.button>
-                                    <span className="font-mono text-xs sm:text-sm font-bold text-[#1c1b18] tabular-nums min-w-[28px] text-center px-1">
+                                    <span className={`font-mono text-xs sm:text-sm font-bold tabular-nums min-w-[28px] text-center px-1 ${item.quantity > availableStock ? 'text-rose-600' : 'text-[#1c1b18]'}`}>
                                       {item.quantity < 1000 ? item.quantity : `${item.quantity.toLocaleString()}`}
                                     </span>
                                     <motion.button
@@ -505,9 +507,9 @@ Notification automatically generated via EcoTex Storefront.`;
                                       onClick={() => {
                                         if (isAtMax) return;
                                         if (isWholesaleItem) {
-                                          onUpdateQuantity(item.id, item.quantity + 5);
+                                          onUpdateQuantity(item.id, Math.min(maxQty, item.quantity + 5));
                                         } else {
-                                          onUpdateQuantity(item.id, item.quantity + 1);
+                                          onUpdateQuantity(item.id, Math.min(maxQty, item.quantity + 1));
                                         }
                                       }}
                                       className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full border flex items-center justify-center transition-colors text-sm leading-none font-bold ${
@@ -516,7 +518,11 @@ Notification automatically generated via EcoTex Storefront.`;
                                           : 'border-[#cfc8bd] hover:border-[#1c1b18] hover:bg-white text-[#1c1b18] cursor-pointer'
                                       }`}
                                       aria-label="Increase quantity"
-                                      title={isAtMax ? 'Retail orders are limited to 5 boxes maximum' : (isWholesaleItem ? 'Increase by 5 boxes' : 'Increase quantity')}
+                                      title={
+                                        isAtMax
+                                          ? (item.quantity >= availableStock ? `Available stock limit reached (${availableStock} boxes in stock)` : 'Retail orders are limited to 5 boxes maximum')
+                                          : (isWholesaleItem ? 'Increase by 5 boxes' : 'Increase quantity')
+                                      }
                                     >
                                       +
                                     </motion.button>
@@ -609,6 +615,11 @@ Notification automatically generated via EcoTex Storefront.`;
                         {/* Checkout CTA */}
                         {(() => {
                           const hasOutOfStockItems = items.some(item => item.product.inStock === false || (typeof item.product.stockQuantity === 'number' && item.product.stockQuantity <= 0));
+                          const overStockItems = items.filter(item => {
+                            const stock = typeof item.product.stockQuantity === 'number' ? item.product.stockQuantity : (item.product.inStock !== false ? 50 : 0);
+                            return item.quantity > stock;
+                          });
+
                           if (hasOutOfStockItems) {
                             return (
                               <div className="mt-4">
@@ -625,6 +636,40 @@ Notification automatically generated via EcoTex Storefront.`;
                               </div>
                             );
                           }
+
+                          if (overStockItems.length > 0) {
+                            return (
+                              <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg">
+                                <div className="flex items-center gap-2 text-rose-800 text-xs font-bold">
+                                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+                                  <span>Stock Limit Exceeded ({overStockItems.length} item{overStockItems.length > 1 ? 's' : ''})</span>
+                                </div>
+                                <p className="text-[11px] text-rose-700 mt-1 leading-relaxed">
+                                  Cart quantity available stock se zyada hai. Barah-e-karam quantity kam karein ya auto-adjust karein.
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    overStockItems.forEach(item => {
+                                      const stock = typeof item.product.stockQuantity === 'number' ? item.product.stockQuantity : (item.product.inStock !== false ? 50 : 0);
+                                      onUpdateQuantity(item.id, Math.max(1, stock));
+                                    });
+                                  }}
+                                  className="mt-2.5 text-xs font-bold text-white bg-[#166534] hover:bg-[#14532d] py-2 px-3 rounded transition-colors cursor-pointer w-full text-center shadow-xs"
+                                >
+                                  Auto-Adjust to Available Stock
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={true}
+                                  className="w-full bg-slate-200 text-slate-500 py-3 px-4 text-xs font-serif tracking-wider uppercase cursor-not-allowed text-center flex items-center justify-center gap-2 rounded-md mt-2"
+                                >
+                                  <span>Cannot Checkout · Exceeds Stock Limit</span>
+                                </button>
+                              </div>
+                            );
+                          }
+
                           return (
                             <motion.button
                               whileHover={{ scale: 1.02, backgroundColor: '#166534' }}

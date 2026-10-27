@@ -75,15 +75,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
-  const maxQuantity = orderType === 'retail' ? 5 : 100000;
+  const maxQuantity = orderType === 'retail' ? Math.min(5, availableStock) : availableStock;
   const [moqWarning, setMoqWarning] = useState<string | null>(null);
 
   // Sync state when product changes or orderType toggles
   useEffect(() => {
     setActiveImageIndex(0);
     setMoqWarning(null);
-    setQuantity(orderType === 'retail' ? 1 : wholesaleMoq);
-  }, [product, orderType, wholesaleMoq]);
+    setQuantity(orderType === 'retail' ? Math.min(1, availableStock) : Math.min(wholesaleMoq, availableStock));
+  }, [product, orderType, wholesaleMoq, availableStock]);
 
   // Escape key to close
   useEffect(() => {
@@ -102,18 +102,25 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
   const handleIncrement = () => {
     if (orderType === 'retail') {
-      if (quantity >= 5) {
-        setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For larger orders, please switch to Wholesale Order.');
+      if (quantity >= maxQuantity) {
+        setMoqWarning(maxQuantity < 5 
+          ? `Stock limit reached: only ${availableStock} boxes available in stock.`
+          : 'Retail orders are limited to a maximum of 5 boxes. For larger orders, please switch to Wholesale Order.');
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
-      setQuantity(prev => Math.min(5, prev + 1));
+      setQuantity(prev => Math.min(maxQuantity, prev + 1));
     } else {
-      // Wholesale: step of 5
+      // Wholesale: step of 5 up to maxQuantity (availableStock)
+      if (quantity >= maxQuantity) {
+        setMoqWarning(`Stock limit reached: only ${availableStock} boxes available in stock.`);
+        setTimeout(() => setMoqWarning(null), 4000);
+        return;
+      }
       setQuantity(prev => {
-        if (prev < 5) return 5;
-        if (prev % 5 !== 0) return Math.floor(prev / 5) * 5 + 5;
-        return prev + 5;
+        if (prev < 5) return Math.min(maxQuantity, 5);
+        const next = (prev % 5 !== 0) ? Math.floor(prev / 5) * 5 + 5 : prev + 5;
+        return Math.min(maxQuantity, next);
       });
     }
     setMoqWarning(null);
@@ -139,6 +146,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
+    if (quantity > availableStock) {
+      setMoqWarning(`Cannot add to cart: only ${availableStock} boxes available in stock.`);
+      setQuantity(availableStock);
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -147,7 +160,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         return;
       }
       if (quantity % 5 !== 0) {
-        const rounded = Math.ceil(quantity / 5) * 5;
+        const rounded = Math.min(availableStock, Math.ceil(quantity / 5) * 5);
         setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
@@ -156,7 +169,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
     if (orderType === 'retail' && quantity > 5) {
       setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(5);
+      setQuantity(Math.min(5, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
@@ -172,6 +185,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
+    if (quantity > availableStock) {
+      setMoqWarning(`Cannot order: only ${availableStock} boxes available in stock.`);
+      setQuantity(availableStock);
+      setTimeout(() => setMoqWarning(null), 4000);
+      return;
+    }
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
         setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
@@ -180,7 +199,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         return;
       }
       if (quantity % 5 !== 0) {
-        const rounded = Math.ceil(quantity / 5) * 5;
+        const rounded = Math.min(availableStock, Math.ceil(quantity / 5) * 5);
         setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
@@ -189,7 +208,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
     if (orderType === 'retail' && quantity > 5) {
       setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(5);
+      setQuantity(Math.min(5, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
@@ -554,10 +573,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         if (isNaN(val)) {
                           setQuantity(minQuantity);
                         } else {
-                          if (orderType === 'retail' && val > 5) {
-                            setQuantity(5);
-                            setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.');
+                          if (val > maxQuantity) {
+                            setQuantity(maxQuantity);
+                            setMoqWarning(
+                              orderType === 'retail' && maxQuantity === 5
+                                ? 'Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.'
+                                : `Stock limit reached: only ${availableStock} boxes available in stock.`
+                            );
                             setTimeout(() => setMoqWarning(null), 4000);
+                          } else if (val < minQuantity) {
+                            setQuantity(minQuantity);
+                            setMoqWarning(null);
                           } else {
                             setQuantity(val);
                             setMoqWarning(null);
@@ -568,10 +594,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         if (isOutOfStock) return;
                         if (quantity < minQuantity) {
                           setQuantity(minQuantity);
-                        } else if (orderType === 'retail' && quantity > 5) {
-                          setQuantity(5);
+                        } else if (quantity > maxQuantity) {
+                          setQuantity(maxQuantity);
                         } else if (orderType === 'wholesale' && quantity % 5 !== 0) {
-                          const rounded = Math.max(5, Math.ceil(quantity / 5) * 5);
+                          const rounded = Math.min(maxQuantity, Math.max(5, Math.ceil(quantity / 5) * 5));
                           setQuantity(rounded);
                           setMoqWarning(`Wholesale orders must be in multiples of 5 (adjusted to ${rounded} boxes).`);
                           setTimeout(() => setMoqWarning(null), 4000);
@@ -582,15 +608,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     />
                     <button
                       type="button"
-                      disabled={isOutOfStock || (orderType === 'retail' && quantity >= 5)}
+                      disabled={isOutOfStock || quantity >= maxQuantity}
                       onClick={handleIncrement}
                       className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                        isOutOfStock || (orderType === 'retail' && quantity >= 5)
+                        isOutOfStock || quantity >= maxQuantity
                           ? 'text-slate-300 bg-slate-50 cursor-not-allowed'
                           : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                       }`}
                       aria-label="Increase quantity"
-                      title={orderType === 'retail' && quantity >= 5 ? 'Retail order limit is 5 boxes' : (orderType === 'wholesale' ? 'Increase by 5 boxes' : 'Increase')}
+                      title={
+                        quantity >= maxQuantity
+                          ? (quantity >= availableStock ? `Stock limit reached (${availableStock} boxes available)` : 'Retail order limit is 5 boxes')
+                          : (orderType === 'wholesale' ? 'Increase by 5 boxes' : 'Increase')
+                      }
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -618,27 +648,35 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   )}
                 </div>
 
-                {/* Wholesale Quick Select Presets (All Multiples of 5 starting from 5) */}
+                {/* Wholesale Quick Select Presets (Disabled if exceeds availableStock) */}
                 {orderType === 'wholesale' && !isOutOfStock && (
                   <div className="flex flex-wrap items-center gap-2 mt-2.5">
                     <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Quick:</span>
-                    {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => (
-                      <button
-                        key={preset}
-                        type="button"
-                        onClick={() => {
-                          setQuantity(preset);
-                          setMoqWarning(null);
-                        }}
-                        className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
-                          quantity === preset
-                            ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs'
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900'
-                        }`}
-                      >
-                        {preset.toLocaleString()}
-                      </button>
-                    ))}
+                    {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => {
+                      const isExceedingStock = preset > availableStock;
+                      return (
+                        <button
+                          key={preset}
+                          type="button"
+                          disabled={isExceedingStock}
+                          onClick={() => {
+                            if (isExceedingStock) return;
+                            setQuantity(preset);
+                            setMoqWarning(null);
+                          }}
+                          title={isExceedingStock ? `Stock limit is ${availableStock} boxes (${preset} is unavailable)` : `Select ${preset} boxes`}
+                          className={`px-2.5 py-1 text-[11px] font-mono rounded-lg border transition-all ${
+                            isExceedingStock
+                              ? 'opacity-35 cursor-not-allowed line-through bg-slate-100 text-slate-400 border-slate-200'
+                              : quantity === preset
+                              ? 'bg-[#166534] text-white border-[#166534] font-bold shadow-xs cursor-pointer'
+                              : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:text-slate-900 cursor-pointer'
+                          }`}
+                        >
+                          {preset.toLocaleString()}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
 
