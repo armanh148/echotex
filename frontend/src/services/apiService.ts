@@ -156,6 +156,16 @@ export const apiService = {
     return res.json();
   },
 
+  async updateOrder(id: string, updates: Partial<Order>): Promise<Order> {
+    const res = await fetch(`${BASE_URL}/orders/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    if (!res.ok) throw new Error('Failed to update order');
+    return res.json();
+  },
+
   async updateOrderStatus(id: string, status: string): Promise<Order> {
     const res = await fetch(`${BASE_URL}/orders/${id}/status`, {
       method: 'PATCH',
@@ -188,6 +198,16 @@ export const apiService = {
       body: JSON.stringify(quote),
     });
     if (!res.ok) throw new Error('Failed to create quote');
+    return res.json();
+  },
+
+  async updateQuote(id: string, updates: Partial<QuoteSubmission>): Promise<QuoteSubmission> {
+    const res = await fetch(`${BASE_URL}/quotes/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    if (!res.ok) throw new Error('Failed to update quote');
     return res.json();
   },
 

@@ -92,9 +92,13 @@ export interface StoreState {
   fetchOrders: () => Promise<Order[]>;
   fetchQuotes: () => Promise<QuoteSubmission[]>;
   createOrder: (orderData: Partial<Order>) => Promise<Order> | Order;
+  updateOrder: (id: string, updates: Partial<Order>) => void;
   updateOrderStatus: (id: string, status: string) => void;
+  deleteOrder: (id: string) => void;
   createQuote: (quoteData: Partial<QuoteSubmission>) => Promise<QuoteSubmission> | QuoteSubmission;
+  updateQuote: (id: string, updates: Partial<QuoteSubmission>) => void;
   updateQuoteStatus: (id: string, status: string) => void;
+  deleteQuote: (id: string) => void;
 
   // Analytics & Stats
   analytics: {
@@ -104,6 +108,7 @@ export interface StoreState {
     grossRevenue: number;
     bagsDisplaced: number;
   };
+  updateAnalytics: (updates: Partial<StoreState['analytics']>) => void;
 }
 
 // Initial Seeds
@@ -1160,6 +1165,46 @@ export const useStore = create<StoreState>((set, get) => ({
     return newOrder;
   },
 
+  updateOrder: (id: string, updates: Partial<Order>) => {
+    set((state) => {
+      const updated = state.orders.map((o) => {
+        if (o.id !== id) return o;
+        const buyerName = updates.buyerName || updates.customerName || o.buyerName || o.customerName;
+        const companyName = updates.companyName || updates.customerCompany || o.companyName || o.customerCompany;
+        const email = updates.email || updates.customerEmail || o.email || o.customerEmail;
+        const address = updates.address || updates.shippingAddress || o.address || o.shippingAddress;
+        const merged = {
+          ...o,
+          ...updates,
+          buyerName,
+          customerName: buyerName,
+          companyName,
+          customerCompany: companyName,
+          email,
+          customerEmail: email,
+          address,
+          shippingAddress: address,
+        };
+        if (updates.items && Array.isArray(updates.items)) {
+          merged.subtotal = updates.items.reduce(
+            (s, it) => s + (Number(it.totalPrice) || (Number(it.price || it.unitPrice || 0) * Number(it.quantity || 1))),
+            0
+          );
+          merged.total = merged.subtotal + (Number(merged.shipping) || 0);
+          merged.totalAmount = merged.total;
+        }
+        return merged;
+      });
+      saveLocal('orders', updated);
+      fetch(`${BASE_URL}/orders/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).catch(() => {});
+      return { orders: updated };
+    });
+  },
+
   updateOrderStatus: (id: string, status: string) => {
     set((state) => {
       const updated = state.orders.map((o) => (o.id === id ? { ...o, status } : o));
@@ -1170,6 +1215,21 @@ export const useStore = create<StoreState>((set, get) => ({
         body: JSON.stringify({ status })
       }).catch(() => {});
       return { orders: updated };
+    });
+  },
+
+  deleteOrder: (id: string) => {
+    set((state) => {
+      const updated = state.orders.filter((o) => o.id !== id);
+      saveLocal('orders', updated);
+      fetch(`${BASE_URL}/orders/${id}`, { method: 'DELETE' }).catch(() => {});
+      return {
+        orders: updated,
+        analytics: {
+          ...state.analytics,
+          totalOrdersCount: updated.length
+        }
+      };
     });
   },
 
@@ -1219,6 +1279,19 @@ export const useStore = create<StoreState>((set, get) => ({
     return newQuote;
   },
 
+  updateQuote: (id: string, updates: Partial<QuoteSubmission>) => {
+    set((state) => {
+      const updated = state.quotes.map((q) => (q.id === id ? { ...q, ...updates } : q));
+      saveLocal('quotes', updated);
+      fetch(`${BASE_URL}/quotes/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).catch(() => {});
+      return { quotes: updated };
+    });
+  },
+
   updateQuoteStatus: (id: string, status: string) => {
     set((state) => {
       const updated = state.quotes.map((q) => (q.id === id ? { ...q, status } : q));
@@ -1229,6 +1302,29 @@ export const useStore = create<StoreState>((set, get) => ({
         body: JSON.stringify({ status })
       }).catch(() => {});
       return { quotes: updated };
+    });
+  },
+
+  deleteQuote: (id: string) => {
+    set((state) => {
+      const updated = state.quotes.filter((q) => q.id !== id);
+      saveLocal('quotes', updated);
+      fetch(`${BASE_URL}/quotes/${id}`, { method: 'DELETE' }).catch(() => {});
+      return {
+        quotes: updated,
+        analytics: {
+          ...state.analytics,
+          quoteRequestsCount: updated.length
+        }
+      };
+    });
+  },
+
+  updateAnalytics: (updates: Partial<StoreState['analytics']>) => {
+    set((state) => {
+      const updated = { ...state.analytics, ...updates };
+      saveLocal('analytics', updated);
+      return { analytics: updated };
     });
   },
 

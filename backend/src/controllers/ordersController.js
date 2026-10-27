@@ -260,10 +260,68 @@ export async function deleteOrder(req, res) {
   }
 }
 
+export async function updateOrder(req, res) {
+  try {
+    const { id } = req.params;
+    const updates = req.body || {};
+    let updatedOrder = null;
+
+    await updateDb((db) => {
+      const idx = db.orders?.findIndex((o) => o.id === id);
+      if (idx === -1 || idx === undefined) return db;
+
+      const existing = db.orders[idx];
+      const buyerName = updates.buyerName || updates.customerName || existing.buyerName;
+      const companyName = updates.companyName || updates.customerCompany || existing.companyName;
+      const email = updates.email || updates.customerEmail || existing.email;
+      const address = updates.address || updates.shippingAddress || existing.address;
+
+      const merged = {
+        ...existing,
+        ...updates,
+        buyerName,
+        customerName: buyerName,
+        companyName,
+        customerCompany: companyName,
+        email,
+        customerEmail: email,
+        address,
+        shippingAddress: address,
+        id: existing.id,
+        updatedAt: new Date().toISOString()
+      };
+
+      if (updates.items && Array.isArray(updates.items)) {
+        merged.subtotal = updates.items.reduce(
+          (s, it) => s + (Number(it.totalPrice) || (Number(it.price || it.unitPrice || 0) * Number(it.quantity || 1))),
+          0
+        );
+        merged.total = merged.subtotal + (Number(merged.shipping) || 0);
+        merged.totalAmount = merged.total;
+      }
+
+      db.orders[idx] = merged;
+      updatedOrder = merged;
+      return db;
+    });
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.json(updatedOrder);
+  } catch (err) {
+    logger.error('Error updating order:', err);
+    res.status(500).json({ error: 'Failed to update order' });
+  }
+}
+
 export default {
   getAllOrders,
   getOrderById,
   createOrder,
+  updateOrder,
   updateOrderStatus,
   deleteOrder,
 };
+

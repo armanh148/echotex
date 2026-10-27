@@ -118,10 +118,44 @@ export async function deleteQuote(req, res) {
   }
 }
 
+export async function updateQuote(req, res) {
+  try {
+    const { id } = req.params;
+    const updates = req.body || {};
+    let updatedQuote = null;
+
+    await updateDb((db) => {
+      const idx = db.quotes?.findIndex((q) => q.id === id);
+      if (idx === -1 || idx === undefined) return db;
+
+      const existing = db.quotes[idx];
+      const merged = {
+        ...existing,
+        ...updates,
+        id: existing.id,
+        updatedAt: new Date().toISOString()
+      };
+      db.quotes[idx] = merged;
+      updatedQuote = merged;
+      return db;
+    });
+
+    if (!updatedQuote) {
+      return res.status(404).json({ error: 'Quote not found' });
+    }
+
+    res.json(updatedQuote);
+  } catch (err) {
+    logger.error('Error updating quote:', err);
+    res.status(500).json({ error: 'Failed to update quote' });
+  }
+}
+
 export default {
   getAllQuotes,
   getQuoteById,
   createQuote,
+  updateQuote,
   updateQuoteStatus,
   deleteQuote,
 };

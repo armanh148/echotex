@@ -4,6 +4,7 @@ import {
   getOrderById,
   createOrder,
   updateOrderStatus,
+  updateOrder,
   deleteOrder,
 } from '../controllers/ordersController.js';
 
@@ -12,6 +13,7 @@ export const ordersRouter = express.Router();
 ordersRouter.get('/', getAllOrders);
 ordersRouter.get('/:id', getOrderById);
 ordersRouter.post('/', createOrder);
+ordersRouter.put('/:id', updateOrder);
 ordersRouter.patch('/:id/status', updateOrderStatus);
 ordersRouter.delete('/:id', deleteOrder);
 
