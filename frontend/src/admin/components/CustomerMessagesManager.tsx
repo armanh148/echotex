@@ -1147,6 +1147,10 @@ export const CustomerMessagesManager: React.FC = () => {
               </div>
             </form>
           </div>
+        </div>,
+        document.body
+      )}
+
       {/* ADD QUICK REPLY TEMPLATE MODAL */}
       {isAddTemplateModalOpen && typeof document !== 'undefined' && createPortal(
         <div
