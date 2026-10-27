@@ -285,13 +285,40 @@ export const CustomerMessagesManager: React.FC = () => {
     }
   };
 
-  // Change Thread Status
-  const handleUpdateStatus = (newStatus: CustomerThread['status']) => {
-    if (!activeThread) return;
-    const updated = threads.map((t) => (t.id === activeThread.id ? { ...t, status: newStatus } : t));
-    setThreads(updated);
-    saveStoredThreads(updated);
-    showToast(`Conversation status updated to "${newStatus}"`);
+  // Delete Thread
+  const handleDeleteThread = (threadId: string) => {
+    if (window.confirm('Are you sure you want to delete this customer conversation thread?')) {
+      deleteStoredThread(threadId);
+      setThreads((prev) => prev.filter((t) => t.id !== threadId));
+      if (activeThreadId === threadId) {
+        setActiveThreadId(null);
+      }
+      showToast('Conversation deleted successfully.');
+    }
+  };
+
+  // Quick Replies (Dynamic from siteSettings or presets)
+  const quickReplies: Array<{ label: string; text: string }> = siteSettings?.quickReplies || QUICK_REPLIES;
+  const [isAddTemplateModalOpen, setIsAddTemplateModalOpen] = useState(false);
+  const [newTemplateForm, setNewTemplateForm] = useState({ label: '', text: '' });
+
+  const handleSaveQuickReply = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTemplateForm.label.trim() || !newTemplateForm.text.trim()) return;
+    const updated = [...quickReplies, { label: newTemplateForm.label.trim(), text: newTemplateForm.text.trim() }];
+    updateSiteSettings({ quickReplies: updated });
+    setIsAddTemplateModalOpen(false);
+    setNewTemplateForm({ label: '', text: '' });
+    showToast(`Quick reply template "${newTemplateForm.label}" saved!`);
+  };
+
+  const handleDeleteQuickReply = (idx: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm('Delete this quick reply template?')) {
+      const updated = quickReplies.filter((_, i) => i !== idx);
+      updateSiteSettings({ quickReplies: updated });
+      showToast('Quick reply template removed.');
+    }
   };
 
   // Submit New Inbound Conversation
