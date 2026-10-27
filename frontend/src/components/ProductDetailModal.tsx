@@ -59,7 +59,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     { url: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85', label: 'Production Detail' }
   ];
 
-  // Wholesale minimum order quantity starts at 5 pcs and goes in multiples of 5
+  // Wholesale minimum order quantity starts at 5 boxes and goes in multiples of 5
   const wholesaleMoq = 5;
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
@@ -91,7 +91,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleIncrement = () => {
     if (orderType === 'retail') {
       if (quantity >= 5) {
-        setMoqWarning('Retail orders are limited to a maximum of 5 units. For larger orders, please switch to Wholesale Order.');
+        setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For larger orders, please switch to Wholesale Order.');
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
@@ -124,21 +124,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleAddToCartClick = () => {
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
-        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} pcs.`);
+        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
         setQuantity(wholesaleMoq);
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
       if (quantity % 5 !== 0) {
         const rounded = Math.ceil(quantity / 5) * 5;
-        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} pcs.`);
+        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
     }
     if (orderType === 'retail' && quantity > 5) {
-      setMoqWarning('Retail orders are limited to a maximum of 5 units. Please switch to Wholesale Order for larger quantities.');
+      setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
       setQuantity(5);
       setTimeout(() => setMoqWarning(null), 4000);
       return;
@@ -152,21 +152,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleExpressCheckout = () => {
     if (orderType === 'wholesale') {
       if (quantity < wholesaleMoq) {
-        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} pcs.`);
+        setMoqWarning(`Wholesale minimum order quantity is ${wholesaleMoq} boxes.`);
         setQuantity(wholesaleMoq);
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
       if (quantity % 5 !== 0) {
         const rounded = Math.ceil(quantity / 5) * 5;
-        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} pcs.`);
+        setMoqWarning(`Wholesale orders must be in multiples of 5. Updated to ${rounded} boxes.`);
         setQuantity(rounded);
         setTimeout(() => setMoqWarning(null), 4000);
         return;
       }
     }
     if (orderType === 'retail' && quantity > 5) {
-      setMoqWarning('Retail orders are limited to a maximum of 5 units. Please switch to Wholesale Order for larger quantities.');
+      setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
       setQuantity(5);
       setTimeout(() => setMoqWarning(null), 4000);
       return;
@@ -364,7 +364,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </span>
                 {orderType === 'wholesale' && (
                   <span className="ml-auto text-[11px] font-bold text-[#166534] bg-[#dcfce7] px-2.5 py-0.5 rounded-full font-mono">
-                    MOQ: {wholesaleMoq} pcs (Multiples of 5)
+                    MOQ: {wholesaleMoq} Boxes (Multiples of 5)
                   </span>
                 )}
               </div>
@@ -376,16 +376,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <span>Order Quantity</span>
                     {orderType === 'retail' ? (
                       <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
-                        RETAIL LIMIT: 1 – 5 PCS MAX
+                        RETAIL LIMIT: 1 – 5 BOXES MAX
                       </span>
                     ) : (
                       <span className="text-[10px] font-bold text-[#166534] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        WHOLESALE MOQ: 5 PCS · MULTIPLES OF 5
+                        WHOLESALE MOQ: 5 BOXES · MULTIPLES OF 5
                       </span>
                     )}
                   </label>
                   <span className="font-mono text-xs font-bold text-[#166534]">
-                    Total: {quantity.toLocaleString()} {quantity === 1 ? 'unit' : 'units'}
+                    Total: {quantity.toLocaleString()} {quantity === 1 ? 'box' : 'boxes'}
                   </span>
                 </div>
 
@@ -403,7 +403,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                       }`}
                       aria-label="Decrease quantity"
-                      title={quantity <= minQuantity ? `Minimum order is ${minQuantity} pcs` : 'Decrease'}
+                      title={quantity <= minQuantity ? `Minimum order is ${minQuantity} box${minQuantity > 1 ? 'es' : ''}` : 'Decrease'}
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -420,7 +420,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         } else {
                           if (orderType === 'retail' && val > 5) {
                             setQuantity(5);
-                            setMoqWarning('Retail orders are limited to a maximum of 5 units. For bulk orders, please select Wholesale Order.');
+                            setMoqWarning('Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.');
                             setTimeout(() => setMoqWarning(null), 4000);
                           } else {
                             setQuantity(val);
@@ -436,7 +436,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         } else if (orderType === 'wholesale' && quantity % 5 !== 0) {
                           const rounded = Math.max(5, Math.ceil(quantity / 5) * 5);
                           setQuantity(rounded);
-                          setMoqWarning(`Wholesale orders must be in multiples of 5 (adjusted to ${rounded} pcs).`);
+                          setMoqWarning(`Wholesale orders must be in multiples of 5 (adjusted to ${rounded} boxes).`);
                           setTimeout(() => setMoqWarning(null), 4000);
                         }
                       }}
@@ -453,7 +453,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           : 'text-slate-600 hover:text-black hover:bg-slate-100 cursor-pointer'
                       }`}
                       aria-label="Increase quantity"
-                      title={orderType === 'retail' && quantity >= 5 ? 'Retail order limit is 5 units' : (orderType === 'wholesale' ? 'Increase by 5' : 'Increase')}
+                      title={orderType === 'retail' && quantity >= 5 ? 'Retail order limit is 5 boxes' : (orderType === 'wholesale' ? 'Increase by 5 boxes' : 'Increase')}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -466,7 +466,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     className="w-full sm:flex-1 h-12 bg-[#0f172a] hover:bg-[#166534] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md active:scale-98 cursor-pointer"
                   >
                     <ShoppingBag className="w-4 h-4" />
-                    <span>Add To Cart ({quantity.toLocaleString()} pcs)</span>
+                    <span>Add To Cart ({quantity.toLocaleString()} {quantity === 1 ? 'Box' : 'Boxes'})</span>
                   </button>
                 </div>
 
