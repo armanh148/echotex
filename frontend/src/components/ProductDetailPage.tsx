@@ -350,19 +350,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <span className="text-xs uppercase font-semibold tracking-[0.25em] text-[#d97706]">
                 {product.categoryLabel || 'SUSTAINABLE NON-WOVEN'}
               </span>
-              <span className="text-slate-300 font-light">—</span>
-              
-              {/* Dynamic Stock Availability Badge */}
-              {isOutOfStock ? (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-bold uppercase tracking-wider">
-                  <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
-                  <span>Out of Stock · Sold Out</span>
-                </div>
-              ) : (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>In Stock {typeof product.stockQuantity === 'number' ? `(${product.stockQuantity} boxes available)` : ''}</span>
-                </div>
+              {isOutOfStock && (
+                <>
+                  <span className="text-slate-300 font-light">—</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-bold uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
+                    <span>Out of Stock · Sold Out</span>
+                  </div>
+                </>
               )}
 
               <span className="text-slate-300 font-light">—</span>

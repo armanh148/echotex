@@ -339,19 +339,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <span className="text-[11px] uppercase font-bold tracking-[0.25em] text-[#d97706]">
                   {product.categoryLabel || 'SUSTAINABLE NON-WOVEN'}
                 </span>
-                <span className="text-slate-300">—</span>
                 
-                {/* Dynamic Stock Status Badge */}
-                {isOutOfStock ? (
-                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold uppercase tracking-wider">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
-                    <span>Out of Stock</span>
-                  </div>
-                ) : (
-                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <span>In Stock {typeof product.stockQuantity === 'number' ? `(${product.stockQuantity} boxes)` : ''}</span>
-                  </div>
+                {isOutOfStock && (
+                  <>
+                    <span className="text-slate-300">—</span>
+                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                      <span>Out of Stock</span>
+                    </div>
+                  </>
                 )}
 
                 <span className="text-slate-300">—</span>
