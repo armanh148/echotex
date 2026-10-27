@@ -395,10 +395,30 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
               {displayCategories.map((cat) => {
                 const isActive = activeCategory.toLowerCase() === cat.id.toLowerCase() || 
                                  activeCategory.toLowerCase() === cat.label.toLowerCase();
-                const productCount = allProducts.filter(p => 
+                const catProducts = allProducts.filter(p => 
                   p.category?.toLowerCase() === cat.id.toLowerCase() ||
                   (p.categoryLabel && p.categoryLabel.toLowerCase() === cat.label.toLowerCase())
-                ).length;
+                );
+                const firstProd = catProducts[0];
+
+                const DEFAULT_CATEGORY_SPECS: Record<string, { size: string; gsm: string }> = {
+                  't-shirt': { size: '11.5" x 21"', gsm: '45 GSM' },
+                  'non-woven': { size: '12" x 15"', gsm: '80 GSM' },
+                  'd-cut': { size: '12" x 15"', gsm: '55 GSM' },
+                  'slider': { size: '10" x 13"', gsm: '70 GSM' },
+                  'food': { size: '12" x 14"', gsm: '90 GSM' },
+                  'laminated': { size: '14" x 16"', gsm: '120 GSM' },
+                  'biodegradable': { size: '12" x 15"', gsm: '55 GSM' },
+                  'all': { size: 'Custom Sizes', gsm: '40-140 GSM' }
+                };
+
+                const matchedSpec = DEFAULT_CATEGORY_SPECS[cat.id.toLowerCase()] || 
+                                    Object.entries(DEFAULT_CATEGORY_SPECS).find(([key]) => cat.label.toLowerCase().includes(key))?.[1];
+
+                const displaySize = cat.size || matchedSpec?.size || (firstProd?.dimensions ? firstProd.dimensions.split(' with ')[0].split(' x ')[0] + ' x ' + (firstProd.dimensions.split(' x ')[1] || '15"').split(' ')[0] : '12" x 15"');
+                const displayGsm = cat.gsm 
+                  ? (typeof cat.gsm === 'number' || !cat.gsm.toString().toUpperCase().includes('GSM') ? `${cat.gsm} GSM` : cat.gsm) 
+                  : (matchedSpec?.gsm || (firstProd?.gsm ? `${firstProd.gsm} GSM` : '70 GSM'));
 
                 return (
                   <div
@@ -436,10 +456,21 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                       <h3 className="font-extrabold text-base sm:text-lg text-stone-900 mb-1 group-hover:text-[#0d3419] transition-colors line-clamp-1">
                         {cat.label}
                       </h3>
-                      <p className="text-[11px] text-stone-500 mb-2 font-medium">
+                      <p className="text-[11px] text-stone-500 mb-2 font-medium line-clamp-1">
                         {cat.subtitle || `${productCount} Models Available`}
                       </p>
-                      <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-stone-600 group-hover:text-[#FF5722] transition-colors mt-auto">
+
+                      {/* Size & GSM Below Heading and Paragraph */}
+                      <div className="flex items-center justify-center gap-1.5 flex-wrap my-1.5">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white text-stone-700 border border-stone-200/90 shadow-2xs">
+                          Size: {displaySize}
+                        </span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#0d3419]/8 text-[#0d3419] border border-[#0d3419]/20 shadow-2xs">
+                          {displayGsm}
+                        </span>
+                      </div>
+
+                      <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-stone-600 group-hover:text-[#FF5722] transition-colors mt-2">
                         <span>Shop Now</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </div>
