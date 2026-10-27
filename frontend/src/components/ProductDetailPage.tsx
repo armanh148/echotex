@@ -21,6 +21,8 @@ import {
   Sparkles
 } from 'lucide-react';
 import { DYE_COLORS, DyeColor } from '../data/colors';
+import { useStore } from '../store/useStore';
+import { PRODUCTS } from '../data/products';
 
 interface ProductDetailPageProps {
   product: Product;
@@ -29,6 +31,7 @@ interface ProductDetailPageProps {
   onAddToCart: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
   onOpenQuote: (product: Product) => void;
   onExpressCheckout?: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
+  onSelectProduct?: (product: Product) => void;
 }
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
@@ -37,8 +40,23 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onNavigateHome,
   onAddToCart,
   onOpenQuote,
-  onExpressCheckout
+  onExpressCheckout,
+  onSelectProduct
 }) => {
+  const { products: storeProducts } = useStore();
+  const allProducts = (storeProducts && storeProducts.length > 0) ? storeProducts : PRODUCTS;
+
+  // 5 Related products for bottom section
+  const relatedProducts = React.useMemo(() => {
+    const others = allProducts.filter(p => p.id !== product.id);
+    const sameCategory = others.filter(p => 
+      p.category && product.category && p.category.toLowerCase() === product.category.toLowerCase()
+    );
+    const differentCategory = others.filter(p => 
+      !p.category || !product.category || p.category.toLowerCase() !== product.category.toLowerCase()
+    );
+    return [...sameCategory, ...differentCategory].slice(0, 5);
+  }, [allProducts, product.id, product.category]);
   // Gallery state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -746,7 +764,31 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
             </div>
 
-            {/* 3 Trust Badges Row */}
+            {/* Description / Specifications */}
+            <div className="mt-8 pt-6 border-t border-slate-200/70">
+              <div className="border-b border-slate-200/70 pb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
+                  Description
+                </span>
+              </div>
+
+              {/* Specifications Bullet List */}
+              <div className="pt-5 text-xs text-slate-600 leading-relaxed">
+                <ul className="space-y-2 font-light">
+                  <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
+                  <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
+                  <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
+                  <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
+                  <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
+                  <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
+                  <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
+                  <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
+                </ul>
+              </div>
+            </div>
+
+            {/* 3 Trust Badges Row (Below Description) */}
             <div className="mt-8 pt-6 border-t border-slate-200/70 grid grid-cols-3 gap-3 text-center">
               <div className="flex flex-col items-center">
                 <div className="w-9 h-9 rounded-full bg-amber-50 text-[#d97706] flex items-center justify-center mb-1.5 shadow-2xs">
@@ -776,35 +818,111 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
             </div>
 
-            {/* Description / Specifications */}
-            <div className="mt-10 pt-6 border-t border-slate-200/70">
-              <div className="border-b border-slate-200/70 pb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
-                  Description
-                </span>
-              </div>
-
-              {/* Specifications Bullet List */}
-              <div className="pt-5 text-xs text-slate-600 leading-relaxed">
-                <ul className="space-y-2 font-light">
-                  <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
-                  <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
-                  <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
-                  <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
-                  <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
-                  <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
-                  <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
-                  <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
-                  <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
-                </ul>
-              </div>
-            </div>
-
           </div>
 
         </div>
 
       </div>
+
+      {/* ========================================================
+          RELATED PRODUCTS (Full Width across screen)
+         ======================================================== */}
+      {relatedProducts.length > 0 && (
+        <section className="w-full max-w-[1840px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 mt-16 sm:mt-24 pt-12 border-t border-slate-200/80">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] mb-1 block">
+                Explore More Options
+              </span>
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f172a] tracking-tight">
+                Related Products
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                Frequently ordered together or alternative sizing options for your business.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onBack}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0d3419] hover:text-[#FF5722] transition-colors cursor-pointer self-start sm:self-auto"
+            >
+              <span>View Full Catalog</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* 5-Column Grid across full width */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+            {relatedProducts.map((relProd) => {
+              const relIsOutOfStock = relProd.inStock === false || (typeof relProd.stockQuantity === 'number' && relProd.stockQuantity <= 0);
+
+              return (
+                <div
+                  key={relProd.id}
+                  onClick={() => {
+                    if (onSelectProduct) {
+                      onSelectProduct(relProd);
+                    }
+                  }}
+                  className="group relative flex flex-col bg-white rounded-2xl border border-slate-200/90 p-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                >
+                  {/* Badge */}
+                  <div className="flex items-center justify-between w-full mb-3">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                      relIsOutOfStock ? 'bg-rose-600 text-white' : 'bg-[#0d3419] text-white'
+                    }`}>
+                      {relIsOutOfStock ? 'SOLD OUT' : (relProd.badge || 'ECO FABRIC')}
+                    </span>
+                    {relProd.gsm && (
+                      <span className="text-[10px] font-bold text-slate-500">
+                        {relProd.gsm} GSM
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Thumbnail */}
+                  <div className="relative w-full aspect-square bg-[#FAF8F5] rounded-xl flex items-center justify-center p-4 mb-3.5 overflow-hidden border border-slate-100">
+                    <img
+                      src={relProd.image || '/images/bag-green.png'}
+                      alt={relProd.name}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/images/bag-green.png';
+                      }}
+                      className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-300 select-none"
+                      draggable={false}
+                    />
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <h4 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#0d3419] transition-colors truncate mb-1">
+                    {relProd.name}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 line-clamp-1 mb-3.5">
+                    {relProd.subtitle || relProd.dimensions || 'Industrial packaging'}
+                  </p>
+
+                  {/* Price & Action */}
+                  <div className="mt-auto flex items-center justify-between pt-2.5 border-t border-slate-100">
+                    <div>
+                      <span className="font-extrabold text-base text-slate-900">
+                        ${relProd.pricePerUnit.toFixed(2)}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium ml-1">
+                        / box
+                      </span>
+                    </div>
+
+                    <span className="text-xs font-bold text-[#FF5722] group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                      <span>View</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Added to Cart Feedback Banner */}
       {addedToast && (

@@ -728,7 +728,32 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 )}
               </div>
 
-              {/* 3 Trust Badges Row */}
+              {/* Description / Specifications */}
+              <div className="mt-6 pt-5 border-t border-slate-100">
+                <div className="border-b border-slate-100 pb-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
+                    Description
+                  </span>
+                </div>
+
+                {/* Specifications Bullet List */}
+                <div className="pt-4 text-xs text-slate-600 leading-relaxed">
+                  <ul className="space-y-1.5 font-light">
+                    <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
+                    <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
+                    <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
+                    <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
+                    <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
+                    <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
+                    <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
+                    <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
+                  </ul>
+                </div>
+
+              </div>
+
+              {/* 3 Trust Badges Row (Below Description) */}
               <div className="mt-6 pt-5 border-t border-slate-100 grid grid-cols-3 gap-3 text-center">
                 <div className="flex flex-col items-center">
                   <div className="w-8 h-8 rounded-full bg-amber-50 text-[#d97706] flex items-center justify-center mb-1">
@@ -756,31 +781,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     Easy Return
                   </span>
                 </div>
-              </div>
-
-              {/* Description / Specifications */}
-              <div className="mt-8 pt-6 border-t border-slate-100">
-                <div className="border-b border-slate-100 pb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
-                    Description
-                  </span>
-                </div>
-
-                {/* Specifications Bullet List */}
-                <div className="pt-4 text-xs text-slate-600 leading-relaxed">
-                  <ul className="space-y-1.5 font-light">
-                    <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
-                    <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
-                    <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
-                    <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
-                    <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
-                    <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
-                    <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
-                    <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
-                    <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
-                  </ul>
-                </div>
-
               </div>
 
             </div>

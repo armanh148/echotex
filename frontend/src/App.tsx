@@ -245,6 +245,7 @@ export default function App() {
               onAddToCart={(p, color, qty, oType) => addToCart(p, color, qty, oType)}
               onOpenQuote={handleOpenQuoteForProduct}
               onExpressCheckout={handleExpressCheckout}
+              onSelectProduct={handleOpenProductDetail}
             />
           )}
 
