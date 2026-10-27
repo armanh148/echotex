@@ -121,6 +121,7 @@ export const CategoriesManager: React.FC = () => {
     e.preventDefault();
     if (!formData.label.trim()) return;
 
+    if (editingCategory) {
       updateCategory(editingCategory.id, {
         label: formData.label.trim(),
         subtitle: formData.subtitle.trim(),

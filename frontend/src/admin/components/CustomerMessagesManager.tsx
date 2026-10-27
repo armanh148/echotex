@@ -702,6 +702,15 @@ export const CustomerMessagesManager: React.FC = () => {
                     size="md"
                   />
 
+                  {/* Delete Conversation */}
+                  <button
+                    onClick={() => handleDeleteThread(activeThread.id)}
+                    className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors cursor-pointer"
+                    title="Delete Conversation"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+
                 </div>
               </div>
 
@@ -773,19 +782,40 @@ export const CustomerMessagesManager: React.FC = () => {
 
               {/* Quick Reply Templates Chip Strip */}
               <div className="px-4 py-2 border-t border-slate-100 bg-[#fbfdfb]">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-[#4E9F76]" />
-                  <span>1-Click Quick Response Templates:</span>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#4E9F76]" />
+                    <span>Quick Response Templates:</span>
+                  </div>
+                  <button
+                    onClick={() => setIsAddTemplateModalOpen(true)}
+                    className="text-[10px] font-bold text-[#4E9F76] hover:text-[#3d8560] inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Add Template</span>
+                  </button>
                 </div>
+
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                  {QUICK_REPLIES.map((tmpl, idx) => (
-                    <button
+                  {quickReplies.map((tmpl, idx) => (
+                    <div
                       key={idx}
-                      onClick={() => setReplyText(tmpl.text)}
-                      className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#4E9F76] hover:bg-[#B2E2C5]/10 text-slate-700 hover:text-[#4E9F76] text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer"
+                      className="inline-flex items-center bg-white border border-slate-200 hover:border-[#4E9F76] rounded-lg text-slate-700 text-[11px] font-semibold whitespace-nowrap transition-all group overflow-hidden"
                     >
-                      {tmpl.label}
-                    </button>
+                      <button
+                        onClick={() => setReplyText(tmpl.text)}
+                        className="px-2.5 py-1 hover:bg-[#B2E2C5]/10 hover:text-[#4E9F76] cursor-pointer"
+                      >
+                        {tmpl.label}
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteQuickReply(idx, e)}
+                        className="px-1.5 py-1 text-slate-300 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        title="Delete template"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -1113,6 +1143,80 @@ export const CustomerMessagesManager: React.FC = () => {
                   className="px-5 py-2 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white font-bold text-xs shadow-md shadow-emerald-900/20 cursor-pointer"
                 >
                   Save & Apply Changes
+                </button>
+              </div>
+            </form>
+          </div>
+      {/* ADD QUICK REPLY TEMPLATE MODAL */}
+      {isAddTemplateModalOpen && typeof document !== 'undefined' && createPortal(
+        <div
+          onClick={() => setIsAddTemplateModalOpen(false)}
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn transition-all"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200/80 animate-in fade-in zoom-in-95 duration-200"
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-lg bg-[#4E9F76]/15 text-[#4E9F76]">
+                  <Sparkles className="w-4 h-4" />
+                </span>
+                <h3 className="font-black text-sm text-[#0f172a]">
+                  Add Quick Reply Template
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddTemplateModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveQuickReply} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Template Button Label *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newTemplateForm.label}
+                  onChange={(e) => setNewTemplateForm({ ...newTemplateForm, label: e.target.value })}
+                  placeholder="e.g. 🎨 Request Artwork Files"
+                  className="w-full px-3 py-2 bg-slate-50 focus:bg-white rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76] font-semibold text-slate-900"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Quick Reply Message Text *
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  value={newTemplateForm.text}
+                  onChange={(e) => setNewTemplateForm({ ...newTemplateForm, text: e.target.value })}
+                  placeholder="Enter the automated response message text..."
+                  className="w-full px-3 py-2 bg-slate-50 focus:bg-white rounded-xl border border-slate-200 focus:outline-none focus:border-[#4E9F76] text-slate-800 leading-relaxed resize-none"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsAddTemplateModalOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold shadow-md cursor-pointer"
+                >
+                  Save Template
                 </button>
               </div>
             </form>
