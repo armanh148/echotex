@@ -44,7 +44,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [orderType, setOrderType] = useState<'retail' | 'wholesale'>('retail');
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'reviews'>('description');
   const [addedToast, setAddedToast] = useState(false);
 
   const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
@@ -766,75 +765,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               </div>
 
-              {/* Tabs: DESCRIPTION | DETAILS | REVIEWS */}
+              {/* Description / Specifications */}
               <div className="mt-8 pt-6 border-t border-slate-100">
-                <div className="flex items-center gap-6 border-b border-slate-100 pb-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('description')}
-                    className={`text-xs font-bold uppercase tracking-wider pb-2 transition-colors cursor-pointer ${
-                      activeTab === 'description'
-                        ? 'text-[#d97706] border-b-2 border-[#d97706]'
-                        : 'text-slate-400 hover:text-slate-700'
-                    }`}
-                  >
+                <div className="border-b border-slate-100 pb-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
                     Description
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('details')}
-                    className={`text-xs font-bold uppercase tracking-wider pb-2 transition-colors cursor-pointer ${
-                      activeTab === 'details'
-                        ? 'text-[#d97706] border-b-2 border-[#d97706]'
-                        : 'text-slate-400 hover:text-slate-700'
-                    }`}
-                  >
-                    Details
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('reviews')}
-                    className={`text-xs font-bold uppercase tracking-wider pb-2 transition-colors cursor-pointer ${
-                      activeTab === 'reviews'
-                        ? 'text-[#d97706] border-b-2 border-[#d97706]'
-                        : 'text-slate-400 hover:text-slate-700'
-                    }`}
-                  >
-                    Reviews
-                  </button>
+                  </span>
                 </div>
 
-                {/* Tab Content */}
+                {/* Specifications Bullet List */}
                 <div className="pt-4 text-xs text-slate-600 leading-relaxed">
-                  {activeTab === 'description' && (
-                    <ul className="space-y-1.5 font-light">
-                      <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
-                      <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
-                      <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
-                      <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
-                      <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
-                      <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
-                      <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
-                      <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
-                      <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
-                    </ul>
-                  )}
-
-                  {activeTab === 'details' && (
-                    <div className="space-y-2">
-                      <p><strong className="font-semibold text-slate-800">Material :</strong> {product.material || '100% Virgin Non-Woven PP'}</p>
-                      <p><strong className="font-semibold text-slate-800">Load Capacity :</strong> {product.capacity || 'Up to 25 lbs'}</p>
-                      <p><strong className="font-semibold text-slate-800">Lead Time :</strong> {product.leadTime || '3-5 business days'}</p>
-                      <p><strong className="font-semibold text-slate-800">Certifications :</strong> {product.certifications?.join(', ') || 'GRS, CalRecycle SB 270'}</p>
-                    </div>
-                  )}
-
-                  {activeTab === 'reviews' && (
-                    <div className="space-y-2 italic">
-                      <p>"Superb build quality! Not a single torn handle across 50,000 units." — Verified Procurement Client</p>
-                      <p>"The custom flexo print color is exactly our brand pantone." — Retail Partner</p>
-                    </div>
-                  )}
+                  <ul className="space-y-1.5 font-light">
+                    <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
+                    <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
+                    <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
+                    <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
+                    <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
+                    <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
+                    <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
+                    <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
+                  </ul>
                 </div>
 
               </div>
