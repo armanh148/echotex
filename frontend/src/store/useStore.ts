@@ -118,7 +118,7 @@ const INITIAL_HERO_CONFIG: HeroConfig = {
   ctaText: "Shop Now",
   badgeDoctor: "Recommended by doctors",
   badgeTrust: "Trusted by 21,000+ People",
-  productImage: "/images/bag-blue.png",
+  productImage: "",
   backgroundImage: "/images/home-hero-bg.jpg",
   showcasePrice: 0.25,
   casePackSize: 1000,

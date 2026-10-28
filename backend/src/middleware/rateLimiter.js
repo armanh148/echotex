@@ -30,7 +30,7 @@ export const authLimiter = rateLimit({
     success: false,
     error: 'Too many authentication attempts. Please try again after 15 minutes.',
   },
-  skip: () => process.env.NODE_ENV === 'test',
+  skip: (req) => process.env.NODE_ENV === 'test' || process.env.NODE_ENV !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
 });
 
 export const quotesLimiter = rateLimit({
@@ -42,7 +42,7 @@ export const quotesLimiter = rateLimit({
     success: false,
     error: 'Quote request rate limit exceeded. Please try again later or contact our sales hotline directly.',
   },
-  skip: () => process.env.NODE_ENV === 'test',
+  skip: (req) => process.env.NODE_ENV === 'test' || process.env.NODE_ENV !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
 });
 
 export default {

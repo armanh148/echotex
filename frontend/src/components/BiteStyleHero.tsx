@@ -131,50 +131,52 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
         </motion.div>
 
         {/* ======================================================
-            RIGHT: PRODUCT BAG IMAGE
+            RIGHT: PRODUCT BAG IMAGE (Only if configured)
            ====================================================== */}
-        <motion.div 
-          initial={{ opacity: 0, x: 50, scale: 0.94 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-6 xl:col-span-5 relative flex items-center justify-center min-h-[380px] sm:min-h-[440px] lg:min-h-[520px] select-none order-2"
-        >
-          {/* Soft ambient green backlight glow */}
-          <div className="absolute inset-0 max-w-[460px] max-h-[460px] m-auto rounded-full bg-emerald-500/20 blur-[100px] pointer-events-none -z-10" />
-
-          {/* Floating Product Bag Cutout */}
-          <motion.div
-            animate={{ 
-              y: [0, -12, 0],
-              rotate: [-0.5, 0.5, -0.5]
-            }}
-            transition={{ 
-              repeat: Infinity, 
-              duration: 5.5, 
-              ease: 'easeInOut' 
-            }}
-            className="relative flex flex-col items-center justify-center w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[520px]"
+        {hasProductImage && (
+          <motion.div 
+            initial={{ opacity: 0, x: 50, scale: 0.94 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 xl:col-span-5 relative flex items-center justify-center min-h-[380px] sm:min-h-[440px] lg:min-h-[520px] select-none order-2"
           >
-            <img 
-              src={heroConfig.productImage || '/images/bag-green.png'} 
-              alt="Ecotex Wholesale Packaging Bag" 
-              onError={(e) => {
-                e.currentTarget.src = '/images/bag-green.png';
-              }}
-              className="w-full h-auto max-h-[420px] sm:max-h-[480px] lg:max-h-[540px] object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.35)] select-none pointer-events-none"
-            />
+            {/* Soft ambient green backlight glow */}
+            <div className="absolute inset-0 max-w-[460px] max-h-[460px] m-auto rounded-full bg-emerald-500/20 blur-[100px] pointer-events-none -z-10" />
 
-            {/* Realistic Ground Floor Shadow */}
+            {/* Floating Product Bag Cutout */}
             <motion.div
-              animate={{
-                scale: [1, 0.86, 1],
-                opacity: [0.35, 0.2, 0.35],
+              animate={{ 
+                y: [0, -12, 0],
+                rotate: [-0.5, 0.5, -0.5]
               }}
-              transition={{ repeat: Infinity, duration: 5.5, ease: 'easeInOut' }}
-              className="absolute -bottom-4 sm:-bottom-6 w-[70%] h-8 bg-black/40 rounded-[100%] blur-xl pointer-events-none -z-10"
-            />
+              transition={{ 
+                repeat: Infinity, 
+                duration: 5.5, 
+                ease: 'easeInOut' 
+              }}
+              className="relative flex flex-col items-center justify-center w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[520px]"
+            >
+              <img 
+                src={heroConfig.productImage} 
+                alt="Ecotex Wholesale Packaging Bag" 
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+                className="w-full h-auto max-h-[420px] sm:max-h-[480px] lg:max-h-[540px] object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.35)] select-none pointer-events-none"
+              />
+
+              {/* Realistic Ground Floor Shadow */}
+              <motion.div
+                animate={{
+                  scale: [1, 0.86, 1],
+                  opacity: [0.35, 0.2, 0.35],
+                }}
+                transition={{ repeat: Infinity, duration: 5.5, ease: 'easeInOut' }}
+                className="absolute -bottom-4 sm:-bottom-6 w-[70%] h-8 bg-black/40 rounded-[100%] blur-xl pointer-events-none -z-10"
+              />
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
 
       </div>
     </section>
