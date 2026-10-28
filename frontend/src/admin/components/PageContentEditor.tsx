@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Package,
+  DollarSign,
   Truck,
   AlertCircle,
   FileText,

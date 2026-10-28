@@ -168,8 +168,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       articleNo: product.articleNo || `EP-${product.id.slice(0, 6).toUpperCase()}`,
       volumeNo: product.volumeNo || `${product.gsm || 45} GSM LUXURY`,
       description: product.description || '',
-      pricePerUnit: product.pricePerUnit || 0.25,
-      originalPrice: product.originalPrice || ((product.pricePerUnit || 0.25) * 1.25),
+      pricePerUnit: product.pricePerUnit || 59.99,
+      originalPrice: product.originalPrice || Math.round((product.pricePerUnit || 59.99) * 1.25 * 100) / 100,
+      retailPricePerUnit: product.retailPricePerUnit !== undefined && product.retailPricePerUnit > 0 ? product.retailPricePerUnit : Number(((product.pricePerUnit || 59.99) * 1.45).toFixed(2)),
+      retailOriginalPrice: product.retailOriginalPrice !== undefined && product.retailOriginalPrice > 0 ? product.retailOriginalPrice : Number(((product.retailPricePerUnit || ((product.pricePerUnit || 59.99) * 1.45)) * 1.25).toFixed(2)),
+      retailMaxBoxes: product.retailMaxBoxes || 5,
       wholesaleMoq: product.wholesaleMoq || 5,
       pcsPerBox: product.pcsPerBox || 200,
       stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
@@ -221,8 +224,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       articleNo: editForm.articleNo.trim(),
       volumeNo: editForm.volumeNo.trim(),
       description: editForm.description.trim(),
-      pricePerUnit: Math.max(0.01, Number(editForm.pricePerUnit) || 0.25),
-      originalPrice: Math.max(0.01, Number(editForm.originalPrice) || 0.35),
+      pricePerUnit: Math.max(0.01, Number(editForm.pricePerUnit) || 59.99),
+      originalPrice: Math.max(0.01, Number(editForm.originalPrice) || 74.99),
+      retailPricePerUnit: Math.max(0.01, Number(editForm.retailPricePerUnit) || 86.99),
+      retailOriginalPrice: Math.max(0.01, Number(editForm.retailOriginalPrice) || 108.73),
+      retailMaxBoxes: Math.max(1, Number(editForm.retailMaxBoxes) || 5),
       wholesaleMoq: Math.max(1, Number(editForm.wholesaleMoq) || 5),
       pcsPerBox: Math.max(1, Number(editForm.pcsPerBox) || 200),
       stockQuantity: finalStockQuantity,
@@ -402,9 +408,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         return;
       }
     }
-    if (orderType === 'retail' && quantity > 5) {
-      setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(Math.min(5, availableStock));
+    if (orderType === 'retail' && quantity > retailMaxBoxes) {
+      setMoqWarning(`Retail orders are limited to a maximum of ${retailMaxBoxes} boxes. Please switch to Wholesale Order for larger quantities.`);
+      setQuantity(Math.min(retailMaxBoxes, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
@@ -441,9 +447,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         return;
       }
     }
-    if (orderType === 'retail' && quantity > 5) {
-      setMoqWarning('Retail orders are limited to a maximum of 5 boxes. Please switch to Wholesale Order for larger quantities.');
-      setQuantity(Math.min(5, availableStock));
+    if (orderType === 'retail' && quantity > retailMaxBoxes) {
+      setMoqWarning(`Retail orders are limited to a maximum of ${retailMaxBoxes} boxes. Please switch to Wholesale Order for larger quantities.`);
+      setQuantity(Math.min(retailMaxBoxes, availableStock));
       setTimeout(() => setMoqWarning(null), 4000);
       return;
     }
@@ -782,11 +788,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </span>
                   {orderType === 'retail' ? (
                     <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                      1 – 5 Boxes
+                      1 – {retailMaxBoxes} Boxes
                     </span>
                   ) : (
                     <span className="text-[10px] font-semibold text-[#166534] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                      Multiples of 5
+                      Multiples of {wholesaleMoq}
                     </span>
                   )}
                 </div>
@@ -829,8 +835,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         if (val > maxQuantity) {
                           setQuantity(maxQuantity);
                           setMoqWarning(
-                            orderType === 'retail' && maxQuantity === 5
-                              ? 'Retail orders are limited to a maximum of 5 boxes. For bulk orders, please select Wholesale Order.'
+                            orderType === 'retail'
+                              ? `Retail orders are limited to a maximum of ${retailMaxBoxes} boxes. For bulk orders, please select Wholesale Order.`
                               : `Stock limit reached: only ${availableStock} boxes available in stock.`
                           );
                           setTimeout(() => setMoqWarning(null), 4000);
@@ -905,7 +911,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {orderType === 'wholesale' && !isOutOfStock && (
                 <div className="flex flex-wrap items-center gap-2 mt-2.5">
                   <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Quick:</span>
-                  {[5, 10, 25, 50, 100, 250, 500, 1000].map((preset) => {
+                  {Array.from(new Set([wholesaleMoq, 10, 25, 50, 100, 250, 500, 1000].filter(n => n >= wholesaleMoq))).map((preset) => {
                     const isExceedingStock = preset > availableStock;
                     return (
                       <button
@@ -1390,80 +1396,209 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* TAB 2: PRICING & INVENTORY */}
               {editorTab === 'pricing' && (
                 <div className="space-y-4 animate-fadeIn">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Master Packaging Spec Card */}
+                  <div className="bg-gradient-to-r from-emerald-50/70 to-teal-50/50 p-4 rounded-2xl border border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                      <label className="block font-bold text-slate-700 mb-1">
-                        Wholesale Base Price Per Unit ($) *
-                      </label>
-                      <input
-                        type="number"
-                        step="0.001"
-                        min="0.01"
-                        required
-                        value={editForm.pricePerUnit}
-                        onChange={(e) => setEditForm({ ...editForm, pricePerUnit: Number(e.target.value) || 0.25 })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold text-base text-[#166534]"
-                      />
-                      <span className="text-[10px] text-slate-400 mt-1 block">
-                        Base pricing for bulk enterprise cartons.
-                      </span>
+                      <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-950 flex items-center gap-1.5">
+                        <Package className="w-4 h-4 text-emerald-600" />
+                        <span>Master Packaging Specification</span>
+                      </h4>
+                      <p className="text-[11px] text-emerald-800/80 mt-0.5">
+                        Number of individual bag pieces packed inside 1 carton box.
+                      </p>
                     </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">
-                        Original / Compare-At Strikethrough Price ($)
-                      </label>
-                      <input
-                        type="number"
-                        step="0.001"
-                        min="0.01"
-                        value={editForm.originalPrice}
-                        onChange={(e) => setEditForm({ ...editForm, originalPrice: Number(e.target.value) || 0.35 })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono text-slate-500"
-                      />
-                      <span className="text-[10px] text-slate-400 mt-1 block">
-                        Shown strikethrough next to active price (e.g. $0.35).
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-emerald-900 whitespace-nowrap">1 Box =</span>
+                      <div className="relative w-32">
+                        <input
+                          type="number"
+                          step="10"
+                          min="1"
+                          required
+                          value={editForm.pcsPerBox}
+                          onChange={(e) => setEditForm({ ...editForm, pcsPerBox: Math.max(1, Number(e.target.value) || 200) })}
+                          className="w-full pl-3 pr-10 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold text-emerald-950 bg-white shadow-2xs focus:outline-none focus:border-emerald-600"
+                        />
+                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-emerald-700 font-mono">Pcs</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">
-                        Pieces Per Box / Pack
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={editForm.pcsPerBox}
-                        onChange={(e) => setEditForm({ ...editForm, pcsPerBox: Math.max(1, Number(e.target.value) || 200) })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
-                        placeholder="200"
-                      />
-                      <span className="text-[10px] text-slate-400 mt-1 block">
-                        1 Box = {editForm.pcsPerBox} Pcs
-                      </span>
+                  {/* Dual Mode Cards */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* 1. Wholesale Mode Card */}
+                    <div className="bg-emerald-50/40 p-4 rounded-2xl border-2 border-emerald-200 space-y-3 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-emerald-200 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                          <strong className="text-xs font-extrabold uppercase text-[#166534]">
+                            Wholesale Order Mode
+                          </strong>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                          MOQ: {editForm.wholesaleMoq} Boxes
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-emerald-900 mb-1">
+                            Wholesale Box Price ($) *
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              required
+                              value={editForm.pricePerUnit}
+                              onChange={(e) => setEditForm({ ...editForm, pricePerUnit: Number(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold text-[#166534] bg-white focus:outline-none focus:border-emerald-600"
+                              placeholder="59.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-emerald-700 mt-1 block">
+                            ≈ ${( (Number(editForm.pricePerUnit) || 0) / (Number(editForm.pcsPerBox) || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">
+                            Wholesale Strike Price ($)
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={editForm.originalPrice}
+                              onChange={(e) => setEditForm({ ...editForm, originalPrice: Number(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 bg-white"
+                              placeholder="74.99"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">Compare-At Strike</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Wholesale MOQ (Boxes)
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={editForm.wholesaleMoq}
+                            onChange={(e) => setEditForm({ ...editForm, wholesaleMoq: Math.max(1, Number(e.target.value) || 5) })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-emerald-200 text-xs font-bold bg-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Tab Button Label
+                          </label>
+                          <input
+                            type="text"
+                            value={editForm.wholesaleTabLabel}
+                            onChange={(e) => setEditForm({ ...editForm, wholesaleTabLabel: e.target.value })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-[#166534] bg-white"
+                            placeholder="Wholesale Order"
+                          />
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">
-                        Wholesale MOQ (Boxes)
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={editForm.wholesaleMoq}
-                        onChange={(e) => setEditForm({ ...editForm, wholesaleMoq: Math.max(1, Number(e.target.value) || 5) })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
-                        placeholder="5"
-                      />
-                      <span className="text-[10px] text-slate-400 mt-1 block">
-                        Minimum wholesale box order.
-                      </span>
-                    </div>
+                    {/* 2. Retail Mode Card */}
+                    <div className="bg-amber-50/40 p-4 rounded-2xl border-2 border-amber-200 space-y-3 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-amber-200 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+                          <strong className="text-xs font-extrabold uppercase text-amber-900">
+                            Retail Order Mode
+                          </strong>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                          Max: {editForm.retailMaxBoxes} Boxes
+                        </span>
+                      </div>
 
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-amber-950 mb-1">
+                            Retail Box Price ($) *
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              required
+                              value={editForm.retailPricePerUnit}
+                              onChange={(e) => setEditForm({ ...editForm, retailPricePerUnit: Number(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-amber-300 text-xs font-bold text-[#d97706] bg-white focus:outline-none focus:border-amber-600"
+                              placeholder="86.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-amber-700 mt-1 block">
+                            ≈ ${( (Number(editForm.retailPricePerUnit) || 0) / (Number(editForm.pcsPerBox) || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">
+                            Retail Strike Price ($)
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={editForm.retailOriginalPrice}
+                              onChange={(e) => setEditForm({ ...editForm, retailOriginalPrice: Number(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 bg-white"
+                              placeholder="108.73"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">Compare-At Strike</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Retail Max Allowed (Boxes)
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={editForm.retailMaxBoxes}
+                            onChange={(e) => setEditForm({ ...editForm, retailMaxBoxes: Math.max(1, Number(e.target.value) || 5) })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-amber-200 text-xs font-bold bg-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Tab Button Label
+                          </label>
+                          <input
+                            type="text"
+                            value={editForm.retailTabLabel}
+                            onChange={(e) => setEditForm({ ...editForm, retailTabLabel: e.target.value })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-amber-900 bg-white"
+                            placeholder="Retail Order"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stock Inventory & Availability */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div>
-                      <label className="block font-bold text-slate-700 mb-1">
+                      <label className="block font-bold text-slate-700 mb-1 text-xs">
                         Available Stock (Boxes)
                       </label>
                       <input
@@ -1471,33 +1606,33 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         min="0"
                         value={editForm.stockQuantity}
                         onChange={(e) => setEditForm({ ...editForm, stockQuantity: Math.max(0, Number(e.target.value) || 0) })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold text-xs"
                         placeholder="50"
                       />
                       <span className="text-[10px] text-slate-400 mt-1 block">
-                        0 automatically switches to Sold Out.
+                        0 boxes automatically activates &ldquo;Sold Out&rdquo; state.
                       </span>
                     </div>
-                  </div>
 
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                    <div>
-                      <strong className="block text-slate-800 font-bold">
-                        Product Active & In Stock
-                      </strong>
-                      <span className="text-slate-500 text-[11px]">
-                        When turned off, purchasing is disabled and &ldquo;Sold Out&rdquo; banner displays.
-                      </span>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                      <div>
+                        <strong className="block text-slate-800 font-bold text-xs">
+                          Product Active & In Stock
+                        </strong>
+                        <span className="text-slate-500 text-[10px]">
+                          Toggle live purchasing on / off.
+                        </span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={editForm.inStock && editForm.stockQuantity > 0}
+                          onChange={(e) => setEditForm({ ...editForm, inStock: e.target.checked })}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166534]"></div>
+                      </label>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={editForm.inStock && editForm.stockQuantity > 0}
-                        onChange={(e) => setEditForm({ ...editForm, inStock: e.target.checked })}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166534]"></div>
-                    </label>
                   </div>
                 </div>
               )}
