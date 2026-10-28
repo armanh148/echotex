@@ -1947,7 +1947,7 @@
     "tagline": "Certified Sustainable Wholesale Packaging Direct From Manufacturer",
     "heroTitle": "It's time to pack better.",
     "siteTitle": "Ecotex Inc. | Wholesale Sustainable Packaging & Polypropylene Bags",
-    "updatedAt": "2026-10-28T06:38:28.820Z",
+    "updatedAt": "2026-10-28T07:09:05.882Z",
     "aboutStory": "Founded with a dedication to manufacturing excellence, Ecotex operates state-of-the-art ultrasonic welding and automated flexographic printing facilities in California and Karachi.",
     "aboutTitle": "Engineered For Durability. Designed For Circularity.",
     "dealConfig": {
@@ -1973,9 +1973,15 @@
       "recyclablePercent": "100%"
     },
     "heroConfig": {
-      "title": "It's time to\npack better..",
-      "ctaText": "Shop Now",
+      "title": "It's time to\npack better.",
       "subtitle": "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
+      "ctaText": "Shop Now",
+      "badgeDoctor": "Recommended by doctors",
+      "badgeTrust": "Trusted by 21,000+ People",
+      "productImage": "/images/bag-black.png",
+      "backgroundImage": "/uploads/Gemini_Generated_Image_syieb6s-1793100472147-uspvk.jpg",
+      "showcasePrice": 0.25,
+      "casePackSize": 1000,
       "variants": [
         {
           "id": "v1",
@@ -2025,13 +2031,7 @@
           "image": "/images/bag-green.png",
           "colorName": "New Custom Colorway"
         }
-      ],
-      "badgeTrust": "Trusted by 21,000+ People",
-      "badgeDoctor": "Recommended by doctors",
-      "casePackSize": 1000,
-      "productImage": "/images/bag-black.png",
-      "showcasePrice": 0.25,
-      "backgroundImage": "/uploads/Gemini_Generated_Image_syieb6s-1793100472147-uspvk.jpg"
+      ]
     },
     "logoConfig": {
       "subtitle": "Sustainable Packaging",
