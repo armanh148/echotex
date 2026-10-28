@@ -89,7 +89,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'hero', label: 'Homepage Banner', icon: Sliders, badge: 'Live' },
     { id: 'categories', label: 'Categories', icon: FolderTree, badge: categories.filter(c => c.id !== 'all').length || categories.length },
-    { id: 'products', label: 'Products Catalog', icon: Package, badge: products.length },
+    { id: 'products', label: 'Products & Single Pages', icon: Package, badge: products.length },
     { id: 'offers', label: 'Special Offers & Deals', icon: Flame, badge: 'HOT' },
     { id: 'content', label: 'Website Content', icon: FileText, badge: '6 Sections' },
     { id: 'rfq-orders', label: 'Orders & Quotes', icon: Inbox, badge: (quotes.filter(q => q.status === 'New').length + orders.filter(o => o.status === 'Pending').length) || undefined },

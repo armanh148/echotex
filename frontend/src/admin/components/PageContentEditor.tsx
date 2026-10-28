@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+  Package,
+  Truck,
+  AlertCircle,
   FileText,
   Save,
   RotateCcw,
@@ -49,10 +52,122 @@ type EditorTab =
   | 'versatility'
   | 'about'
   | 'contact'
-  | 'footer';
+  | 'footer'
+  | 'single-product';
 
 export const PageContentEditor: React.FC = () => {
-  const { siteSettings, updateSiteSettings } = useStore();
+  const { siteSettings, updateSiteSettings, products, updateProduct } = useStore();
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const [productSaveSuccess, setProductSaveSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!selectedProductId && products.length > 0) {
+      setSelectedProductId(products[0].id);
+    }
+  }, [products, selectedProductId]);
+
+  const activeSelectedProduct = products.find(p => p.id === selectedProductId) || products[0];
+
+  const [pdpForm, setPdpForm] = useState<any>(null);
+
+  useEffect(() => {
+    if (activeSelectedProduct) {
+      const gImgs = activeSelectedProduct.galleryImages || [
+        activeSelectedProduct.image || '/images/bag-green.png',
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85',
+        'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=85',
+        'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85'
+      ];
+      setPdpForm({
+        name: activeSelectedProduct.name,
+        categoryLabel: activeSelectedProduct.categoryLabel || 'SUSTAINABLE NON-WOVEN',
+        subtitle: activeSelectedProduct.subtitle || '',
+        articleNo: activeSelectedProduct.articleNo || `EP-${activeSelectedProduct.id.slice(0, 6).toUpperCase()}`,
+        volumeNo: activeSelectedProduct.volumeNo || `${activeSelectedProduct.gsm || 80} GSM LUXURY`,
+        rating: activeSelectedProduct.rating !== undefined ? activeSelectedProduct.rating : 4.9,
+        brandName: activeSelectedProduct.brandName || 'ECOTEX INC.',
+        pricePerUnit: activeSelectedProduct.pricePerUnit || 0.25,
+        originalPrice: activeSelectedProduct.originalPrice || Math.round((activeSelectedProduct.pricePerUnit || 0.25) * 1.35 * 100) / 100,
+        pcsPerBox: activeSelectedProduct.pcsPerBox || 200,
+        wholesaleMoq: activeSelectedProduct.wholesaleMoq || 5,
+        stockQuantity: activeSelectedProduct.stockQuantity !== undefined ? activeSelectedProduct.stockQuantity : 50,
+        inStock: activeSelectedProduct.inStock !== false,
+        gallery0: gImgs[0] || activeSelectedProduct.image || '/images/bag-green.png',
+        gallery1: gImgs[1] || 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85',
+        gallery2: gImgs[2] || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=85',
+        gallery3: gImgs[3] || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85',
+        fabricDetails: activeSelectedProduct.fabricDetails || `${activeSelectedProduct.gsm || 80} GSM Virgin Non-Woven Polypropylene`,
+        dimensions: activeSelectedProduct.dimensions || '11.5\"W x 21\"H x 6.5\" Gusset',
+        handles: activeSelectedProduct.handles || 'Ultrasonic Thermal Welded Loops',
+        printingMethod: activeSelectedProduct.printingMethod || 'High-Precision Flexographic / Gravure Custom Imprint',
+        compliance: activeSelectedProduct.compliance || 'Certified California SB 270 & ASTM D6400',
+        packingDetails: activeSelectedProduct.packingDetails || 'Export-Grade Heavy Duty Corrugated Cartons',
+        guaranteedFabric: activeSelectedProduct.guaranteedFabric || '100% Virgin Grade Recyclable Polypropylene',
+        enrouteQuality: activeSelectedProduct.enrouteQuality || 'Enroute to Quality Standard',
+        bestFor: activeSelectedProduct.bestFor || 'Supermarket grocers, retail boutiques',
+        recommendedPrint: activeSelectedProduct.recommendedPrint || 'High-Precision Flexographic Custom Imprint',
+        description: activeSelectedProduct.description || '',
+        trustBadge1: activeSelectedProduct.trustBadge1 || 'Fast Delivery',
+        trustBadge2: activeSelectedProduct.trustBadge2 || 'Secure Store',
+        trustBadge3: activeSelectedProduct.trustBadge3 || 'Easy Return',
+        retailPolicyText: activeSelectedProduct.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
+        wholesalePolicyText: activeSelectedProduct.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
+        outOfStockNotice: activeSelectedProduct.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.'
+      });
+    }
+  }, [activeSelectedProduct]);
+
+  const handleSavePdpForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeSelectedProduct || !pdpForm) return;
+
+    const finalStock = Math.max(0, Number(pdpForm.stockQuantity) || 0);
+    const finalInStock = pdpForm.inStock && finalStock > 0;
+    const finalGallery = [
+      pdpForm.gallery0?.trim(),
+      pdpForm.gallery1?.trim(),
+      pdpForm.gallery2?.trim(),
+      pdpForm.gallery3?.trim()
+    ].filter(Boolean);
+
+    updateProduct(activeSelectedProduct.id, {
+      name: pdpForm.name.trim(),
+      categoryLabel: pdpForm.categoryLabel.trim(),
+      subtitle: pdpForm.subtitle.trim(),
+      articleNo: pdpForm.articleNo.trim(),
+      volumeNo: pdpForm.volumeNo.trim(),
+      rating: Number(pdpForm.rating) || 4.9,
+      brandName: pdpForm.brandName.trim(),
+      pricePerUnit: Number(pdpForm.pricePerUnit) || 0.25,
+      originalPrice: Number(pdpForm.originalPrice) || 0.35,
+      pcsPerBox: Number(pdpForm.pcsPerBox) || 200,
+      wholesaleMoq: Number(pdpForm.wholesaleMoq) || 5,
+      stockQuantity: finalStock,
+      inStock: finalInStock,
+      image: pdpForm.gallery0?.trim() || activeSelectedProduct.image || '/images/bag-green.png',
+      galleryImages: finalGallery,
+      fabricDetails: pdpForm.fabricDetails.trim(),
+      dimensions: pdpForm.dimensions.trim(),
+      handles: pdpForm.handles.trim(),
+      printingMethod: pdpForm.printingMethod.trim(),
+      compliance: pdpForm.compliance.trim(),
+      packingDetails: pdpForm.packingDetails.trim(),
+      guaranteedFabric: pdpForm.guaranteedFabric.trim(),
+      enrouteQuality: pdpForm.enrouteQuality.trim(),
+      bestFor: pdpForm.bestFor.trim(),
+      recommendedPrint: pdpForm.recommendedPrint.trim(),
+      description: pdpForm.description.trim(),
+      trustBadge1: pdpForm.trustBadge1.trim(),
+      trustBadge2: pdpForm.trustBadge2.trim(),
+      trustBadge3: pdpForm.trustBadge3.trim(),
+      retailPolicyText: pdpForm.retailPolicyText.trim(),
+      wholesalePolicyText: pdpForm.wholesalePolicyText.trim(),
+      outOfStockNotice: pdpForm.outOfStockNotice.trim()
+    });
+
+    setProductSaveSuccess(true);
+    setTimeout(() => setProductSaveSuccess(false), 3000);
+  };
   const [formData, setFormData] = useState<SiteSettings>(siteSettings);
   const [activeTab, setActiveTab] = useState<EditorTab>('logo');
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -273,6 +388,7 @@ export const PageContentEditor: React.FC = () => {
     { id: 'about', label: 'About Us & Team', icon: Users, desc: 'Company story & leadership' },
     { id: 'contact', label: 'Contact & Facilities', icon: Phone, desc: 'Locations & sales lines' },
     { id: 'footer', label: 'Footer & Legal', icon: Globe, desc: 'Links, copyright & badges' },
+    { id: 'single-product', label: 'Single Product Page', icon: Package, desc: 'Specs, gallery & policies' },
   ];
 
   return (
@@ -1425,6 +1541,356 @@ export const PageContentEditor: React.FC = () => {
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none focus:border-[#86C59E]"
               />
             </div>
+          </div>
+        )}
+
+        {/* TAB 7: SINGLE PRODUCT PAGE EDITOR */}
+        {activeTab === 'single-product' && (
+          <div className="space-y-6 animate-fadeIn">
+            
+            {/* Header Banner & Product Selector */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h4 className="text-sm font-black text-amber-950 flex items-center gap-2">
+                  <Package className="w-5 h-5 text-[#d97706]" />
+                  <span>Single Product Page Content Customizer</span>
+                </h4>
+                <p className="text-xs text-amber-800/90 mt-0.5">
+                  Select any wholesale product from your catalog to customize its single product page specifications, 4-photo gallery, badges, and policies.
+                </p>
+              </div>
+
+              {/* Product Selector Dropdown */}
+              <div className="w-full sm:w-72 shrink-0">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-amber-900 mb-1">
+                  Active Product:
+                </label>
+                <select
+                  value={selectedProductId}
+                  onChange={(e) => setSelectedProductId(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-amber-300 bg-white text-xs font-bold text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                >
+                  {products.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.articleNo || p.id.slice(0, 6).toUpperCase()})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {pdpForm && (
+              <form onSubmit={handleSavePdpForm} className="space-y-5">
+                
+                {/* 1. Basic Metadata */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
+                    <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-[#d97706]" />
+                      <span>1. Headline, Article & Brand Metadata</span>
+                    </h5>
+                    <span className="text-[11px] font-mono text-slate-400">ID: {activeSelectedProduct.id}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Product Title</label>
+                      <input
+                        type="text"
+                        required
+                        value={pdpForm.name}
+                        onChange={(e) => setPdpForm({ ...pdpForm, name: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Category Label</label>
+                      <input
+                        type="text"
+                        value={pdpForm.categoryLabel}
+                        onChange={(e) => setPdpForm({ ...pdpForm, categoryLabel: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="SUSTAINABLE NON-WOVEN"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Customer Rating (Stars)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="1.0"
+                        max="5.0"
+                        value={pdpForm.rating}
+                        onChange={(e) => setPdpForm({ ...pdpForm, rating: parseFloat(e.target.value) || 4.9 })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Article No.</label>
+                      <input
+                        type="text"
+                        value={pdpForm.articleNo}
+                        onChange={(e) => setPdpForm({ ...pdpForm, articleNo: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-mono font-bold"
+                        placeholder="EP-NW-3040"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Volume No.</label>
+                      <input
+                        type="text"
+                        value={pdpForm.volumeNo}
+                        onChange={(e) => setPdpForm({ ...pdpForm, volumeNo: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-mono font-bold"
+                        placeholder="80 GSM LUXURY"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. 4-Thumbnail Gallery */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
+                  <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-[#d97706]" />
+                    <span>2. 4-Photo Gallery Strip</span>
+                  </h5>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {[0, 1, 2, 3].map((slotIdx) => {
+                      const key = `gallery${slotIdx}`;
+                      const val = pdpForm[key] || '';
+                      return (
+                        <div key={slotIdx} className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                          <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                            <span>{slotIdx === 0 ? 'Slot 1 (Main Hero)' : `Slot ${slotIdx + 1} (Thumbnail)`}</span>
+                          </div>
+                          <div className="w-full aspect-square bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center p-2 overflow-hidden">
+                            <img
+                              src={val || '/images/bag-green.png'}
+                              alt={`Slot ${slotIdx + 1}`}
+                              className="w-full h-full object-contain"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/images/bag-green.png'; }}
+                            />
+                          </div>
+                          <input
+                            type="text"
+                            value={val}
+                            onChange={(e) => setPdpForm({ ...pdpForm, [key]: e.target.value })}
+                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-[11px] font-mono"
+                            placeholder="Image URL..."
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Full Specifications List */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
+                  <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#d97706]" />
+                    <span>3. Technical Specifications Table</span>
+                  </h5>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• BRAND NAME</label>
+                      <input
+                        type="text"
+                        value={pdpForm.brandName}
+                        onChange={(e) => setPdpForm({ ...pdpForm, brandName: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="ECOTEX INC."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Fabric</label>
+                      <input
+                        type="text"
+                        value={pdpForm.fabricDetails}
+                        onChange={(e) => setPdpForm({ ...pdpForm, fabricDetails: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="80 GSM Virgin Non-Woven Polypropylene"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Dimensions</label>
+                      <input
+                        type="text"
+                        value={pdpForm.dimensions}
+                        onChange={(e) => setPdpForm({ ...pdpForm, dimensions: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder='11.5"W x 21"H x 6.5" Gusset'
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Handles</label>
+                      <input
+                        type="text"
+                        value={pdpForm.handles}
+                        onChange={(e) => setPdpForm({ ...pdpForm, handles: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="Ultrasonic Thermal Welded Loops"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Printing</label>
+                      <input
+                        type="text"
+                        value={pdpForm.printingMethod}
+                        onChange={(e) => setPdpForm({ ...pdpForm, printingMethod: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="High-Precision Flexographic / Gravure Custom Imprint"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Compliance</label>
+                      <input
+                        type="text"
+                        value={pdpForm.compliance}
+                        onChange={(e) => setPdpForm({ ...pdpForm, compliance: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="Certified California SB 270 & ASTM D6400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Bag & Picture Packing</label>
+                      <input
+                        type="text"
+                        value={pdpForm.packingDetails}
+                        onChange={(e) => setPdpForm({ ...pdpForm, packingDetails: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="Export-Grade Heavy Duty Corrugated Cartons"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">• Guaranteed Fabric</label>
+                      <input
+                        type="text"
+                        value={pdpForm.guaranteedFabric}
+                        onChange={(e) => setPdpForm({ ...pdpForm, guaranteedFabric: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold"
+                        placeholder="100% Virgin Grade Recyclable Polypropylene"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">• Quality Standard Banner</label>
+                    <input
+                      type="text"
+                      value={pdpForm.enrouteQuality}
+                      onChange={(e) => setPdpForm({ ...pdpForm, enrouteQuality: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-[#d97706]"
+                      placeholder="Enroute to Quality Standard"
+                    />
+                  </div>
+                </div>
+
+                {/* 4. Badges & Policies */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
+                  <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#d97706]" />
+                    <span>4. Badges, Policies & Out of Stock Notification</span>
+                  </h5>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">Trust Badge 1</label>
+                      <input
+                        type="text"
+                        value={pdpForm.trustBadge1}
+                        onChange={(e) => setPdpForm({ ...pdpForm, trustBadge1: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                        placeholder="Fast Delivery"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">Trust Badge 2</label>
+                      <input
+                        type="text"
+                        value={pdpForm.trustBadge2}
+                        onChange={(e) => setPdpForm({ ...pdpForm, trustBadge2: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                        placeholder="Secure Store"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">Trust Badge 3</label>
+                      <input
+                        type="text"
+                        value={pdpForm.trustBadge3}
+                        onChange={(e) => setPdpForm({ ...pdpForm, trustBadge3: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                        placeholder="Easy Return"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Retail Order Policy Text</label>
+                    <textarea
+                      rows={2}
+                      value={pdpForm.retailPolicyText}
+                      onChange={(e) => setPdpForm({ ...pdpForm, retailPolicyText: e.target.value })}
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white text-xs font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Wholesale Order Policy Text</label>
+                    <textarea
+                      rows={2}
+                      value={pdpForm.wholesalePolicyText}
+                      onChange={(e) => setPdpForm({ ...pdpForm, wholesalePolicyText: e.target.value })}
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white text-xs font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-rose-800 mb-1">Out of Stock Notice (When 0 Boxes)</label>
+                    <textarea
+                      rows={2}
+                      value={pdpForm.outOfStockNotice}
+                      onChange={(e) => setPdpForm({ ...pdpForm, outOfStockNotice: e.target.value })}
+                      className="w-full p-2.5 rounded-xl border border-rose-200 bg-white text-xs font-medium text-rose-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Save Product Page Button */}
+                <div className="pt-2 flex items-center justify-end gap-3">
+                  {productSaveSuccess && (
+                    <span className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 animate-fadeIn">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Single Product Page changes saved live!</span>
+                    </span>
+                  )}
+                  <button
+                    type="submit"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-extrabold shadow-md shadow-amber-600/20 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save Single Product Page</span>
+                  </button>
+                </div>
+
+              </form>
+            )}
+
           </div>
         )}
 

@@ -11,8 +11,13 @@ export const generalLimiter = rateLimit({
     error: 'Too many requests from this IP, please try again after 15 minutes.',
   },
   skip: (req) => {
-    // Skip rate limits in test environments or internal health checks
-    return req.path === '/api/health' || process.env.NODE_ENV === 'test';
+    // Skip rate limits in test environments or internal health checks or local development
+    return req.path === '/api/health' || 
+      process.env.NODE_ENV === 'test' || 
+      process.env.NODE_ENV !== 'production' ||
+      req.ip === '127.0.0.1' || 
+      req.ip === '::1' ||
+      req.ip === '::ffff:127.0.0.1';
   },
 });
 
