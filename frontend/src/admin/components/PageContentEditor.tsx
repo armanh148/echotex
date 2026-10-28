@@ -61,6 +61,12 @@ export const PageContentEditor: React.FC = () => {
     setFormData(siteSettings);
   }, [siteSettings]);
 
+  const hasUnpublishedChanges = JSON.stringify(formData) !== JSON.stringify(siteSettings);
+
+  const handleDiscardDraft = () => {
+    setFormData(siteSettings);
+  };
+
   const handleSave = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     updateSiteSettings(formData);
@@ -282,6 +288,17 @@ export const PageContentEditor: React.FC = () => {
             <span className="text-xs font-black uppercase tracking-wider text-[#4E9F76]">
               100% Dynamic Storefront Studio
             </span>
+            {hasUnpublishedChanges ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Unpublished Changes
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                Published & Live
+              </span>
+            )}
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-[#0f172a] mt-1">
             Universal Content & Image CMS
@@ -291,7 +308,17 @@ export const PageContentEditor: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {hasUnpublishedChanges && (
+            <button
+              type="button"
+              onClick={handleDiscardDraft}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-all cursor-pointer"
+              title="Discard unsaved changes and restore current live content"
+            >
+              <span>Discard Changes</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={handleResetToDefaults}
@@ -303,7 +330,11 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#86C59E] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+              hasUnpublishedChanges
+                ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
+                : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
+            }`}
           >
             {saveSuccess ? (
               <>
@@ -469,11 +500,7 @@ export const PageContentEditor: React.FC = () => {
                 value={formData.logoConfig?.customLogoUrl || ''}
                 onChange={(newUrl) => {
                   const updatedLogoConfig = { ...(formData.logoConfig || {}), customLogoUrl: newUrl };
-                  const updatedForm = { ...formData, logoConfig: updatedLogoConfig };
-                  setFormData(updatedForm);
-                  updateSiteSettings({ logoConfig: updatedLogoConfig });
-                  setSaveSuccess(true);
-                  setTimeout(() => setSaveSuccess(false), 2500);
+                  setFormData(prev => ({ ...prev, logoConfig: updatedLogoConfig }));
                 }}
                 aspectRatio="banner"
               />
@@ -520,12 +547,7 @@ export const PageContentEditor: React.FC = () => {
                 value={formData.logoConfig?.faviconUrl || ''}
                 onChange={(newUrl) => {
                   const updatedLogoConfig = { ...(formData.logoConfig || {}), faviconUrl: newUrl };
-                  const updatedForm = { ...formData, logoConfig: updatedLogoConfig };
-
-                  setFormData(updatedForm);
-                  updateSiteSettings({ logoConfig: updatedLogoConfig });
-                  setSaveSuccess(true);
-                  setTimeout(() => setSaveSuccess(false), 2500);
+                  setFormData(prev => ({ ...prev, logoConfig: updatedLogoConfig }));
                 }}
                 aspectRatio="square"
               />
@@ -1412,13 +1434,22 @@ export const PageContentEditor: React.FC = () => {
       {/* Floating Save Actions Bar at Bottom */}
       <div className="sticky bottom-4 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#B2E2C5]/50 shadow-xl">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#86C59E] animate-pulse" />
+          <div className={`w-2.5 h-2.5 rounded-full ${hasUnpublishedChanges ? 'bg-amber-500 animate-pulse' : 'bg-[#86C59E]'}`} />
           <span className="text-xs font-bold text-slate-600">
-            Real-Time Storefront Synchronization Active
+            {hasUnpublishedChanges ? 'Unpublished draft changes. Click "Publish All Changes Now" to update storefront.' : 'Storefront is synchronized with the latest published content.'}
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {hasUnpublishedChanges && (
+            <button
+              type="button"
+              onClick={handleDiscardDraft}
+              className="px-3.5 py-2 rounded-xl text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs font-bold transition-all cursor-pointer"
+            >
+              Discard Changes
+            </button>
+          )}
           <button
             type="button"
             onClick={handleResetToDefaults}
@@ -1429,7 +1460,11 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#86C59E] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+              hasUnpublishedChanges
+                ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
+                : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
+            }`}
           >
             {saveSuccess ? (
               <>

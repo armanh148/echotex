@@ -10,7 +10,8 @@ import {
   ArrowRight,
   Trash2,
   Sparkles,
-  Image as ImageIcon
+  AlertCircle,
+  Undo2
 } from 'lucide-react';
 import { useStore, HeroConfig } from '../../store/useStore';
 import { ImageUploader } from './ImageUploader';
@@ -18,18 +19,20 @@ import { ImageUploader } from './ImageUploader';
 export const HeroBannerManager: React.FC = () => {
   const { 
     heroConfig, 
-    updateHeroConfig, 
-    siteImages, 
-    updateSiteImage 
+    updateHeroConfig 
   } = useStore();
 
+  // Local draft state - changes remain in draft until user clicks "Publish Updates"
   const [localHero, setLocalHero] = useState<HeroConfig>(heroConfig);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Sync state if store updates externally
+  // Sync draft state if external store changes and user has no unsaved draft
   useEffect(() => {
     setLocalHero(heroConfig);
   }, [heroConfig]);
+
+  // Check if current draft has unpublished edits
+  const hasUnpublishedChanges = JSON.stringify(localHero) !== JSON.stringify(heroConfig);
 
   const handleSaveAll = () => {
     updateHeroConfig(localHero);
@@ -37,8 +40,12 @@ export const HeroBannerManager: React.FC = () => {
     setTimeout(() => setSaveSuccess(false), 2500);
   };
 
+  const handleDiscardDraft = () => {
+    setLocalHero(heroConfig);
+  };
+
   const handleResetToDefault = () => {
-    if (!window.confirm('Reset hero section copy and images back to default?')) return;
+    if (!window.confirm('Reset hero section copy and images back to factory default?')) return;
     const defaultHero: HeroConfig = {
       title: "It's time to\npack better.",
       subtitle: "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
@@ -52,9 +59,6 @@ export const HeroBannerManager: React.FC = () => {
       variants: []
     };
     setLocalHero(defaultHero);
-    updateHeroConfig(defaultHero);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 2500);
   };
 
   // Preset bag images
@@ -87,19 +91,41 @@ export const HeroBannerManager: React.FC = () => {
             <span className="text-xs font-black uppercase tracking-wider text-[#4E9F76]">
               Homepage Visual Hero Manager
             </span>
+            {hasUnpublishedChanges ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Unpublished Draft
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                Live on Storefront
+              </span>
+            )}
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-[#0f172a] mt-1">
             Homepage Hero Banner
           </h2>
           <p className="text-xs text-slate-500">
-            Customize the headline, subtitle copy, CTA button, featured bag image, and panoramic background.
+            Edit the draft below and preview in real-time. Changes will <strong>only</strong> appear on the live storefront when you click <strong>Publish Updates</strong>.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {hasUnpublishedChanges && (
+            <button
+              onClick={handleDiscardDraft}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-all cursor-pointer"
+              title="Discard unpublished draft and restore current live version"
+            >
+              <Undo2 className="w-3.5 h-3.5" />
+              <span>Discard Draft</span>
+            </button>
+          )}
+
           <button
             onClick={handleResetToDefault}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Defaults</span>
@@ -107,17 +133,21 @@ export const HeroBannerManager: React.FC = () => {
 
           <button
             onClick={handleSaveAll}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#86C59E] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+              hasUnpublishedChanges
+                ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
+                : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
+            }`}
           >
             {saveSuccess ? (
               <>
                 <CheckCircle2 className="w-4 h-4 text-[#B2E2C5]" />
-                <span>Live Synced!</span>
+                <span>Published to Storefront!</span>
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                <span>Publish Updates</span>
+                <span>{hasUnpublishedChanges ? 'Publish Updates Now' : 'Published'}</span>
               </>
             )}
           </button>
@@ -150,9 +180,7 @@ export const HeroBannerManager: React.FC = () => {
                   rows={2}
                   value={localHero.title}
                   onChange={(e) => {
-                    const updated = { ...localHero, title: e.target.value };
-                    setLocalHero(updated);
-                    updateHeroConfig({ title: e.target.value });
+                    setLocalHero(prev => ({ ...prev, title: e.target.value }));
                   }}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-[#0f172a] focus:outline-none focus:border-[#86C59E] focus:ring-2 focus:ring-[#B2E2C5]/30"
                   placeholder="It's time to&#10;pack better."
@@ -167,9 +195,7 @@ export const HeroBannerManager: React.FC = () => {
                   rows={3}
                   value={localHero.subtitle}
                   onChange={(e) => {
-                    const updated = { ...localHero, subtitle: e.target.value };
-                    setLocalHero(updated);
-                    updateHeroConfig({ subtitle: e.target.value });
+                    setLocalHero(prev => ({ ...prev, subtitle: e.target.value }));
                   }}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#0f172a] focus:outline-none focus:border-[#86C59E] focus:ring-2 focus:ring-[#B2E2C5]/30"
                   placeholder="Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags..."
@@ -184,9 +210,7 @@ export const HeroBannerManager: React.FC = () => {
                   type="text"
                   value={localHero.ctaText || 'Shop Now'}
                   onChange={(e) => {
-                    const updated = { ...localHero, ctaText: e.target.value };
-                    setLocalHero(updated);
-                    updateHeroConfig({ ctaText: e.target.value });
+                    setLocalHero(prev => ({ ...prev, ctaText: e.target.value }));
                   }}
                   className="w-full sm:w-1/2 px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#4E9F76] focus:outline-none focus:border-[#86C59E]"
                   placeholder="Shop Now"
@@ -219,9 +243,7 @@ export const HeroBannerManager: React.FC = () => {
                       key={preset.url}
                       type="button"
                       onClick={() => {
-                        const updated = { ...localHero, productImage: preset.url };
-                        setLocalHero(updated);
-                        updateHeroConfig({ productImage: preset.url });
+                        setLocalHero(prev => ({ ...prev, productImage: preset.url }));
                       }}
                       className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                         isSelected
@@ -245,9 +267,7 @@ export const HeroBannerManager: React.FC = () => {
               description="Upload a transparent product bag image from your computer or paste a direct image URL"
               value={localHero.productImage || '/images/bag-green.png'}
               onChange={(newUrl) => {
-                const updated = { ...localHero, productImage: newUrl || '/images/bag-green.png' };
-                setLocalHero(updated);
-                updateHeroConfig({ productImage: newUrl || '/images/bag-green.png' });
+                setLocalHero(prev => ({ ...prev, productImage: newUrl || '/images/bag-green.png' }));
               }}
               aspectRatio="square"
             />
@@ -280,9 +300,7 @@ export const HeroBannerManager: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = { ...localHero, backgroundImage: 'none' };
-                    setLocalHero(updated);
-                    updateHeroConfig({ backgroundImage: 'none' });
+                    setLocalHero(prev => ({ ...prev, backgroundImage: 'none' }));
                   }}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
                   title="Remove image and return to clean dark emerald gradient"
@@ -294,9 +312,7 @@ export const HeroBannerManager: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = { ...localHero, backgroundImage: '/images/home-hero-bg.jpg' };
-                    setLocalHero(updated);
-                    updateHeroConfig({ backgroundImage: '/images/home-hero-bg.jpg' });
+                    setLocalHero(prev => ({ ...prev, backgroundImage: '/images/home-hero-bg.jpg' }));
                   }}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-[#4E9F76] border border-emerald-200 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
                 >
@@ -313,9 +329,7 @@ export const HeroBannerManager: React.FC = () => {
                 value={localHero.backgroundImage === 'none' ? '' : (localHero.backgroundImage || '/images/home-hero-bg.jpg')}
                 onChange={(newUrl) => {
                   const val = newUrl ? newUrl : 'none';
-                  const updated = { ...localHero, backgroundImage: val };
-                  setLocalHero(updated);
-                  updateHeroConfig({ backgroundImage: val });
+                  setLocalHero(prev => ({ ...prev, backgroundImage: val }));
                 }}
                 aspectRatio="banner"
               />
@@ -334,9 +348,15 @@ export const HeroBannerManager: React.FC = () => {
                 Live Storefront Hero Preview
               </span>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#B2E2C5]/30 text-[#4E9F76]">
-              Real-Time WYSIWYG
-            </span>
+            {hasUnpublishedChanges ? (
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                Previewing Draft
+              </span>
+            ) : (
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#B2E2C5]/30 text-[#4E9F76]">
+                Previewing Live
+              </span>
+            )}
           </div>
 
           {/* Miniature Replica of BiteStyleHero */}
@@ -427,9 +447,18 @@ export const HeroBannerManager: React.FC = () => {
 
           </div>
 
-          <div className="p-4 rounded-2xl bg-white border border-[#B2E2C5]/40 text-xs text-slate-500 flex items-center justify-between">
-            <span>Every edit in this panel synchronizes automatically with the homepage.</span>
-            <span className="font-bold text-[#4E9F76]">Zero Reloads</span>
+          <div className="p-4 rounded-2xl bg-white border border-[#B2E2C5]/40 text-xs text-slate-600 flex items-center justify-between shadow-2xs">
+            {hasUnpublishedChanges ? (
+              <span className="flex items-center gap-1.5 text-amber-700 font-bold">
+                <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
+                Unpublished changes in draft. Click "Publish Updates Now" above to push to site.
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                Storefront is synchronized with the latest published version.
+              </span>
+            )}
           </div>
 
         </div>
