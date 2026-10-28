@@ -220,7 +220,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     wholesaleMoq: product.wholesaleMoq || 5,
     pcsPerBox: product.pcsPerBox || 200,
     stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
-    availableColors: (product.availableColors && product.availableColors.length > 0)
+    availableColors: ((product.availableColors && product.availableColors.length > 0) ? product.availableColors : DEFAULT_PALETTE) as ProductColorVariant[]
       ? product.availableColors.map((c, i) => ({
           id: c.id || ('col-' + i),
           name: c.name,
@@ -285,7 +285,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       wholesaleMoq: product.wholesaleMoq || 5,
       pcsPerBox: product.pcsPerBox || 200,
       stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
-      availableColors: (product.availableColors && product.availableColors.length > 0)
+      availableColors: ((product.availableColors && product.availableColors.length > 0) ? product.availableColors : DEFAULT_PALETTE) as ProductColorVariant[]
         ? product.availableColors.map((c, i) => ({
             id: c.id || ('col-' + i),
             name: c.name,
@@ -1841,7 +1841,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                             };
                             setEditForm({
                               ...editForm,
-                              availableColors: [...(editForm.availableColors || []), newColor]
+                              availableColors: [...((editForm.availableColors || []) as ProductColorVariant[]), newColor]
                             });
                           }}
                           className="px-2.5 py-1 bg-[#166534] hover:bg-[#14532d] text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-xs cursor-pointer"

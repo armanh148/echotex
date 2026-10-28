@@ -8,7 +8,7 @@ export type ProductCategory =
   | string;
 
 export interface ProductColorVariant {
-  id: string;
+  id?: string;
   name: string;
   hex: string;
   stockQuantity?: number;
