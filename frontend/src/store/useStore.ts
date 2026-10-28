@@ -1404,7 +1404,14 @@ if (typeof window !== 'undefined') {
         useStore.setState({ siteSettings: JSON.parse(e.newValue) });
       } else if (e.key === 'ecotex_orders') {
         const parsed = JSON.parse(e.newValue);
-        if (Array.isArray(parsed)) useStore.setState({ orders: parsed });
+        if (Array.isArray(parsed)) {
+          const map = new Map<string, any>();
+          parsed.forEach((o: any) => { if (o && o.id) map.set(o.id, o); });
+          useStore.getState().orders.forEach((o: any) => { if (o && o.id && !map.has(o.id)) map.set(o.id, o); });
+          const merged = Array.from(map.values()) as Order[];
+          merged.sort((a, b) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+          useStore.setState({ orders: merged });
+        }
       } else if (e.key === 'ecotex_quotes') {
         const parsed = JSON.parse(e.newValue);
         if (Array.isArray(parsed)) useStore.setState({ quotes: parsed });

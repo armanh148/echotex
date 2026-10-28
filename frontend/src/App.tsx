@@ -99,7 +99,6 @@ export default function App() {
     setCartInitialStep('checkout');
     setIsCartOpen(true);
     setQuickViewProduct(null);
-    setSelectedProduct(null);
   };
 
   const handleOpenProductDetail = (product: Product) => {
