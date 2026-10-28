@@ -119,7 +119,7 @@ export const PageContentEditor: React.FC = () => {
               hex: c.hex || '#166534',
               stockQuantity: c.stockQuantity !== undefined 
                 ? c.stockQuantity 
-                : (activeSelectedProduct.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+                : (c.id && activeSelectedProduct.colorStock ? activeSelectedProduct.colorStock[c.id] : undefined) ?? (activeSelectedProduct.colorStock ? activeSelectedProduct.colorStock[c.name.toLowerCase()] : undefined) ?? 25
             }))
           : DEFAULT_PALETTE.map(c => ({
               ...c,

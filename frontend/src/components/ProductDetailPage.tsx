@@ -97,7 +97,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         const id = c.id || ('col-' + i);
         const stock = c.stockQuantity !== undefined 
           ? c.stockQuantity 
-          : (product.colorStock?.[id] ?? (product.colorStock?.[c.name.toLowerCase()] ?? 25));
+          : (id && product.colorStock ? product.colorStock[id] : undefined) ?? (product.colorStock ? product.colorStock[c.name.toLowerCase()] : undefined) ?? 25;
         return {
           id,
           name: c.name,
@@ -227,7 +227,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           hex: c.hex || '#166534',
           stockQuantity: c.stockQuantity !== undefined 
             ? c.stockQuantity 
-            : (product.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+            : (c.id && product.colorStock ? product.colorStock[c.id] : undefined) ?? (product.colorStock ? product.colorStock[c.name.toLowerCase()] : undefined) ?? 25
         }))
       : DEFAULT_PALETTE.map(c => ({
           ...c,
@@ -292,7 +292,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             hex: c.hex || '#166534',
             stockQuantity: c.stockQuantity !== undefined 
               ? c.stockQuantity 
-              : (product.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+              : (c.id && product.colorStock ? product.colorStock[c.id] : undefined) ?? (product.colorStock ? product.colorStock[c.name.toLowerCase()] : undefined) ?? 25
           }))
         : DEFAULT_PALETTE.map(c => ({
             ...c,

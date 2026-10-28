@@ -334,7 +334,7 @@ export const ProductCatalogManager: React.FC = () => {
             hex: c.hex || '#166534',
             stockQuantity: c.stockQuantity !== undefined 
               ? c.stockQuantity 
-              : (p.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+              : (c.id && p.colorStock ? p.colorStock[c.id] : undefined) ?? (p.colorStock ? p.colorStock[c.name.toLowerCase()] : undefined) ?? 25
           }))
         : DEFAULT_PALETTE.map(c => ({
             ...c,
