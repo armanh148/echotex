@@ -800,32 +800,50 @@ export const useStore = create<StoreState>((set, get) => ({
 
       if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value) && ordsRes.value.length > 0) {
         const serverOrders = [...ordsRes.value];
-        serverOrders.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
         set((state) => {
-          const grossRev = serverOrders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
+          const map = new Map<string, any>();
+          serverOrders.forEach((o: any) => { if (o && o.id) map.set(o.id, o); });
+          state.orders.forEach((o: any) => {
+            if (o && o.id && !map.has(o.id)) {
+              map.set(o.id, o);
+            }
+          });
+          const mergedOrders = Array.from(map.values()) as Order[];
+          mergedOrders.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+          const grossRev = mergedOrders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
+          saveLocal('orders', mergedOrders);
           return {
-            orders: serverOrders,
+            orders: mergedOrders,
             analytics: {
               ...state.analytics,
-              totalOrdersCount: serverOrders.length,
+              totalOrdersCount: mergedOrders.length,
               grossRevenue: grossRev > 0 ? grossRev : state.analytics.grossRevenue,
             }
           };
         });
-        saveLocal('orders', serverOrders);
       }
 
       if (qtsRes.status === 'fulfilled' && Array.isArray(qtsRes.value) && qtsRes.value.length > 0) {
         const serverQuotes = [...qtsRes.value];
-        serverQuotes.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
-        set((state) => ({
-          quotes: serverQuotes,
-          analytics: {
-            ...state.analytics,
-            quoteRequestsCount: serverQuotes.length,
-          }
-        }));
-        saveLocal('quotes', serverQuotes);
+        set((state) => {
+          const map = new Map<string, any>();
+          serverQuotes.forEach((q: any) => { if (q && q.id) map.set(q.id, q); });
+          state.quotes.forEach((q: any) => {
+            if (q && q.id && !map.has(q.id)) {
+              map.set(q.id, q);
+            }
+          });
+          const mergedQuotes = Array.from(map.values()) as QuoteSubmission[];
+          mergedQuotes.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+          saveLocal('quotes', mergedQuotes);
+          return {
+            quotes: mergedQuotes,
+            analytics: {
+              ...state.analytics,
+              quoteRequestsCount: mergedQuotes.length,
+            }
+          };
+        });
       }
 
       if (statsRes.status === 'fulfilled' && statsRes.value) {
@@ -1033,23 +1051,30 @@ export const useStore = create<StoreState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          data.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+          let mergedResult: Order[] = [];
           set((state) => {
-            const grossRev = data.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
+            const map = new Map<string, any>();
+            data.forEach((o: any) => { if (o && o.id) map.set(o.id, o); });
+            state.orders.forEach((o: any) => {
+              if (o && o.id && !map.has(o.id)) {
+                map.set(o.id, o);
+              }
+            });
+            const mergedOrders = Array.from(map.values()) as Order[];
+            mergedOrders.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+            mergedResult = mergedOrders;
+            const grossRev = mergedOrders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
+            saveLocal('orders', mergedOrders);
             return {
-              orders: data,
+              orders: mergedOrders,
               analytics: {
                 ...state.analytics,
-                totalOrdersCount: data.length,
+                totalOrdersCount: mergedOrders.length,
                 grossRevenue: grossRev > 0 ? grossRev : state.analytics.grossRevenue,
               }
             };
           });
-          saveLocal('orders', data);
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('ecotex_orders_updated', { detail: data }));
-          }
-          return data;
+          return mergedResult;
         }
       }
     } catch (err) {
@@ -1064,19 +1089,28 @@ export const useStore = create<StoreState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          data.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
-          set((state) => ({
-            quotes: data,
-            analytics: {
-              ...state.analytics,
-              quoteRequestsCount: data.length,
-            }
-          }));
-          saveLocal('quotes', data);
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('ecotex_quotes_updated', { detail: data }));
-          }
-          return data;
+          let mergedResult: QuoteSubmission[] = [];
+          set((state) => {
+            const map = new Map<string, any>();
+            data.forEach((q: any) => { if (q && q.id) map.set(q.id, q); });
+            state.quotes.forEach((q: any) => {
+              if (q && q.id && !map.has(q.id)) {
+                map.set(q.id, q);
+              }
+            });
+            const mergedQuotes = Array.from(map.values()) as QuoteSubmission[];
+            mergedQuotes.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
+            mergedResult = mergedQuotes;
+            saveLocal('quotes', mergedQuotes);
+            return {
+              quotes: mergedQuotes,
+              analytics: {
+                ...state.analytics,
+                quoteRequestsCount: mergedQuotes.length,
+              }
+            };
+          });
+          return mergedResult;
         }
       }
     } catch (err) {

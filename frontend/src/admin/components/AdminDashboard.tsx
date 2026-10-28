@@ -40,18 +40,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     // Auto-poll every 5 seconds for live order & quote updates
     const interval = setInterval(syncData, 5000);
 
-    // Instant local events from storefront checkout
+    // Instant local events from storefront checkout or cross-tab sync
     const handleOrderEvent = () => syncData();
     window.addEventListener('ecotex_order_placed', handleOrderEvent);
-    window.addEventListener('ecotex_orders_updated', handleOrderEvent);
-    window.addEventListener('ecotex_quotes_updated', handleOrderEvent);
     window.addEventListener('storage', handleOrderEvent);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('ecotex_order_placed', handleOrderEvent);
-      window.removeEventListener('ecotex_orders_updated', handleOrderEvent);
-      window.removeEventListener('ecotex_quotes_updated', handleOrderEvent);
       window.removeEventListener('storage', handleOrderEvent);
     };
   }, [fetchOrders, fetchQuotes]);
