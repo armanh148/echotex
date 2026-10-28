@@ -46,7 +46,20 @@ import {
   ShopConfig,
   TeamMemberConfig,
   TestimonialConfig
-} from '../../types';
+import { Product, ProductCategory, ProductColorVariant } from '../../types';
+
+const DEFAULT_PALETTE: ProductColorVariant[] = [
+  { id: 'white', name: 'White', hex: '#FFFFFF', stockQuantity: 25 },
+  { id: 'black', name: 'Black', hex: '#18181b', stockQuantity: 50 },
+  { id: 'royal-blue', name: 'Royal Blue', hex: '#2563eb', stockQuantity: 30 },
+  { id: 'red', name: 'Red', hex: '#dc2626', stockQuantity: 20 },
+  { id: 'dark-green', name: 'Dark Green', hex: '#166534', stockQuantity: 50 },
+  { id: 'navy-blue', name: 'Navy Blue', hex: '#1e3a8a', stockQuantity: 40 },
+  { id: 'yellow', name: 'Yellow', hex: '#eab308', stockQuantity: 15 },
+  { id: 'orange', name: 'Orange', hex: '#ea580c', stockQuantity: 20 },
+  { id: 'sky-blue', name: 'Sky Blue', hex: '#38bdf8', stockQuantity: 25 },
+  { id: 'beige-cream', name: 'Beige / Cream', hex: '#f5ecd7', stockQuantity: 35 }
+];
 import { ImageUploader } from './ImageUploader';
 
 type EditorTab =
@@ -98,6 +111,19 @@ export const PageContentEditor: React.FC = () => {
         pcsPerBox: activeSelectedProduct.pcsPerBox || 200,
         wholesaleMoq: activeSelectedProduct.wholesaleMoq || 5,
         stockQuantity: activeSelectedProduct.stockQuantity !== undefined ? activeSelectedProduct.stockQuantity : 50,
+        availableColors: (activeSelectedProduct.availableColors && activeSelectedProduct.availableColors.length > 0)
+          ? activeSelectedProduct.availableColors.map((c, i) => ({
+              id: c.id || ('col-' + i),
+              name: c.name,
+              hex: c.hex || '#166534',
+              stockQuantity: c.stockQuantity !== undefined 
+                ? c.stockQuantity 
+                : (activeSelectedProduct.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+            }))
+          : DEFAULT_PALETTE.map(c => ({
+              ...c,
+              stockQuantity: activeSelectedProduct.colorStock?.[c.id] ?? c.stockQuantity
+            })),
         colorStock: activeSelectedProduct.colorStock && Object.keys(activeSelectedProduct.colorStock).length > 0 ? { ...activeSelectedProduct.colorStock } : {
           'white': 25,
           'black': 50,
@@ -174,7 +200,17 @@ export const PageContentEditor: React.FC = () => {
       pcsPerBox: Math.max(1, Number(pdpForm.pcsPerBox) || 200),
       wholesaleMoq: Math.max(1, Number(pdpForm.wholesaleMoq) || 5),
       stockQuantity: finalStock,
-      colorStock: pdpForm.colorStock || {},
+      availableColors: (pdpForm.availableColors || []).map((c: any) => ({
+        id: c.id || ('col-' + Math.random().toString(36).substring(2, 7)),
+        name: (c.name || '').trim() || 'Custom Color',
+        hex: c.hex || '#166534',
+        stockQuantity: Math.max(0, Number(c.stockQuantity) || 0)
+      })),
+      colorStock: (pdpForm.availableColors || []).reduce((acc: any, c: any) => {
+        const stock = Math.max(0, Number(c.stockQuantity) || 0);
+        const key = c.id || c.name.toLowerCase().replace(/\s+/g, '-');
+        return { ...acc, [key]: stock, [c.name.toLowerCase()]: stock };
+      }, {} as Record<string, number>),
       inStock: finalInStock,
       image: pdpForm.gallery0?.trim() || activeSelectedProduct.image || '/images/bag-green.png',
       galleryImages: finalGallery,
@@ -2321,84 +2357,177 @@ export const PageContentEditor: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Color-Wise Stock Inventory Card */}
-                  <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-2xs">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  {/* Dynamic Color Palette & Stock Inventory Card */}
+                  <div className="bg-white p-4.5 rounded-xl border-2 border-emerald-200/90 space-y-3.5 shadow-2xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-200/80 pb-3">
                       <div>
                         <strong className="block text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                           <Layers className="w-4 h-4 text-emerald-600" />
-                          <span>Color-Wise Stock Inventory (Boxes Per Color)</span>
+                          <span>Dynamic Color Palette & Stock Inventory</span>
                         </strong>
                         <span className="text-[11px] text-slate-500">
-                          Har colour ka stock set karein. Frontend pr customer jab colour select karega (jaise Red mein 20 boxes tha), toh 20 se zyada add nahi kar sakega.
+                          Apni marzi se naye colours add karein, color picker se shade chunein, aur har colour ka stock set karein (jaise Red mein 20 boxes).
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-600">Sum:</span>
+                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                        <span className="text-xs font-bold text-slate-600">Total:</span>
                         <span className="text-xs font-mono font-bold text-[#166534] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                          {Object.values(pdpForm.colorStock || {}).reduce((acc: number, v: any) => acc + (Number(v) || 0), 0)} Boxes
+                          {(pdpForm.availableColors || []).reduce((acc: number, c: any) => acc + (Number(c.stockQuantity) || 0), 0)} Boxes
                         </span>
                         <button
                           type="button"
                           onClick={() => {
-                            const sum = Object.values(pdpForm.colorStock || {}).reduce((acc: number, v: any) => acc + (Number(v) || 0), 0);
+                            const sum = (pdpForm.availableColors || []).reduce((acc: number, c: any) => acc + (Number(c.stockQuantity) || 0), 0);
                             setPdpForm({ ...pdpForm, stockQuantity: sum, inStock: sum > 0 });
                           }}
                           className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline cursor-pointer"
+                          title="Sync master stock with color sum"
                         >
                           Sync Master
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newId = 'col-' + Date.now();
+                            const newColor: ProductColorVariant = {
+                              id: newId,
+                              name: 'Color ' + ((pdpForm.availableColors || []).length + 1),
+                              hex: '#166534',
+                              stockQuantity: 20
+                            };
+                            setPdpForm({
+                              ...pdpForm,
+                              availableColors: [...(pdpForm.availableColors || []), newColor]
+                            });
+                          }}
+                          className="px-3 py-1.5 bg-[#166534] hover:bg-[#14532d] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>+ Add Color</span>
                         </button>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
-                      {DYE_COLORS.map((c) => {
-                        const stock = pdpForm.colorStock?.[c.id] !== undefined ? pdpForm.colorStock[c.id] : 0;
-                        const isSoldOut = stock <= 0;
-                        return (
-                          <div 
-                            key={c.id} 
-                            className={`p-2.5 rounded-xl border transition-all flex flex-col justify-between space-y-2 ${
-                              isSoldOut 
-                                ? 'bg-rose-50/40 border-rose-200' 
-                                : 'bg-slate-50/70 border-slate-200'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between gap-1">
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <span 
-                                  className="w-3.5 h-3.5 rounded-full shrink-0 border border-slate-300" 
-                                  style={{ backgroundColor: c.hex }} 
+                    {/* Color items list */}
+                    {(!pdpForm.availableColors || pdpForm.availableColors.length === 0) ? (
+                      <div className="text-center py-6 bg-slate-50 rounded-xl border border-dashed border-slate-300 space-y-2">
+                        <p className="text-xs text-slate-500">Abhi koi colour add nahi hai.</p>
+                        <button
+                          type="button"
+                          onClick={() => setPdpForm({ ...pdpForm, availableColors: DEFAULT_PALETTE.map(c => ({ ...c })) })}
+                          className="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-bold rounded-xl cursor-pointer"
+                        >
+                          Standard 10 Colors Load Karein
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                        {pdpForm.availableColors.map((c: any, index: number) => {
+                          const stock = Number(c.stockQuantity) || 0;
+                          const isSoldOut = stock <= 0;
+                          return (
+                            <div
+                              key={c.id || index}
+                              className={`p-3 rounded-xl border transition-all flex flex-col justify-between space-y-2.5 relative group ${
+                                isSoldOut 
+                                  ? 'bg-rose-50/40 border-rose-200' 
+                                  : 'bg-slate-50/70 border-slate-200 hover:border-emerald-300'
+                              }`}
+                            >
+                              {/* Top row: Color Picker Swatch & Color Name Input */}
+                              <div className="flex items-center gap-2">
+                                <label 
+                                  className="relative w-6 h-6 rounded-full shrink-0 shadow-2xs border-2 border-slate-300 cursor-pointer overflow-hidden"
+                                  style={{ backgroundColor: c.hex }}
+                                  title="Click to pick color shade"
+                                >
+                                  <input
+                                    type="color"
+                                    value={c.hex}
+                                    onChange={(e) => {
+                                      const updated = [...pdpForm.availableColors];
+                                      updated[index] = { ...updated[index], hex: e.target.value };
+                                      setPdpForm({ ...pdpForm, availableColors: updated });
+                                    }}
+                                    className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  value={c.name}
+                                  onChange={(e) => {
+                                    const updated = [...pdpForm.availableColors];
+                                    updated[index] = { ...updated[index], name: e.target.value };
+                                    setPdpForm({ ...pdpForm, availableColors: updated });
+                                  }}
+                                  className="w-full text-xs font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:border-emerald-500 focus:outline-none bg-transparent"
+                                  placeholder="Color Name"
                                 />
-                                <span className="text-xs font-bold text-slate-800 truncate">{c.name}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = pdpForm.availableColors.filter((_: any, i: number) => i !== index);
+                                    setPdpForm({ ...pdpForm, availableColors: updated });
+                                  }}
+                                  className="opacity-40 hover:opacity-100 text-rose-500 hover:text-rose-700 p-0.5 rounded cursor-pointer transition-opacity"
+                                  title="Delete this color"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
                               </div>
-                              <span className={`text-[9px] font-bold ${isSoldOut ? 'text-rose-600' : 'text-emerald-700'}`}>
-                                {isSoldOut ? '0' : `${stock} bx`}
-                              </span>
-                            </div>
 
-                            <div className="relative">
-                              <input
-                                type="number"
-                                min="0"
-                                step="1"
-                                value={stock}
-                                onChange={(e) => {
-                                  const val = Math.max(0, parseInt(e.target.value) || 0);
-                                  const updated = { ...(pdpForm.colorStock || {}), [c.id]: val };
-                                  setPdpForm({ ...pdpForm, colorStock: updated });
-                                }}
-                                className={`w-full px-2 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
-                                  isSoldOut ? 'border-rose-300 bg-white text-rose-700' : 'border-slate-200 bg-white text-slate-800'
-                                }`}
-                              />
+                              {/* Middle row: Hex code & Stock Input */}
+                              <div className="flex items-center gap-2">
+                                <div className="relative w-20 shrink-0">
+                                  <input
+                                    type="text"
+                                    value={c.hex}
+                                    onChange={(e) => {
+                                      const updated = [...pdpForm.availableColors];
+                                      updated[index] = { ...updated[index], hex: e.target.value };
+                                      setPdpForm({ ...pdpForm, availableColors: updated });
+                                    }}
+                                    className="w-full px-1.5 py-1 text-[10px] font-mono text-slate-600 bg-white border border-slate-200 rounded-lg text-center"
+                                    placeholder="#000000"
+                                  />
+                                </div>
+
+                                <div className="relative flex-1">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={stock}
+                                    onChange={(e) => {
+                                      const val = Math.max(0, parseInt(e.target.value) || 0);
+                                      const updated = [...pdpForm.availableColors];
+                                      updated[index] = { ...updated[index], stockQuantity: val };
+                                      setPdpForm({ ...pdpForm, availableColors: updated });
+                                    }}
+                                    className={`w-full pl-2 pr-7 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
+                                      isSoldOut 
+                                        ? 'border-rose-300 bg-rose-50/50 text-rose-800' 
+                                        : 'border-slate-200 bg-white text-slate-800'
+                                    }`}
+                                    placeholder="0"
+                                  />
+                                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 font-mono">bx</span>
+                                </div>
+                              </div>
+
+                              {/* Bottom status */}
+                              <div className="flex items-center justify-between text-[10px] pt-0.5">
+                                <span className="text-slate-400">Status:</span>
+                                <strong className={isSoldOut ? 'text-rose-600 font-bold' : 'text-[#166534]'}>
+                                  {isSoldOut ? 'Sold Out' : `${stock} Boxes`}
+                                </strong>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>                </div>
 
                 {/* 4. Full Specifications List */}
                 <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
