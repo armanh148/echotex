@@ -28,7 +28,20 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
-import { Product, ProductCategory } from '../../types';
+import { Product, ProductCategory, ProductColorVariant } from '../../types';
+
+const DEFAULT_PALETTE: ProductColorVariant[] = [
+  { id: 'white', name: 'White', hex: '#FFFFFF', stockQuantity: 25 },
+  { id: 'black', name: 'Black', hex: '#18181b', stockQuantity: 50 },
+  { id: 'royal-blue', name: 'Royal Blue', hex: '#2563eb', stockQuantity: 30 },
+  { id: 'red', name: 'Red', hex: '#dc2626', stockQuantity: 20 },
+  { id: 'dark-green', name: 'Dark Green', hex: '#166534', stockQuantity: 50 },
+  { id: 'navy-blue', name: 'Navy Blue', hex: '#1e3a8a', stockQuantity: 40 },
+  { id: 'yellow', name: 'Yellow', hex: '#eab308', stockQuantity: 15 },
+  { id: 'orange', name: 'Orange', hex: '#ea580c', stockQuantity: 20 },
+  { id: 'sky-blue', name: 'Sky Blue', hex: '#38bdf8', stockQuantity: 25 },
+  { id: 'beige-cream', name: 'Beige / Cream', hex: '#f5ecd7', stockQuantity: 35 }
+];
 import { ImageUploader } from './ImageUploader';
 import { CustomSelect } from './ui/CustomSelect';
 import { DYE_COLORS } from '../../data/colors';
@@ -133,6 +146,7 @@ export const ProductCatalogManager: React.FC = () => {
     wholesaleMoq: 5,
     pcsPerBox: 200,
     stockQuantity: 50,
+    availableColors: DEFAULT_PALETTE.map(c => ({ ...c })) as ProductColorVariant[],
     colorStock: {
       'white': 25,
       'black': 50,
@@ -228,6 +242,7 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: 5,
       pcsPerBox: 200,
       stockQuantity: 50,
+      availableColors: DEFAULT_PALETTE.map(c => ({ ...c })),
       colorStock: {
         'white': 25,
         'black': 50,
@@ -312,6 +327,19 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: p.wholesaleMoq || 5,
       pcsPerBox: p.pcsPerBox || 200,
       stockQuantity: currentStockQty,
+      availableColors: (p.availableColors && p.availableColors.length > 0)
+        ? p.availableColors.map((c, i) => ({
+            id: c.id || ('col-' + i),
+            name: c.name,
+            hex: c.hex || '#166534',
+            stockQuantity: c.stockQuantity !== undefined 
+              ? c.stockQuantity 
+              : (p.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+          }))
+        : DEFAULT_PALETTE.map(c => ({
+            ...c,
+            stockQuantity: p.colorStock?.[c.id] ?? c.stockQuantity
+          })),
       colorStock: p.colorStock && Object.keys(p.colorStock).length > 0 ? { ...p.colorStock } : {
         'white': 25,
         'black': 50,
@@ -401,7 +429,17 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: Math.max(1, Number(formData.wholesaleMoq) || 5),
       pcsPerBox: Math.max(1, Number(formData.pcsPerBox) || 200),
       stockQuantity: finalStockQuantity,
-      colorStock: formData.colorStock || {},
+      availableColors: (formData.availableColors || []).map(c => ({
+        id: c.id || ('col-' + Math.random().toString(36).substring(2, 7)),
+        name: (c.name || '').trim() || 'Custom Color',
+        hex: c.hex || '#166534',
+        stockQuantity: Math.max(0, Number(c.stockQuantity) || 0)
+      })),
+      colorStock: (formData.availableColors || []).reduce((acc, c) => {
+        const stock = Math.max(0, Number(c.stockQuantity) || 0);
+        const key = c.id || c.name.toLowerCase().replace(/\s+/g, '-');
+        return { ...acc, [key]: stock, [c.name.toLowerCase()]: stock };
+      }, {} as Record<string, number>),
       gsm: Number(formData.gsm) || 80,
       dimensions: formData.dimensions.trim(),
       material: formData.material.trim(),
@@ -1216,108 +1254,177 @@ export const ProductCatalogManager: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Color-Wise Stock Inventory Breakdown Card */}
+                  {/* Dynamic Color Palette & Stock Inventory Card */}
                   <div className="bg-slate-50/70 p-4.5 rounded-2xl border-2 border-emerald-200/90 space-y-3.5 shadow-2xs">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-200/80 pb-3">
                       <div>
                         <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                           <Layers className="w-4 h-4 text-emerald-600" />
-                          <span>Color-Wise Stock Inventory (Boxes Per Color)</span>
+                          <span>Dynamic Color Palette & Stock Inventory</span>
                         </h4>
                         <p className="text-[11px] text-slate-500 mt-0.5">
-                          Har colour ka stock boxes mein alag set karein. Frontend pr customer jab colour select karega (jaise Red mein 20 tha), toh us colour ki stock limit apply hogi aur us se zyada add nahi ho sakega.
+                          Apni marzi se koi bhi naya colour add karein, color picker se shade chunein, aur har colour ka stock set karein (jaise Red mein 20 boxes).
                         </p>
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex flex-wrap items-center gap-2 shrink-0">
                         <span className="text-xs font-bold text-slate-600">Total:</span>
                         <span className="text-xs font-mono font-bold text-[#166534] bg-emerald-100 border border-emerald-300 px-3 py-1 rounded-full">
-                          {Object.values(formData.colorStock || {}).reduce((acc, v) => acc + (Number(v) || 0), 0)} Boxes
+                          {(formData.availableColors || []).reduce((acc, c) => acc + (Number(c.stockQuantity) || 0), 0)} Boxes
                         </span>
                         <button
                           type="button"
                           onClick={() => {
-                            const total = Object.values(formData.colorStock || {}).reduce((acc, v) => acc + (Number(v) || 0), 0);
+                            const total = (formData.availableColors || []).reduce((acc, c) => acc + (Number(c.stockQuantity) || 0), 0);
                             setFormData({ ...formData, stockQuantity: total, inStock: total > 0 });
                           }}
                           className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline px-2 py-1 rounded-lg hover:bg-emerald-100/50 cursor-pointer transition-colors"
-                          title="Master Stock Quantity ko total color inventory se synchronize karein"
+                          title="Sync master stock quantity with the sum of all colors"
                         >
-                          Sync Master Stock
+                          Sync Master
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newId = 'col-' + Date.now();
+                            const newColor: ProductColorVariant = {
+                              id: newId,
+                              name: 'Color ' + ((formData.availableColors || []).length + 1),
+                              hex: '#166534',
+                              stockQuantity: 20
+                            };
+                            setFormData({
+                              ...formData,
+                              availableColors: [...(formData.availableColors || []), newColor]
+                            });
+                          }}
+                          className="px-3 py-1.5 bg-[#166534] hover:bg-[#14532d] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>+ Add Color</span>
                         </button>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                      {DYE_COLORS.map((c) => {
-                        const stock = formData.colorStock?.[c.id] !== undefined ? formData.colorStock[c.id] : 0;
-                        const isSoldOut = stock <= 0;
-                        return (
-                          <div 
-                            key={c.id} 
-                            className={`p-3 rounded-xl border transition-all flex flex-col justify-between space-y-2.5 ${
-                              isSoldOut 
-                                ? 'bg-rose-50/40 border-rose-200' 
-                                : 'bg-white border-slate-200 shadow-2xs hover:border-emerald-300'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between gap-1.5">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <span 
-                                  className="w-4 h-4 rounded-full shrink-0 shadow-2xs border border-slate-300"
-                                  style={{ backgroundColor: c.hex }} 
+                    {/* Color items list */}
+                    {(!formData.availableColors || formData.availableColors.length === 0) ? (
+                      <div className="text-center py-6 bg-white rounded-xl border border-dashed border-slate-300 space-y-2">
+                        <p className="text-xs text-slate-500">Abhi koi colour add nahi hai.</p>
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, availableColors: DEFAULT_PALETTE.map(c => ({ ...c })) })}
+                          className="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-bold rounded-xl cursor-pointer"
+                        >
+                          Standard 10 Colors Load Karein
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                        {formData.availableColors.map((c, index) => {
+                          const stock = Number(c.stockQuantity) || 0;
+                          const isSoldOut = stock <= 0;
+                          return (
+                            <div
+                              key={c.id || index}
+                              className={`p-3 rounded-xl border transition-all flex flex-col justify-between space-y-2.5 relative group ${
+                                isSoldOut 
+                                  ? 'bg-rose-50/40 border-rose-200' 
+                                  : 'bg-white border-slate-200 shadow-2xs hover:border-emerald-300'
+                              }`}
+                            >
+                              {/* Top row: Color Picker Swatch & Color Name Input */}
+                              <div className="flex items-center gap-2">
+                                <label 
+                                  className="relative w-6 h-6 rounded-full shrink-0 shadow-2xs border-2 border-slate-300 cursor-pointer overflow-hidden"
+                                  style={{ backgroundColor: c.hex }}
+                                  title="Click to pick color shade"
+                                >
+                                  <input
+                                    type="color"
+                                    value={c.hex}
+                                    onChange={(e) => {
+                                      const updated = [...formData.availableColors];
+                                      updated[index] = { ...updated[index], hex: e.target.value };
+                                      setFormData({ ...formData, availableColors: updated });
+                                    }}
+                                    className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  value={c.name}
+                                  onChange={(e) => {
+                                    const updated = [...formData.availableColors];
+                                    updated[index] = { ...updated[index], name: e.target.value };
+                                    setFormData({ ...formData, availableColors: updated });
+                                  }}
+                                  className="w-full text-xs font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:border-emerald-500 focus:outline-none bg-transparent"
+                                  placeholder="Color Name"
                                 />
-                                <span className="text-xs font-bold text-slate-800 truncate" title={c.name}>
-                                  {c.name}
-                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = formData.availableColors.filter((_, i) => i !== index);
+                                    setFormData({ ...formData, availableColors: updated });
+                                  }}
+                                  className="opacity-40 hover:opacity-100 text-rose-500 hover:text-rose-700 p-0.5 rounded cursor-pointer transition-opacity"
+                                  title="Delete this color"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
                               </div>
-                              {isSoldOut ? (
-                                <span className="text-[9px] font-extrabold uppercase text-rose-700 bg-rose-100/80 px-1.5 py-0.2 rounded">
-                                  Out
-                                </span>
-                              ) : (
-                                <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">
-                                  Live
-                                </span>
-                              )}
-                            </div>
 
-                            <div className="relative">
-                              <input
-                                type="number"
-                                min="0"
-                                step="1"
-                                value={stock}
-                                onChange={(e) => {
-                                  const val = Math.max(0, parseInt(e.target.value) || 0);
-                                  const updated = { ...(formData.colorStock || {}), [c.id]: val };
-                                  setFormData({
-                                    ...formData,
-                                    colorStock: updated
-                                  });
-                                }}
-                                className={`w-full pl-2 pr-7 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
-                                  isSoldOut 
-                                    ? 'border-rose-300 bg-white text-rose-800 font-extrabold' 
-                                    : 'border-slate-200 bg-slate-50/50 text-slate-800'
-                                }`}
-                                placeholder="0"
-                              />
-                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 font-mono">bx</span>
-                            </div>
+                              {/* Middle row: Hex code & Stock Input */}
+                              <div className="flex items-center gap-2">
+                                <div className="relative w-20 shrink-0">
+                                  <input
+                                    type="text"
+                                    value={c.hex}
+                                    onChange={(e) => {
+                                      const updated = [...formData.availableColors];
+                                      updated[index] = { ...updated[index], hex: e.target.value };
+                                      setFormData({ ...formData, availableColors: updated });
+                                    }}
+                                    className="w-full px-1.5 py-1 text-[10px] font-mono text-slate-600 bg-slate-50 border border-slate-200 rounded-lg text-center"
+                                    placeholder="#000000"
+                                  />
+                                </div>
 
-                            <div className="flex items-center justify-between text-[10px]">
-                              <span className="text-slate-400">Status:</span>
-                              <strong className={isSoldOut ? 'text-rose-600 font-bold' : 'text-[#166534]'}>
-                                {isSoldOut ? 'Sold Out' : `${stock} Boxes`}
-                              </strong>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                                <div className="relative flex-1">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={stock}
+                                    onChange={(e) => {
+                                      const val = Math.max(0, parseInt(e.target.value) || 0);
+                                      const updated = [...formData.availableColors];
+                                      updated[index] = { ...updated[index], stockQuantity: val };
+                                      setFormData({ ...formData, availableColors: updated });
+                                    }}
+                                    className={`w-full pl-2 pr-7 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
+                                      isSoldOut 
+                                        ? 'border-rose-300 bg-rose-50/50 text-rose-800' 
+                                        : 'border-slate-200 bg-slate-50/50 text-slate-800'
+                                    }`}
+                                    placeholder="0"
+                                  />
+                                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 font-mono">bx</span>
+                                </div>
+                              </div>
 
-                </div>
+                              {/* Bottom status */}
+                              <div className="flex items-center justify-between text-[10px] pt-0.5">
+                                <span className="text-slate-400">Status:</span>
+                                <strong className={isSoldOut ? 'text-rose-600 font-bold' : 'text-[#166534]'}>
+                                  {isSoldOut ? 'Sold Out' : `${stock} Boxes`}
+                                </strong>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>                </div>
               )}
 
               {/* ========================================================

@@ -50,16 +50,64 @@
       ],
       "availableColors": [
         {
-          "hex": "#86C59E",
-          "name": "Eco Green"
-        },
-        {
+          "id": "white",
+          "name": "White",
           "hex": "#FFFFFF",
-          "name": "Pure White"
+          "stockQuantity": 25
         },
         {
-          "hex": "#0f172a",
-          "name": "Deep Slate"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -139,16 +187,64 @@
       ],
       "availableColors": [
         {
-          "hex": "#86C59E",
-          "name": "Eco Green"
-        },
-        {
+          "id": "white",
+          "name": "White",
           "hex": "#FFFFFF",
-          "name": "Pure White"
+          "stockQuantity": 25
         },
         {
-          "hex": "#0f172a",
-          "name": "Deep Slate"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -213,16 +309,64 @@
       "categoryLabel": "Slider Bags",
       "availableColors": [
         {
-          "hex": "#36BF40",
-          "name": "Eco Green"
-        },
-        {
+          "id": "white",
+          "name": "White",
           "hex": "#FFFFFF",
-          "name": "Pure White"
+          "stockQuantity": 25
         },
         {
-          "hex": "#0f172a",
-          "name": "Deep Slate"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -279,8 +423,64 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
+        },
+        {
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
           "hex": "#166534",
-          "name": "Ecotex Forest"
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -348,16 +548,64 @@
       "stockQuantity": 100,
       "availableColors": [
         {
-          "hex": "#1b4329",
-          "name": "Forest Green"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
-          "hex": "#7ea242",
-          "name": "Olive Green"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
         },
         {
-          "hex": "#e8e2d5",
-          "name": "Natural Sand"
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -421,12 +669,64 @@
       "categoryLabel": "T-Shirt Bags",
       "availableColors": [
         {
-          "hex": "#ffffff",
-          "name": "Pure White"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
-          "hex": "#1b4329",
-          "name": "Eco Green"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -491,16 +791,64 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
+        },
+        {
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
           "hex": "#166534",
-          "name": "Ecotex Forest"
+          "stockQuantity": 50
         },
         {
-          "hex": "#1e3a5f",
-          "name": "Navy Blue"
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
         },
         {
-          "hex": "#f0ece1",
-          "name": "Cream"
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -565,12 +913,64 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
-          "hex": "#ffffff",
-          "name": "Gloss White"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
-          "hex": "#111827",
-          "name": "Obsidian Black"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -635,12 +1035,64 @@
       "categoryLabel": "D-Cut Punch Bags",
       "availableColors": [
         {
-          "hex": "#c2410c",
-          "name": "Terracotta Orange"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
-          "hex": "#78350f",
-          "name": "Earth Clay"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -705,12 +1157,64 @@
       "categoryLabel": "D-Cut Punch Bags",
       "availableColors": [
         {
-          "hex": "#1e293b",
-          "name": "Matte Black"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
-          "hex": "#475569",
-          "name": "Graphite Grey"
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -775,12 +1279,64 @@
       "categoryLabel": "Slider Zipper Bags",
       "availableColors": [
         {
-          "hex": "#e2e8f0",
-          "name": "Frosted Clear"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
+          "hex": "#166534",
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
           "hex": "#38bdf8",
-          "name": "Sky Blue Tint"
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
@@ -845,12 +1401,64 @@
       "categoryLabel": "Food Item Bags",
       "availableColors": [
         {
-          "hex": "#d97706",
-          "name": "Amber Orange"
+          "id": "white",
+          "name": "White",
+          "hex": "#FFFFFF",
+          "stockQuantity": 25
         },
         {
+          "id": "black",
+          "name": "Black",
+          "hex": "#18181b",
+          "stockQuantity": 50
+        },
+        {
+          "id": "royal-blue",
+          "name": "Royal Blue",
+          "hex": "#2563eb",
+          "stockQuantity": 30
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "hex": "#dc2626",
+          "stockQuantity": 20
+        },
+        {
+          "id": "dark-green",
+          "name": "Dark Green",
           "hex": "#166534",
-          "name": "Deep Green"
+          "stockQuantity": 50
+        },
+        {
+          "id": "navy-blue",
+          "name": "Navy Blue",
+          "hex": "#1e3a8a",
+          "stockQuantity": 40
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "hex": "#eab308",
+          "stockQuantity": 15
+        },
+        {
+          "id": "orange",
+          "name": "Orange",
+          "hex": "#ea580c",
+          "stockQuantity": 20
+        },
+        {
+          "id": "sky-blue",
+          "name": "Sky Blue",
+          "hex": "#38bdf8",
+          "stockQuantity": 25
+        },
+        {
+          "id": "beige-cream",
+          "name": "Beige / Cream",
+          "hex": "#f5ecd7",
+          "stockQuantity": 35
         }
       ],
       "checkoutButtonText": "\u2192 Express Checkout",
