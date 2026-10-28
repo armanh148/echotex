@@ -48,7 +48,7 @@ export async function getAllOrders(req, res) {
     });
 
     // Sort latest first
-    orders.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+    orders.sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
     res.json(orders);
   } catch (err) {
     logger.error('Error fetching orders:', err);

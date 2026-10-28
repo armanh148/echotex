@@ -40,8 +40,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     updateSiteSettings, 
     updateAnalytics, 
     updateQuoteStatus, 
-    updateOrderStatus 
+    updateOrderStatus,
+    fetchOrders,
+    fetchQuotes
   } = useStore();
+
+  React.useEffect(() => {
+    fetchOrders?.();
+    fetchQuotes?.();
+  }, [fetchOrders, fetchQuotes]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -107,7 +114,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   const totalCatalogCount = products.length;
   const inStockCount = products.filter(p => p.inStock).length;
   const newQuotes = quotes.filter(q => q.status === 'New');
-  const recentOrders = orders.slice(0, 4);
+  const sortedOrders = [...orders].sort((a, b) => new Date((b as any).createdAt || b.date || 0).getTime() - new Date((a as any).createdAt || a.date || 0).getTime());
+  const recentOrders = sortedOrders.slice(0, 5);
+  const sortedQuotes = [...quotes].sort((a, b) => new Date((b as any).createdAt || b.date || 0).getTime() - new Date((a as any).createdAt || a.date || 0).getTime());
+  const recentQuotes = sortedQuotes.slice(0, 5);
 
   // Computed real gross pipeline from orders or analytics
   const realGrossRevenue = orders.length > 0 
@@ -424,7 +434,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             </div>
 
             <div className="divide-y divide-slate-100 mt-2">
-              {quotes.slice(0, 3).map((q) => (
+              {recentQuotes.map((q) => (
                 <div key={q.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2">

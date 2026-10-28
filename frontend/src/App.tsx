@@ -28,6 +28,7 @@ export default function App() {
 
   // Zustand Global Store Integration
   const { 
+    products,
     cart, 
     isCartOpen, 
     setIsCartOpen, 
@@ -234,7 +235,7 @@ export default function App() {
           {/* PRODUCT DETAIL VIEW */}
           {activeSection === 'product-detail' && selectedProduct && (
             <ProductDetailPage
-              product={selectedProduct}
+              product={products.find(p => p.id === selectedProduct.id) || selectedProduct}
               onBack={() => {
                 handleNavigate('shop');
               }}

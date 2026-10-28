@@ -25,7 +25,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onBackToSite,
   onLogout
 }) => {
-  const { isAuthenticated, checkAuth, logout } = useStore();
+  const { isAuthenticated, checkAuth, logout, fetchOrders, fetchQuotes } = useStore();
+
+  // Real-time synchronization for orders & quotes across storefront and admin
+  useEffect(() => {
+    const syncData = () => {
+      fetchOrders?.();
+      fetchQuotes?.();
+    };
+
+    // Initial sync
+    syncData();
+
+    // Auto-poll every 5 seconds for live order & quote updates
+    const interval = setInterval(syncData, 5000);
+
+    // Instant local events from storefront checkout
+    const handleOrderEvent = () => syncData();
+    window.addEventListener('ecotex_order_placed', handleOrderEvent);
+    window.addEventListener('ecotex_orders_updated', handleOrderEvent);
+    window.addEventListener('ecotex_quotes_updated', handleOrderEvent);
+    window.addEventListener('storage', handleOrderEvent);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('ecotex_order_placed', handleOrderEvent);
+      window.removeEventListener('ecotex_orders_updated', handleOrderEvent);
+      window.removeEventListener('ecotex_quotes_updated', handleOrderEvent);
+      window.removeEventListener('storage', handleOrderEvent);
+    };
+  }, [fetchOrders, fetchQuotes]);
   const [activeSection, setActiveSection] = useState<AdminSection>('overview');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

@@ -113,6 +113,8 @@ export interface Order {
   totalAmount?: number;
   status: 'Pending' | 'In Production' | 'Dispatched' | 'Completed' | 'Cancelled' | string;
   date?: string;
+  createdAt?: string;
+  notifications?: any;
   items: {
     productId?: string;
     productName?: string;

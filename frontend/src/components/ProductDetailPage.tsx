@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Product } from '../types';
 import { 
   Heart, 
@@ -19,7 +20,9 @@ import {
   Package,
   Lock,
   Sparkles,
-  Edit3
+  Edit3,
+  X,
+  Save
 } from 'lucide-react';
 import { DYE_COLORS, DyeColor } from '../data/colors';
 import { useStore } from '../store/useStore';
@@ -46,7 +49,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onSelectProduct,
   onEditProduct
 }) => {
-  const { products: storeProducts, isAuthenticated } = useStore();
+  const { products: storeProducts, isAuthenticated, updateProduct } = useStore();
   const allProducts = (storeProducts && storeProducts.length > 0) ? storeProducts : PRODUCTS;
 
   // 5 Related products for bottom section
@@ -88,6 +91,143 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
     return DYE_COLORS.find(c => c.name.toLowerCase() === ((product as any).color || product.availableColors?.[0]?.name)?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
   });
+
+  // ========================================================
+  // SINGLE PRODUCT PAGE CMS EDITOR STATE
+  // ========================================================
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editorTab, setEditorTab] = useState<'info' | 'pricing' | 'images' | 'specs' | 'badges'>('info');
+  const [editorToast, setEditorToast] = useState<string | null>(null);
+
+  const PRESET_IMAGES = [
+    { label: 'Leaf Green', url: '/images/bag-green.png' },
+    { label: 'Cobalt Blue', url: '/images/bag-blue.png' },
+    { label: 'Linen White', url: '/images/bag-white.png' },
+    { label: 'Luxury Black', url: '/images/bag-black.png' },
+    { label: 'Bio Amber', url: '/images/bag-orange.png' },
+    { label: 'PLA Bio Jar', url: '/images/bite-hero-product.png' }
+  ];
+
+  const [editForm, setEditForm] = useState({
+    name: product.name,
+    categoryLabel: product.categoryLabel || 'SUSTAINABLE NON-WOVEN',
+    subtitle: product.subtitle || '',
+    rating: product.rating !== undefined ? product.rating : 4.9,
+    articleNo: product.articleNo || `EP-${product.id.slice(0, 6).toUpperCase()}`,
+    volumeNo: product.volumeNo || `${product.gsm || 45} GSM LUXURY`,
+    description: product.description || '',
+    pricePerUnit: product.pricePerUnit || 0.25,
+    originalPrice: product.originalPrice || ((product.pricePerUnit || 0.25) * 1.25),
+    wholesaleMoq: product.wholesaleMoq || 5,
+    pcsPerBox: product.pcsPerBox || 200,
+    stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
+    inStock: product.inStock !== false,
+    image: product.image || '/images/bag-green.png',
+    gallery0: product.galleryImages?.[0] || product.image || '/images/bag-green.png',
+    gallery1: product.galleryImages?.[1] || 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85',
+    gallery2: product.galleryImages?.[2] || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=85',
+    gallery3: product.galleryImages?.[3] || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85',
+    bestFor: product.bestFor || 'Supermarket grocers, retail boutiques',
+    recommendedPrint: product.recommendedPrint || '2-Color Flexographic ink on Leaf Green',
+    brandName: product.brandName || 'ECOTEX INC.',
+    fabricDetails: product.fabricDetails || `${product.gsm || 45} GSM Virgin Non-Woven Polypropylene`,
+    dimensions: product.dimensions || '11.5"W x 21"H x 6.5" Gusset',
+    handles: product.handles || 'Ultrasonic Thermal Welded Loops',
+    printingMethod: product.printingMethod || 'High-Precision Flexographic / Gravure Custom Imprint',
+    compliance: product.compliance || 'Certified California SB 270 & ASTM D6400',
+    packingDetails: product.packingDetails || 'Export-Grade Heavy Duty Corrugated Cartons',
+    guaranteedFabric: product.guaranteedFabric || '100% Virgin Grade Recyclable Polypropylene',
+    enrouteQuality: product.enrouteQuality || 'Enroute to Quality Standard',
+    trustBadge1: product.trustBadge1 || 'Fast Delivery',
+    trustBadge2: product.trustBadge2 || 'Secure Store',
+    trustBadge3: product.trustBadge3 || 'Easy Return',
+  });
+
+  useEffect(() => {
+    setEditForm({
+      name: product.name,
+      categoryLabel: product.categoryLabel || 'SUSTAINABLE NON-WOVEN',
+      subtitle: product.subtitle || '',
+      rating: product.rating !== undefined ? product.rating : 4.9,
+      articleNo: product.articleNo || `EP-${product.id.slice(0, 6).toUpperCase()}`,
+      volumeNo: product.volumeNo || `${product.gsm || 45} GSM LUXURY`,
+      description: product.description || '',
+      pricePerUnit: product.pricePerUnit || 0.25,
+      originalPrice: product.originalPrice || ((product.pricePerUnit || 0.25) * 1.25),
+      wholesaleMoq: product.wholesaleMoq || 5,
+      pcsPerBox: product.pcsPerBox || 200,
+      stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
+      inStock: product.inStock !== false,
+      image: product.image || '/images/bag-green.png',
+      gallery0: product.galleryImages?.[0] || product.image || '/images/bag-green.png',
+      gallery1: product.galleryImages?.[1] || 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85',
+      gallery2: product.galleryImages?.[2] || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=85',
+      gallery3: product.galleryImages?.[3] || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=85',
+      bestFor: product.bestFor || 'Supermarket grocers, retail boutiques',
+      recommendedPrint: product.recommendedPrint || '2-Color Flexographic ink on Leaf Green',
+      brandName: product.brandName || 'ECOTEX INC.',
+      fabricDetails: product.fabricDetails || `${product.gsm || 45} GSM Virgin Non-Woven Polypropylene`,
+      dimensions: product.dimensions || '11.5"W x 21"H x 6.5" Gusset',
+      handles: product.handles || 'Ultrasonic Thermal Welded Loops',
+      printingMethod: product.printingMethod || 'High-Precision Flexographic / Gravure Custom Imprint',
+      compliance: product.compliance || 'Certified California SB 270 & ASTM D6400',
+      packingDetails: product.packingDetails || 'Export-Grade Heavy Duty Corrugated Cartons',
+      guaranteedFabric: product.guaranteedFabric || '100% Virgin Grade Recyclable Polypropylene',
+      enrouteQuality: product.enrouteQuality || 'Enroute to Quality Standard',
+      trustBadge1: product.trustBadge1 || 'Fast Delivery',
+      trustBadge2: product.trustBadge2 || 'Secure Store',
+      trustBadge3: product.trustBadge3 || 'Easy Return',
+    });
+  }, [product]);
+
+  const handleSaveProductPage = (e: React.FormEvent) => {
+    e.preventDefault();
+    const finalStockQuantity = Math.max(0, Number(editForm.stockQuantity) || 0);
+    const finalInStock = editForm.inStock && finalStockQuantity > 0;
+
+    const updates: Partial<Product> = {
+      name: editForm.name.trim(),
+      categoryLabel: editForm.categoryLabel.trim(),
+      subtitle: editForm.subtitle.trim(),
+      rating: Number(editForm.rating) || 4.9,
+      articleNo: editForm.articleNo.trim(),
+      volumeNo: editForm.volumeNo.trim(),
+      description: editForm.description.trim(),
+      pricePerUnit: Math.max(0.01, Number(editForm.pricePerUnit) || 0.25),
+      originalPrice: Math.max(0.01, Number(editForm.originalPrice) || 0.35),
+      wholesaleMoq: Math.max(1, Number(editForm.wholesaleMoq) || 5),
+      pcsPerBox: Math.max(1, Number(editForm.pcsPerBox) || 200),
+      stockQuantity: finalStockQuantity,
+      inStock: finalInStock,
+      image: editForm.image.trim(),
+      galleryImages: [
+        editForm.gallery0.trim() || editForm.image.trim(),
+        editForm.gallery1.trim(),
+        editForm.gallery2.trim(),
+        editForm.gallery3.trim(),
+      ].filter(Boolean),
+      bestFor: editForm.bestFor.trim(),
+      recommendedPrint: editForm.recommendedPrint.trim(),
+      brandName: editForm.brandName.trim(),
+      fabricDetails: editForm.fabricDetails.trim(),
+      dimensions: editForm.dimensions.trim(),
+      handles: editForm.handles.trim(),
+      printingMethod: editForm.printingMethod.trim(),
+      compliance: editForm.compliance.trim(),
+      packingDetails: editForm.packingDetails.trim(),
+      guaranteedFabric: editForm.guaranteedFabric.trim(),
+      enrouteQuality: editForm.enrouteQuality.trim(),
+      trustBadge1: editForm.trustBadge1.trim(),
+      trustBadge2: editForm.trustBadge2.trim(),
+      trustBadge3: editForm.trustBadge3.trim(),
+    };
+
+    updateProduct(product.id, updates);
+    setIsEditorOpen(false);
+    setEditorToast('Single Product Page updated & published live!');
+    setTimeout(() => setEditorToast(null), 3500);
+  };
+
 
   // Fixed product bag image (does not change on color swatch selection)
   const bagCutout = product.image || '/images/bag-green.png';
@@ -298,18 +438,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
 
           <div className="flex items-center gap-2.5 ml-4 shrink-0">
-            {isAuthenticated && (
-              <button
-                type="button"
-                onClick={() => onEditProduct ? onEditProduct(product) : onNavigateHome()}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
-                title="Edit this product page in Admin Panel"
-              >
-                <Edit3 className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Edit Product (Admin)</span>
-                <span className="sm:hidden">Edit</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setIsEditorOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-extrabold transition-all shadow-xs hover:shadow-md cursor-pointer hover:scale-[1.02] active:scale-98"
+              title="Edit this entire single product page (CMS Studio)"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Edit Single Page</span>
+              <span className="sm:hidden">Edit Page</span>
+            </button>
 
             <button
               onClick={onBack}
@@ -975,6 +1113,674 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <Check className="w-4 h-4 text-[#22c55e]" />
           <span>Added {product.name} to Cart</span>
         </div>
+      )}
+
+      {/* Editor Saved Feedback Toast */}
+      {editorToast && (
+        <div className="fixed top-6 right-6 z-[99999] bg-[#0f172a] text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-bold animate-fadeIn border border-[#22c55e]/50">
+          <Check className="w-4 h-4 text-[#22c55e]" />
+          <span>{editorToast}</span>
+        </div>
+      )}
+
+      {/* Floating Bottom Quick-Edit Button */}
+      <div className="fixed bottom-6 left-6 z-40">
+        <button
+          type="button"
+          onClick={() => setIsEditorOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-bold shadow-2xl border border-amber-400/50 hover:border-amber-400 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          title="Edit this single product page (CMS Studio)"
+        >
+          <Edit3 className="w-4 h-4 text-amber-400" />
+          <span>Edit Product Page</span>
+        </button>
+      </div>
+
+      {/* Full Single Product Page Editor Modal */}
+      {isEditorOpen && typeof document !== 'undefined' && createPortal(
+        <div 
+          onClick={() => setIsEditorOpen(false)}
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-200/90 flex flex-col max-h-[92vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-[#0f172a]"
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center font-bold">
+                  <Edit3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-[#0f172a]">
+                    Single Product Page Live CMS Editor
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Edit and customize every detail of &ldquo;{product.name}&rdquo; in real-time.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsEditorOpen(false)}
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="px-6 py-2.5 bg-white border-b border-slate-100 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-none text-xs">
+              <button
+                type="button"
+                onClick={() => setEditorTab('info')}
+                className={`px-3.5 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  editorTab === 'info'
+                    ? 'bg-amber-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                General & Header
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEditorTab('pricing')}
+                className={`px-3.5 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  editorTab === 'pricing'
+                    ? 'bg-amber-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Pricing & Inventory
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEditorTab('images')}
+                className={`px-3.5 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  editorTab === 'images'
+                    ? 'bg-amber-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Showcase & Gallery
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEditorTab('specs')}
+                className={`px-3.5 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  editorTab === 'specs'
+                    ? 'bg-amber-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Specifications Table
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEditorTab('badges')}
+                className={`px-3.5 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  editorTab === 'badges'
+                    ? 'bg-amber-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Badges & Recommendations
+              </button>
+            </div>
+
+            {/* Form Content Area */}
+            <form onSubmit={handleSaveProductPage} className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
+              
+              {/* TAB 1: GENERAL & HEADER */}
+              {editorTab === 'info' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Product Title / Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={editForm.name}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-semibold"
+                        placeholder="e.g. The Ecotex Heavy-Duty Grocery Tote"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Category Tag / Badge
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.categoryLabel}
+                        onChange={(e) => setEditForm({ ...editForm, categoryLabel: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 uppercase tracking-wider"
+                        placeholder="e.g. SUSTAINABLE NON-WOVEN"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Article No.
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.articleNo}
+                        onChange={(e) => setEditForm({ ...editForm, articleNo: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono"
+                        placeholder="e.g. EP-TSHIRT-01"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Volume No. / GSM Tag
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.volumeNo}
+                        onChange={(e) => setEditForm({ ...editForm, volumeNo: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 uppercase font-mono"
+                        placeholder="e.g. 45 GSM LUXURY"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Customer Rating (0.0 - 5.0)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="1"
+                        max="5"
+                        value={editForm.rating}
+                        onChange={(e) => setEditForm({ ...editForm, rating: Number(e.target.value) || 4.9 })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
+                        placeholder="4.9"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Short Subtitle / Headline
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.subtitle}
+                      onChange={(e) => setEditForm({ ...editForm, subtitle: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                      placeholder="e.g. Engineered For High-Volume Supermarket Use"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Full Editorial Description Paragraph
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={editForm.description}
+                      onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 leading-relaxed"
+                      placeholder="Enter the luxury editorial narrative describing the bag, fabric, and sustainability benefits..."
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: PRICING & INVENTORY */}
+              {editorTab === 'pricing' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Wholesale Base Price Per Unit ($) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.001"
+                        min="0.01"
+                        required
+                        value={editForm.pricePerUnit}
+                        onChange={(e) => setEditForm({ ...editForm, pricePerUnit: Number(e.target.value) || 0.25 })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold text-base text-[#166534]"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">
+                        Base pricing for bulk enterprise cartons.
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Original / Compare-At Strikethrough Price ($)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.001"
+                        min="0.01"
+                        value={editForm.originalPrice}
+                        onChange={(e) => setEditForm({ ...editForm, originalPrice: Number(e.target.value) || 0.35 })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono text-slate-500"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">
+                        Shown strikethrough next to active price (e.g. $0.35).
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Pieces Per Box / Pack
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={editForm.pcsPerBox}
+                        onChange={(e) => setEditForm({ ...editForm, pcsPerBox: Math.max(1, Number(e.target.value) || 200) })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
+                        placeholder="200"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">
+                        1 Box = {editForm.pcsPerBox} Pcs
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Wholesale MOQ (Boxes)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={editForm.wholesaleMoq}
+                        onChange={(e) => setEditForm({ ...editForm, wholesaleMoq: Math.max(1, Number(e.target.value) || 5) })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
+                        placeholder="5"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">
+                        Minimum wholesale box order.
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Available Stock (Boxes)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={editForm.stockQuantity}
+                        onChange={(e) => setEditForm({ ...editForm, stockQuantity: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono font-bold"
+                        placeholder="50"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">
+                        0 automatically switches to Sold Out.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <strong className="block text-slate-800 font-bold">
+                        Product Active & In Stock
+                      </strong>
+                      <span className="text-slate-500 text-[11px]">
+                        When turned off, purchasing is disabled and &ldquo;Sold Out&rdquo; banner displays.
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={editForm.inStock && editForm.stockQuantity > 0}
+                        onChange={(e) => setEditForm({ ...editForm, inStock: e.target.checked })}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166534]"></div>
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: IMAGES & GALLERY */}
+              {editorTab === 'images' && (
+                <div className="space-y-5 animate-fadeIn">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">
+                      Main Product Visual URL *
+                    </label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="text"
+                        required
+                        value={editForm.image}
+                        onChange={(e) => setEditForm({ ...editForm, image: e.target.value, gallery0: e.target.value })}
+                        className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 font-mono"
+                        placeholder="/images/bag-green.png"
+                      />
+                      <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 p-1 shrink-0 flex items-center justify-center overflow-hidden">
+                        <img src={editForm.image} alt="Preview" className="w-full h-full object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/bag-green.png'; }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Preset Selector */}
+                  <div>
+                    <label className="block font-bold text-slate-500 mb-2 text-[11px] uppercase tracking-wider">
+                      Quick Visual Presets (Click to apply)
+                    </label>
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                      {PRESET_IMAGES.map((preset, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setEditForm({ ...editForm, image: preset.url, gallery0: preset.url })}
+                          className={`p-2 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                            editForm.image === preset.url
+                              ? 'border-amber-500 bg-amber-50 text-amber-900 font-bold'
+                              : 'border-slate-200 hover:border-slate-300 bg-white'
+                          }`}
+                        >
+                          <img src={preset.url} alt={preset.label} className="w-8 h-8 object-contain" />
+                          <span className="text-[10px] truncate max-w-full">{preset.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4">
+                    <label className="block font-bold text-slate-700 mb-3">
+                      4 Thumbnails Gallery Strip (Shown under main showcase)
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Thumbnail 1 (Front View)</span>
+                        <input
+                          type="text"
+                          value={editForm.gallery0}
+                          onChange={(e) => setEditForm({ ...editForm, gallery0: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-mono text-[11px]"
+                          placeholder="Image URL"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Thumbnail 2 (Lifestyle Editorial)</span>
+                        <input
+                          type="text"
+                          value={editForm.gallery1}
+                          onChange={(e) => setEditForm({ ...editForm, gallery1: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-mono text-[11px]"
+                          placeholder="Image URL"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Thumbnail 3 (Fabric & Seam Macro)</span>
+                        <input
+                          type="text"
+                          value={editForm.gallery2}
+                          onChange={(e) => setEditForm({ ...editForm, gallery2: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-mono text-[11px]"
+                          placeholder="Image URL"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Thumbnail 4 (Production Workshop)</span>
+                        <input
+                          type="text"
+                          value={editForm.gallery3}
+                          onChange={(e) => setEditForm({ ...editForm, gallery3: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-mono text-[11px]"
+                          placeholder="Image URL"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: SPECIFICATIONS TABLE */}
+              {editorTab === 'specs' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Brand Name
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.brandName}
+                        onChange={(e) => setEditForm({ ...editForm, brandName: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="ECOTEX INC."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Fabric Specification
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.fabricDetails}
+                        onChange={(e) => setEditForm({ ...editForm, fabricDetails: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="45 GSM Virgin Non-Woven Polypropylene"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Dimensions
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.dimensions}
+                        onChange={(e) => setEditForm({ ...editForm, dimensions: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="11.5&quot;W x 21&quot;H x 6.5&quot; Gusset"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Handle Construction
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.handles}
+                        onChange={(e) => setEditForm({ ...editForm, handles: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="Ultrasonic Thermal Welded Loops"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Printing Technology
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.printingMethod}
+                        onChange={(e) => setEditForm({ ...editForm, printingMethod: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="High-Precision Flexographic / Gravure Custom Imprint"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Environmental Compliance
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.compliance}
+                        onChange={(e) => setEditForm({ ...editForm, compliance: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="Certified California SB 270 & ASTM D6400"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Export Packing Details
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.packingDetails}
+                        onChange={(e) => setEditForm({ ...editForm, packingDetails: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="Export-Grade Heavy Duty Corrugated Cartons"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Fabric Guarantee
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.guaranteedFabric}
+                        onChange={(e) => setEditForm({ ...editForm, guaranteedFabric: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="100% Virgin Grade Recyclable Polypropylene"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Quality Standard Banner
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.enrouteQuality}
+                        onChange={(e) => setEditForm({ ...editForm, enrouteQuality: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="Enroute to Quality Standard"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: BADGES & RECOMMENDATIONS */}
+              {editorTab === 'badges' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Best For Recommendation Tag
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.bestFor}
+                        onChange={(e) => setEditForm({ ...editForm, bestFor: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="Supermarket grocers, retail boutiques"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Recommended Print Technique
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.recommendedPrint}
+                        onChange={(e) => setEditForm({ ...editForm, recommendedPrint: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500"
+                        placeholder="2-Color Flexographic ink on Leaf Green"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4">
+                    <label className="block font-bold text-slate-800 mb-2">
+                      3 Bottom Trust Badges (Shown below description)
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Trust Badge 1 (Truck Icon)</span>
+                        <input
+                          type="text"
+                          value={editForm.trustBadge1}
+                          onChange={(e) => setEditForm({ ...editForm, trustBadge1: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-bold text-xs"
+                          placeholder="Fast Delivery"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Trust Badge 2 (Shield Icon)</span>
+                        <input
+                          type="text"
+                          value={editForm.trustBadge2}
+                          onChange={(e) => setEditForm({ ...editForm, trustBadge2: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-bold text-xs"
+                          placeholder="Secure Store"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500 block mb-1">Trust Badge 3 (Return Icon)</span>
+                        <input
+                          type="text"
+                          value={editForm.trustBadge3}
+                          onChange={(e) => setEditForm({ ...editForm, trustBadge3: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 font-bold text-xs"
+                          placeholder="Easy Return"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Modal Actions Footer */}
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsEditorOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Save & Publish Live</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>,
+        document.body
       )}
 
     </div>

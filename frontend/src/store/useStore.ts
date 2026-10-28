@@ -799,7 +799,8 @@ export const useStore = create<StoreState>((set, get) => ({
       }
 
       if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value) && ordsRes.value.length > 0) {
-        const serverOrders = ordsRes.value;
+        const serverOrders = [...ordsRes.value];
+        serverOrders.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
         set((state) => {
           const grossRev = serverOrders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
           return {
@@ -815,7 +816,8 @@ export const useStore = create<StoreState>((set, get) => ({
       }
 
       if (qtsRes.status === 'fulfilled' && Array.isArray(qtsRes.value) && qtsRes.value.length > 0) {
-        const serverQuotes = qtsRes.value;
+        const serverQuotes = [...qtsRes.value];
+        serverQuotes.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
         set((state) => ({
           quotes: serverQuotes,
           analytics: {
@@ -1031,6 +1033,7 @@ export const useStore = create<StoreState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
+          data.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
           set((state) => {
             const grossRev = data.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
             return {
@@ -1043,6 +1046,9 @@ export const useStore = create<StoreState>((set, get) => ({
             };
           });
           saveLocal('orders', data);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('ecotex_orders_updated', { detail: data }));
+          }
           return data;
         }
       }
@@ -1058,6 +1064,7 @@ export const useStore = create<StoreState>((set, get) => ({
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
+          data.sort((a: any, b: any) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
           set((state) => ({
             quotes: data,
             analytics: {
@@ -1066,6 +1073,9 @@ export const useStore = create<StoreState>((set, get) => ({
             }
           }));
           saveLocal('quotes', data);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('ecotex_quotes_updated', { detail: data }));
+          }
           return data;
         }
       }
@@ -1104,6 +1114,7 @@ export const useStore = create<StoreState>((set, get) => ({
       total,
       totalAmount: total,
       date: orderData.date || new Date().toISOString().split('T')[0],
+      createdAt: (orderData as any).createdAt || new Date().toISOString(),
       items: orderData.items || []
     };
 
@@ -1113,6 +1124,10 @@ export const useStore = create<StoreState>((set, get) => ({
         ? state.orders.map(o => o.id === orderId ? newOrder : o)
         : [newOrder, ...state.orders];
       saveLocal('orders', updated);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('ecotex_order_placed', { detail: newOrder }));
+        window.dispatchEvent(new CustomEvent('ecotex_orders_updated', { detail: updated }));
+      }
 
       // Automatically deduct ordered stock from products inventory
       const updatedProducts = state.products.map((prod) => {

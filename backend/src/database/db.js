@@ -187,7 +187,7 @@ export async function updateDb(updater) {
         }
         await writeToDiskAtomic(memoryDb);
         if (config.databaseUrl) {
-          await saveAllCollectionsToNeon(memoryDb).catch((err) => {
+          saveAllCollectionsToNeon(memoryDb).catch((err) => {
             logger.warn('Failed to sync update to Neon PostgreSQL:', err.message || err);
           });
         }

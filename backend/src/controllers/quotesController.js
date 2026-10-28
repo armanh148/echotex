@@ -5,7 +5,7 @@ export async function getAllQuotes(req, res) {
   try {
     const db = getDb();
     const quotes = [...(db.quotes || [])];
-    quotes.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+    quotes.sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
     res.json(quotes);
   } catch (err) {
     logger.error('Error fetching quotes:', err);

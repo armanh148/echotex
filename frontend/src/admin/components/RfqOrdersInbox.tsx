@@ -347,8 +347,13 @@ export const RfqOrdersInbox: React.FC = () => {
     }
   };
 
+  // Sort Quotes newest first
+  const sortedQuotes = [...quotes].sort(
+    (a, b) => new Date((b as any).createdAt || b.date || 0).getTime() - new Date((a as any).createdAt || a.date || 0).getTime()
+  );
+
   // Filter Quotes
-  const filteredQuotes = quotes.filter(q => {
+  const filteredQuotes = sortedQuotes.filter(q => {
     const matchesSearch = 
       q.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       q.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -359,8 +364,13 @@ export const RfqOrdersInbox: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Sort Orders newest first
+  const sortedOrders = [...orders].sort(
+    (a, b) => new Date((b as any).createdAt || b.date || 0).getTime() - new Date((a as any).createdAt || a.date || 0).getTime()
+  );
+
   // Filter Orders
-  const filteredOrders = orders.filter(o => {
+  const filteredOrders = sortedOrders.filter(o => {
     const custName = (o.customerName || o.buyerName || '').toLowerCase();
     const custEmail = (o.customerEmail || o.email || '').toLowerCase();
     const custCompany = (o.customerCompany || o.companyName || '').toLowerCase();
