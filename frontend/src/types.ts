@@ -7,6 +7,16 @@ export type ProductCategory =
   | 'recycled-textiles'
   | string;
 
+export interface ProductColorVariant {
+  id?: string;
+  name: string;
+  hex: string;
+  stockQuantity?: number;
+  inStock?: boolean;
+  bestFor?: string;
+  recommendedPrint?: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -24,7 +34,7 @@ export interface Product {
   material: string; // e.g., 'Virgin & Recycled Non-Woven Polypropylene'
   capacity: string; // e.g. 'Up to 25 lbs'
   certifications: string[]; // e.g. ['GRS Certified', '100% Recyclable', 'FDA Compliant']
-  availableColors: { name: string; hex: string }[];
+  availableColors: ProductColorVariant[];
   description: string;
   features: string[];
   bestFor: string;
