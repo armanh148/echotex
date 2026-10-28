@@ -88,8 +88,11 @@ export const PageContentEditor: React.FC = () => {
         volumeNo: activeSelectedProduct.volumeNo || `${activeSelectedProduct.gsm || 80} GSM LUXURY`,
         rating: activeSelectedProduct.rating !== undefined ? activeSelectedProduct.rating : 4.9,
         brandName: activeSelectedProduct.brandName || 'ECOTEX INC.',
-        pricePerUnit: activeSelectedProduct.pricePerUnit || 0.25,
-        originalPrice: activeSelectedProduct.originalPrice || Math.round((activeSelectedProduct.pricePerUnit || 0.25) * 1.35 * 100) / 100,
+        pricePerUnit: activeSelectedProduct.pricePerUnit || 59.99,
+        originalPrice: activeSelectedProduct.originalPrice || Math.round((activeSelectedProduct.pricePerUnit || 59.99) * 1.25 * 100) / 100,
+        retailPricePerUnit: activeSelectedProduct.retailPricePerUnit !== undefined && activeSelectedProduct.retailPricePerUnit > 0 ? activeSelectedProduct.retailPricePerUnit : Math.round((activeSelectedProduct.pricePerUnit || 59.99) * 1.45 * 100) / 100,
+        retailOriginalPrice: activeSelectedProduct.retailOriginalPrice !== undefined && activeSelectedProduct.retailOriginalPrice > 0 ? activeSelectedProduct.retailOriginalPrice : Math.round((activeSelectedProduct.retailPricePerUnit || (activeSelectedProduct.pricePerUnit || 59.99) * 1.45) * 1.25 * 100) / 100,
+        retailMaxBoxes: activeSelectedProduct.retailMaxBoxes || 5,
         pcsPerBox: activeSelectedProduct.pcsPerBox || 200,
         wholesaleMoq: activeSelectedProduct.wholesaleMoq || 5,
         stockQuantity: activeSelectedProduct.stockQuantity !== undefined ? activeSelectedProduct.stockQuantity : 50,
@@ -149,10 +152,13 @@ export const PageContentEditor: React.FC = () => {
       volumeNo: pdpForm.volumeNo.trim(),
       rating: Number(pdpForm.rating) || 4.9,
       brandName: pdpForm.brandName.trim(),
-      pricePerUnit: Number(pdpForm.pricePerUnit) || 0.25,
-      originalPrice: Number(pdpForm.originalPrice) || 0.35,
-      pcsPerBox: Number(pdpForm.pcsPerBox) || 200,
-      wholesaleMoq: Number(pdpForm.wholesaleMoq) || 5,
+      pricePerUnit: Math.max(0.01, Number(pdpForm.pricePerUnit) || 59.99),
+      originalPrice: Math.max(0.01, Number(pdpForm.originalPrice) || 74.99),
+      retailPricePerUnit: Math.max(0.01, Number(pdpForm.retailPricePerUnit) || 86.99),
+      retailOriginalPrice: Math.max(0.01, Number(pdpForm.retailOriginalPrice) || 108.73),
+      retailMaxBoxes: Math.max(1, Number(pdpForm.retailMaxBoxes) || 5),
+      pcsPerBox: Math.max(1, Number(pdpForm.pcsPerBox) || 200),
+      wholesaleMoq: Math.max(1, Number(pdpForm.wholesaleMoq) || 5),
       stockQuantity: finalStock,
       inStock: finalInStock,
       image: pdpForm.gallery0?.trim() || activeSelectedProduct.image || '/images/bag-green.png',
@@ -2080,11 +2086,232 @@ export const PageContentEditor: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 3. Full Specifications List */}
+                {/* 3. Pricing & Order Modes (Wholesale vs Retail Configuration) */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                      <DollarSign className="w-4 h-4 text-[#d97706]" />
+                      <span>3. Pricing & Order Modes (Wholesale & Retail Settings)</span>
+                    </h5>
+                    <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-xl border border-slate-200 shadow-2xs">
+                      <Package className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-xs font-bold text-slate-700">1 Box =</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="10"
+                        value={pdpForm.pcsPerBox || 200}
+                        onChange={(e) => setPdpForm({ ...pdpForm, pcsPerBox: Math.max(1, parseInt(e.target.value) || 200) })}
+                        className="w-16 px-1.5 py-0.5 text-center text-xs font-mono font-bold text-emerald-950 border border-slate-200 rounded-md bg-slate-50"
+                      />
+                      <span className="text-[10px] font-bold text-slate-500">Pcs</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* Wholesale Mode Box */}
+                    <div className="bg-emerald-50/40 p-4 rounded-xl border-2 border-emerald-200 space-y-3 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-emerald-200 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                          <strong className="text-xs font-extrabold uppercase text-[#166534]">
+                            Wholesale Order Mode
+                          </strong>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                          MOQ: {pdpForm.wholesaleMoq || 5} Boxes
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-emerald-900 mb-1">Box Price ($)</label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={pdpForm.pricePerUnit}
+                              onChange={(e) => setPdpForm({ ...pdpForm, pricePerUnit: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-emerald-300 text-xs font-bold text-[#166534] bg-white focus:outline-none focus:border-emerald-600"
+                              placeholder="59.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-emerald-700 mt-1 block">
+                            ≈ ${( (pdpForm.pricePerUnit || 0) / (pdpForm.pcsPerBox || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">Original Price ($)</label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={pdpForm.originalPrice}
+                              onChange={(e) => setPdpForm({ ...pdpForm, originalPrice: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 bg-white"
+                              placeholder="74.99"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">Compare-At Strike</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">Wholesale MOQ (Boxes)</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={pdpForm.wholesaleMoq}
+                            onChange={(e) => setPdpForm({ ...pdpForm, wholesaleMoq: Math.max(1, parseInt(e.target.value) || 5) })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-emerald-200 text-xs font-bold bg-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">Tab Button Label</label>
+                          <input
+                            type="text"
+                            value={pdpForm.wholesaleTabLabel || ''}
+                            onChange={(e) => setPdpForm({ ...pdpForm, wholesaleTabLabel: e.target.value })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-[#166534] bg-white"
+                            placeholder="Wholesale Order"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">Wholesale Policy Notice</label>
+                        <textarea
+                          rows={2}
+                          value={pdpForm.wholesalePolicyText || ''}
+                          onChange={(e) => setPdpForm({ ...pdpForm, wholesalePolicyText: e.target.value })}
+                          className="w-full p-2 rounded-xl border border-emerald-200 text-xs bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Retail Mode Box */}
+                    <div className="bg-amber-50/40 p-4 rounded-xl border-2 border-amber-200 space-y-3 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-amber-200 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+                          <strong className="text-xs font-extrabold uppercase text-amber-900">
+                            Retail Order Mode
+                          </strong>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                          Max: {pdpForm.retailMaxBoxes || 5} Boxes
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-amber-950 mb-1">Box Price ($)</label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={pdpForm.retailPricePerUnit}
+                              onChange={(e) => setPdpForm({ ...pdpForm, retailPricePerUnit: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-amber-300 text-xs font-bold text-[#d97706] bg-white focus:outline-none focus:border-amber-600"
+                              placeholder="86.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-amber-700 mt-1 block">
+                            ≈ ${( (pdpForm.retailPricePerUnit || 0) / (pdpForm.pcsPerBox || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">Original Price ($)</label>
+                          <div className="relative">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={pdpForm.retailOriginalPrice}
+                              onChange={(e) => setPdpForm({ ...pdpForm, retailOriginalPrice: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 bg-white"
+                              placeholder="108.73"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">Compare-At Strike</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">Retail Max Allowed (Boxes)</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={pdpForm.retailMaxBoxes}
+                            onChange={(e) => setPdpForm({ ...pdpForm, retailMaxBoxes: Math.max(1, parseInt(e.target.value) || 5) })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-amber-200 text-xs font-bold bg-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">Tab Button Label</label>
+                          <input
+                            type="text"
+                            value={pdpForm.retailTabLabel || ''}
+                            onChange={(e) => setPdpForm({ ...pdpForm, retailTabLabel: e.target.value })}
+                            className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-amber-900 bg-white"
+                            placeholder="Retail Order"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">Retail Policy Notice</label>
+                        <textarea
+                          rows={2}
+                          value={pdpForm.retailPolicyText || ''}
+                          onChange={(e) => setPdpForm({ ...pdpForm, retailPolicyText: e.target.value })}
+                          className="w-full p-2 rounded-xl border border-amber-200 text-xs bg-white text-slate-800 focus:outline-none focus:border-amber-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stock Availability */}
+                  <div className="bg-white p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <strong className="block text-xs font-bold text-slate-800">Available Stock (Boxes)</strong>
+                      <span className="text-[11px] text-slate-500">Stock 0 hone pr product automatic Sold Out mark ho jata hai.</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="number"
+                        min="0"
+                        value={pdpForm.stockQuantity}
+                        onChange={(e) => setPdpForm({ ...pdpForm, stockQuantity: Math.max(0, parseInt(e.target.value) || 0) })}
+                        className="w-24 px-2.5 py-1.5 rounded-xl border border-slate-200 font-mono font-bold text-xs bg-slate-50"
+                      />
+                      <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+                        <input
+                          type="checkbox"
+                          checked={pdpForm.inStock && (pdpForm.stockQuantity || 0) > 0}
+                          onChange={(e) => setPdpForm({ ...pdpForm, inStock: e.target.checked })}
+                          className="w-4 h-4 rounded text-emerald-600"
+                        />
+                        <span>Active & In Stock</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Full Specifications List */}
                 <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
                   <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                     <FileText className="w-4 h-4 text-[#d97706]" />
-                    <span>3. Technical Specifications Table</span>
+                    <span>4. Technical Specifications Table</span>
                   </h5>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
