@@ -62,7 +62,7 @@
           "name": "Deep Slate"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -77,7 +77,19 @@
       "wholesaleMoq": 5,
       "retailMaxBoxes": 5,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "prod-1791786437631",
@@ -139,7 +151,7 @@
           "name": "Deep Slate"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -155,7 +167,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "prod-1791183909856",
@@ -201,7 +225,7 @@
           "name": "Deep Slate"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -217,7 +241,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-muqua379",
@@ -247,7 +283,7 @@
           "name": "Ecotex Forest"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -263,7 +299,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-tshirt-grocery",
@@ -312,7 +360,7 @@
           "name": "Natural Sand"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -327,7 +375,19 @@
       "wholesaleMoq": 5,
       "retailMaxBoxes": 5,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-tshirt-supermarket",
@@ -369,7 +429,7 @@
           "name": "Eco Green"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -385,7 +445,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-loop-classic",
@@ -431,7 +503,7 @@
           "name": "Cream"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -447,7 +519,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-soft-laminated",
@@ -489,7 +573,7 @@
           "name": "Obsidian Black"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -505,7 +589,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-dcut-heavy",
@@ -547,7 +643,7 @@
           "name": "Earth Clay"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -563,7 +659,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-dcut-boutique",
@@ -605,7 +713,7 @@
           "name": "Graphite Grey"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -621,7 +729,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-slider-eva",
@@ -663,7 +783,7 @@
           "name": "Sky Blue Tint"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -679,7 +799,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     },
     {
       "id": "eco-food-cooler",
@@ -721,7 +853,7 @@
           "name": "Deep Green"
         }
       ],
-      "checkoutButtonText": "→ Express Checkout",
+      "checkoutButtonText": "\u2192 Express Checkout",
       "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
       "retailTabLabel": "Retail Order",
       "wholesaleTabLabel": "Wholesale Order",
@@ -737,7 +869,19 @@
       "retailMaxBoxes": 5,
       "pcsPerBox": 200,
       "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
+      "colorStock": {
+        "white": 25,
+        "black": 50,
+        "royal-blue": 30,
+        "red": 20,
+        "dark-green": 50,
+        "navy-blue": 40,
+        "yellow": 15,
+        "orange": 20,
+        "sky-blue": 25,
+        "beige-cream": 35
+      }
     }
   ],
   "categories": [
@@ -810,7 +954,7 @@
     {
       "id": "ECX-615695",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -830,7 +974,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -853,12 +997,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-355978",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -878,7 +1022,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -901,12 +1045,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-479597",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -926,7 +1070,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -949,12 +1093,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-408248",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -974,7 +1118,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -997,12 +1141,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-545603",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1022,7 +1166,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1045,12 +1189,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-373334",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1070,7 +1214,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1093,12 +1237,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-964340",
       "zip": "75820",
-      "city": "کراچی",
+      "city": "\u06a9\u0631\u0627\u0686\u06cc",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1118,7 +1262,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, کراچی, CA 75820",
+      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1141,7 +1285,7 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, کراچی, CA 75820"
+      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
     },
     {
       "id": "ECX-174201",
@@ -2740,10 +2884,10 @@
     },
     "companyName": "Ecotex Inc.",
     "aboutMission": "Empowering commercial enterprises and supermarket chains with certified non-woven and compostable packaging that drastically reduces carbon footprints without sacrificing load capacity.",
-    "announcement": "🌱 Certified Recycled & Compostable Wholesale Packaging · Direct from Corona, CA Facility",
+    "announcement": "\ud83c\udf31 Certified Recycled & Compostable Wholesale Packaging \u00b7 Direct from Corona, CA Facility",
     "footerConfig": {
       "tagline": "Direct manufacturer of certified circular non-woven, compostable bio-PLA, and insulated wholesale packaging for global commercial enterprise.",
-      "copyrightNotice": "Copyright 2026 © Ecotex Inc. All rights reserved.",
+      "copyrightNotice": "Copyright 2026 \u00a9 Ecotex Inc. All rights reserved.",
       "newsletterTitle": "Subscribe To Our Quarterly Newsletter",
       "newsletterBgImage": "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=80",
       "newsletterSubtitle": "Receive direct mill pricing updates, material innovation whitepapers, and California SB 54 regulatory packaging briefs."
@@ -2752,7 +2896,7 @@
     "navbarConfig": {
       "phoneDisplay": "(951) 555-ECOTEX",
       "ctaButtonText": "START SH",
-      "announcementText": "🌱 Certified Recycled & Compostable Wholesale Packaging · Direct from Corona, CA Facility",
+      "announcementText": "\ud83c\udf31 Certified Recycled & Compostable Wholesale Packaging \u00b7 Direct from Corona, CA Facility",
       "announcementActive": false
     },
     "plantAddress": "Sector 15, Korangi Industrial Area, Karachi, PK",
@@ -2760,7 +2904,7 @@
     "contactConfig": {
       "email": "orders@ecotexinc.com",
       "phone": "(951) 555-ECOTEX",
-      "headline": "Let’s Engineer Your Sustainable Wholesale Packaging Solution",
+      "headline": "Let\u2019s Engineer Your Sustainable Wholesale Packaging Solution",
       "twitterUrl": "https://twitter.com",
       "facebookUrl": "https://facebook.com",
       "linkedinUrl": "https://linkedin.com",
@@ -2778,7 +2922,7 @@
     "minOrderNotice": "Free pallet freight on continental US orders over $1,000",
     "secondaryPhone": "+92 332 8784015",
     "whatsappNumber": "+1 (951) 450-9773",
-    "copyrightNotice": "Copyright 2026 © Ecotex Inc. All rights reserved.",
+    "copyrightNotice": "Copyright 2026 \u00a9 Ecotex Inc. All rights reserved.",
     "facilityAddress": "1200 Industrial Parkway, Corona, CA 92881",
     "metaDescription": "Vertically integrated manufacturer of circular non-woven polypropylene bags, compostable blends, and reusable commercial textiles. Direct from Corona, CA.",
     "quoteCalcConfig": {
@@ -2833,8 +2977,8 @@
       "emailEnabled": true,
       "whatsappNumber": "",
       "whatsappEnabled": true,
-      "emailSubjectTemplate": "🛒 New Order {{orderId}} — {{customerName}} ({{total}})",
-      "whatsappMessageTemplate": "📦 *New Order Received!*\n\n*Order ID:* {{orderId}}\n*Customer:* {{customerName}}\n*Company:* {{companyName}}\n*Total:* {{total}}\n*Items:* {{itemsSummary}}\n\nPlease log in to the Ecotex admin panel to review and process this order."
+      "emailSubjectTemplate": "\ud83d\uded2 New Order {{orderId}} \u2014 {{customerName}} ({{total}})",
+      "whatsappMessageTemplate": "\ud83d\udce6 *New Order Received!*\n\n*Order ID:* {{orderId}}\n*Customer:* {{customerName}}\n*Company:* {{companyName}}\n*Total:* {{total}}\n*Items:* {{itemsSummary}}\n\nPlease log in to the Ecotex admin panel to review and process this order."
     },
     "orderNotifications": {
       "emailEnabled": false,

@@ -18,6 +18,7 @@ export interface Product {
   wholesaleMoq?: number; // wholesale minimum order quantity
   pcsPerBox?: number; // number of pieces inside 1 box (dynamic pack size e.g. 200, 500 pcs/box)
   stockQuantity?: number; // Available inventory count in boxes (0 means out of stock)
+  colorStock?: Record<string, number>; // Inventory count in boxes per color variant
   gsm: number; // Grams per square meter
   dimensions: string; // e.g., '12"W x 14"H x 4"D'
   material: string; // e.g., 'Virgin & Recycled Non-Woven Polypropylene'
