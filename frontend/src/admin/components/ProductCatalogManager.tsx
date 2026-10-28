@@ -31,6 +31,7 @@ import { useStore } from '../../store/useStore';
 import { Product, ProductCategory } from '../../types';
 import { ImageUploader } from './ImageUploader';
 import { CustomSelect } from './ui/CustomSelect';
+import { DYE_COLORS } from '../../data/colors';
 
 export const ProductCatalogManager: React.FC = () => {
   const { 
@@ -132,6 +133,18 @@ export const ProductCatalogManager: React.FC = () => {
     wholesaleMoq: 5,
     pcsPerBox: 200,
     stockQuantity: 50,
+    colorStock: {
+      'white': 25,
+      'black': 50,
+      'royal-blue': 30,
+      'red': 20,
+      'dark-green': 50,
+      'navy-blue': 40,
+      'yellow': 15,
+      'orange': 20,
+      'sky-blue': 25,
+      'beige-cream': 35
+    } as Record<string, number>,
     gsm: 80,
     dimensions: '11.5"W x 21"H x 6.5" Gusset',
     material: 'Virgin Non-Woven Polypropylene',
@@ -215,6 +228,18 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: 5,
       pcsPerBox: 200,
       stockQuantity: 50,
+      colorStock: {
+        'white': 25,
+        'black': 50,
+        'royal-blue': 30,
+        'red': 20,
+        'dark-green': 50,
+        'navy-blue': 40,
+        'yellow': 15,
+        'orange': 20,
+        'sky-blue': 25,
+        'beige-cream': 35
+      },
       gsm: 80,
       dimensions: '11.5"W x 21"H x 6.5" Gusset',
       material: 'Virgin Non-Woven Polypropylene',
@@ -287,6 +312,18 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: p.wholesaleMoq || 5,
       pcsPerBox: p.pcsPerBox || 200,
       stockQuantity: currentStockQty,
+      colorStock: p.colorStock && Object.keys(p.colorStock).length > 0 ? { ...p.colorStock } : {
+        'white': 25,
+        'black': 50,
+        'royal-blue': 30,
+        'red': 20,
+        'dark-green': 50,
+        'navy-blue': 40,
+        'yellow': 15,
+        'orange': 20,
+        'sky-blue': 25,
+        'beige-cream': 35
+      },
       gsm: p.gsm,
       dimensions: p.dimensions || '11.5"W x 21"H x 6.5" Gusset',
       material: p.material || 'Virgin Non-Woven Polypropylene',
@@ -364,6 +401,7 @@ export const ProductCatalogManager: React.FC = () => {
       wholesaleMoq: Math.max(1, Number(formData.wholesaleMoq) || 5),
       pcsPerBox: Math.max(1, Number(formData.pcsPerBox) || 200),
       stockQuantity: finalStockQuantity,
+      colorStock: formData.colorStock || {},
       gsm: Number(formData.gsm) || 80,
       dimensions: formData.dimensions.trim(),
       material: formData.material.trim(),
@@ -1175,6 +1213,107 @@ export const ProductCatalogManager: React.FC = () => {
                           {preset.label}
                         </button>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Color-Wise Stock Inventory Breakdown Card */}
+                  <div className="bg-slate-50/70 p-4.5 rounded-2xl border-2 border-emerald-200/90 space-y-3.5 shadow-2xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-3">
+                      <div>
+                        <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                          <Layers className="w-4 h-4 text-emerald-600" />
+                          <span>Color-Wise Stock Inventory (Boxes Per Color)</span>
+                        </h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          Har colour ka stock boxes mein alag set karein. Frontend pr customer jab colour select karega (jaise Red mein 20 tha), toh us colour ki stock limit apply hogi aur us se zyada add nahi ho sakega.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-xs font-bold text-slate-600">Total:</span>
+                        <span className="text-xs font-mono font-bold text-[#166534] bg-emerald-100 border border-emerald-300 px-3 py-1 rounded-full">
+                          {Object.values(formData.colorStock || {}).reduce((acc, v) => acc + (Number(v) || 0), 0)} Boxes
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const total = Object.values(formData.colorStock || {}).reduce((acc, v) => acc + (Number(v) || 0), 0);
+                            setFormData({ ...formData, stockQuantity: total, inStock: total > 0 });
+                          }}
+                          className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline px-2 py-1 rounded-lg hover:bg-emerald-100/50 cursor-pointer transition-colors"
+                          title="Master Stock Quantity ko total color inventory se synchronize karein"
+                        >
+                          Sync Master Stock
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                      {DYE_COLORS.map((c) => {
+                        const stock = formData.colorStock?.[c.id] !== undefined ? formData.colorStock[c.id] : 0;
+                        const isSoldOut = stock <= 0;
+                        return (
+                          <div 
+                            key={c.id} 
+                            className={`p-3 rounded-xl border transition-all flex flex-col justify-between space-y-2.5 ${
+                              isSoldOut 
+                                ? 'bg-rose-50/40 border-rose-200' 
+                                : 'bg-white border-slate-200 shadow-2xs hover:border-emerald-300'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-1.5">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span 
+                                  className="w-4 h-4 rounded-full shrink-0 shadow-2xs border border-slate-300"
+                                  style={{ backgroundColor: c.hex }} 
+                                />
+                                <span className="text-xs font-bold text-slate-800 truncate" title={c.name}>
+                                  {c.name}
+                                </span>
+                              </div>
+                              {isSoldOut ? (
+                                <span className="text-[9px] font-extrabold uppercase text-rose-700 bg-rose-100/80 px-1.5 py-0.2 rounded">
+                                  Out
+                                </span>
+                              ) : (
+                                <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">
+                                  Live
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="relative">
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={stock}
+                                onChange={(e) => {
+                                  const val = Math.max(0, parseInt(e.target.value) || 0);
+                                  const updated = { ...(formData.colorStock || {}), [c.id]: val };
+                                  setFormData({
+                                    ...formData,
+                                    colorStock: updated
+                                  });
+                                }}
+                                className={`w-full pl-2 pr-7 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
+                                  isSoldOut 
+                                    ? 'border-rose-300 bg-white text-rose-800 font-extrabold' 
+                                    : 'border-slate-200 bg-slate-50/50 text-slate-800'
+                                }`}
+                                placeholder="0"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 font-mono">bx</span>
+                            </div>
+
+                            <div className="flex items-center justify-between text-[10px]">
+                              <span className="text-slate-400">Status:</span>
+                              <strong className={isSoldOut ? 'text-rose-600 font-bold' : 'text-[#166534]'}>
+                                {isSoldOut ? 'Sold Out' : `${stock} Boxes`}
+                              </strong>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 

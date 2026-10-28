@@ -32,6 +32,7 @@ import {
   Check
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { DYE_COLORS } from '../../data/colors';
 import {
   SiteSettings,
   LogoConfig,
@@ -97,6 +98,18 @@ export const PageContentEditor: React.FC = () => {
         pcsPerBox: activeSelectedProduct.pcsPerBox || 200,
         wholesaleMoq: activeSelectedProduct.wholesaleMoq || 5,
         stockQuantity: activeSelectedProduct.stockQuantity !== undefined ? activeSelectedProduct.stockQuantity : 50,
+        colorStock: activeSelectedProduct.colorStock && Object.keys(activeSelectedProduct.colorStock).length > 0 ? { ...activeSelectedProduct.colorStock } : {
+          'white': 25,
+          'black': 50,
+          'royal-blue': 30,
+          'red': 20,
+          'dark-green': 50,
+          'navy-blue': 40,
+          'yellow': 15,
+          'orange': 20,
+          'sky-blue': 25,
+          'beige-cream': 35
+        },
         inStock: activeSelectedProduct.inStock !== false,
         gallery0: gImgs[0] || activeSelectedProduct.image || '/images/bag-green.png',
         gallery1: gImgs[1] || 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85',
@@ -161,6 +174,7 @@ export const PageContentEditor: React.FC = () => {
       pcsPerBox: Math.max(1, Number(pdpForm.pcsPerBox) || 200),
       wholesaleMoq: Math.max(1, Number(pdpForm.wholesaleMoq) || 5),
       stockQuantity: finalStock,
+      colorStock: pdpForm.colorStock || {},
       inStock: finalInStock,
       image: pdpForm.gallery0?.trim() || activeSelectedProduct.image || '/images/bag-green.png',
       galleryImages: finalGallery,
@@ -2284,7 +2298,7 @@ export const PageContentEditor: React.FC = () => {
                   {/* Stock Availability */}
                   <div className="bg-white p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                      <strong className="block text-xs font-bold text-slate-800">Available Stock (Boxes)</strong>
+                      <strong className="block text-xs font-bold text-slate-800">Master Stock (Boxes)</strong>
                       <span className="text-[11px] text-slate-500">Stock 0 hone pr product automatic Sold Out mark ho jata hai.</span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -2304,6 +2318,84 @@ export const PageContentEditor: React.FC = () => {
                         />
                         <span>Active & In Stock</span>
                       </label>
+                    </div>
+                  </div>
+
+                  {/* Color-Wise Stock Inventory Card */}
+                  <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-2xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                      <div>
+                        <strong className="block text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                          <Layers className="w-4 h-4 text-emerald-600" />
+                          <span>Color-Wise Stock Inventory (Boxes Per Color)</span>
+                        </strong>
+                        <span className="text-[11px] text-slate-500">
+                          Har colour ka stock set karein. Frontend pr customer jab colour select karega (jaise Red mein 20 boxes tha), toh 20 se zyada add nahi kar sakega.
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-slate-600">Sum:</span>
+                        <span className="text-xs font-mono font-bold text-[#166534] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                          {Object.values(pdpForm.colorStock || {}).reduce((acc: number, v: any) => acc + (Number(v) || 0), 0)} Boxes
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const sum = Object.values(pdpForm.colorStock || {}).reduce((acc: number, v: any) => acc + (Number(v) || 0), 0);
+                            setPdpForm({ ...pdpForm, stockQuantity: sum, inStock: sum > 0 });
+                          }}
+                          className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline cursor-pointer"
+                        >
+                          Sync Master
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
+                      {DYE_COLORS.map((c) => {
+                        const stock = pdpForm.colorStock?.[c.id] !== undefined ? pdpForm.colorStock[c.id] : 0;
+                        const isSoldOut = stock <= 0;
+                        return (
+                          <div 
+                            key={c.id} 
+                            className={`p-2.5 rounded-xl border transition-all flex flex-col justify-between space-y-2 ${
+                              isSoldOut 
+                                ? 'bg-rose-50/40 border-rose-200' 
+                                : 'bg-slate-50/70 border-slate-200'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-1">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span 
+                                  className="w-3.5 h-3.5 rounded-full shrink-0 border border-slate-300" 
+                                  style={{ backgroundColor: c.hex }} 
+                                />
+                                <span className="text-xs font-bold text-slate-800 truncate">{c.name}</span>
+                              </div>
+                              <span className={`text-[9px] font-bold ${isSoldOut ? 'text-rose-600' : 'text-emerald-700'}`}>
+                                {isSoldOut ? '0' : `${stock} bx`}
+                              </span>
+                            </div>
+
+                            <div className="relative">
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={stock}
+                                onChange={(e) => {
+                                  const val = Math.max(0, parseInt(e.target.value) || 0);
+                                  const updated = { ...(pdpForm.colorStock || {}), [c.id]: val };
+                                  setPdpForm({ ...pdpForm, colorStock: updated });
+                                }}
+                                className={`w-full px-2 py-1 text-center font-mono font-bold text-xs rounded-lg border focus:outline-none focus:border-emerald-500 ${
+                                  isSoldOut ? 'border-rose-300 bg-white text-rose-700' : 'border-slate-200 bg-white text-slate-800'
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
