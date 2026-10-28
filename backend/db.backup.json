@@ -70,7 +70,14 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.31,
+      "retailPricePerUnit": 0.36,
+      "retailOriginalPrice": 0.45,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "prod-1791786437631",
@@ -140,7 +147,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.31,
+      "retailPricePerUnit": 0.36,
+      "retailOriginalPrice": 0.45,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "prod-1791183909856",
@@ -194,7 +209,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.31,
+      "retailPricePerUnit": 0.36,
+      "retailOriginalPrice": 0.45,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-muqua379",
@@ -232,7 +255,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.44,
+      "retailPricePerUnit": 0.51,
+      "retailOriginalPrice": 0.64,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-tshirt-grocery",
@@ -289,7 +320,14 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.22,
+      "retailPricePerUnit": 0.26,
+      "retailOriginalPrice": 0.33,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-tshirt-supermarket",
@@ -339,7 +377,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.28,
+      "retailPricePerUnit": 0.32,
+      "retailOriginalPrice": 0.4,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-loop-classic",
@@ -393,7 +439,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.31,
+      "retailPricePerUnit": 0.36,
+      "retailOriginalPrice": 0.45,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-soft-laminated",
@@ -443,7 +497,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 1.19,
+      "retailPricePerUnit": 1.38,
+      "retailOriginalPrice": 1.72,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-dcut-heavy",
@@ -493,7 +555,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.69,
+      "retailPricePerUnit": 0.8,
+      "retailOriginalPrice": 1.0,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-dcut-boutique",
@@ -543,7 +613,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.6,
+      "retailPricePerUnit": 0.7,
+      "retailOriginalPrice": 0.88,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-slider-eva",
@@ -593,7 +671,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 0.85,
+      "retailPricePerUnit": 0.99,
+      "retailOriginalPrice": 1.24,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     },
     {
       "id": "eco-food-cooler",
@@ -643,7 +729,15 @@
       "relatedTag": "Explore More Options",
       "relatedTitle": "Related Products",
       "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog"
+      "relatedBackBtnText": "View Full Catalog",
+      "originalPrice": 1.44,
+      "retailPricePerUnit": 1.67,
+      "retailOriginalPrice": 2.09,
+      "wholesaleMoq": 5,
+      "retailMaxBoxes": 5,
+      "pcsPerBox": 200,
+      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
+      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...)."
     }
   ],
   "categories": [
