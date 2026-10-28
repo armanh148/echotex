@@ -1028,10 +1028,10 @@ export const ProductCatalogManager: React.FC = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
                     
                     {/* Left 7 Cols: 4 Slots Input */}
-                    <div className="lg:col-span-7 space-y-3.5">
+                    <div className="lg:col-span-7 space-y-4">
                       
                       {/* Slot 1 */}
-                      <div className="bg-slate-50/70 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                      <div className="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 space-y-3">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <span className="w-5 h-5 rounded-md bg-[#d97706] text-white flex items-center justify-center text-[10px]">1</span>
@@ -1040,34 +1040,34 @@ export const ProductCatalogManager: React.FC = () => {
                           <span className="text-[10px] font-mono text-slate-400">Primary Product View</span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            required
-                            value={formData.gallery0}
-                            onChange={(e) => setFormData({ ...formData, gallery0: e.target.value, image: e.target.value })}
-                            className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono bg-white"
-                            placeholder="/images/bag-green.png"
-                          />
-                        </div>
+                        <ImageUploader
+                          label=""
+                          description="Click Browse File or drag & drop to upload product photo directly from your device"
+                          value={formData.gallery0}
+                          onChange={(url) => setFormData({ ...formData, gallery0: url, image: url })}
+                          aspectRatio="portrait"
+                        />
 
                         {/* Presets */}
-                        <div className="flex flex-wrap gap-1">
-                          {PRODUCT_IMAGE_PRESETS.map((pr) => (
-                            <button
-                              key={pr.url}
-                              type="button"
-                              onClick={() => setFormData({ ...formData, gallery0: pr.url, image: pr.url })}
-                              className="px-2 py-0.5 rounded-md text-[10px] bg-white border border-slate-200 hover:border-amber-400 cursor-pointer font-medium"
-                            >
-                              {pr.label}
-                            </button>
-                          ))}
+                        <div className="pt-2 border-t border-slate-200/80">
+                          <span className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">Quick Preset Colorways:</span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {PRODUCT_IMAGE_PRESETS.map((pr) => (
+                              <button
+                                key={pr.url}
+                                type="button"
+                                onClick={() => setFormData({ ...formData, gallery0: pr.url, image: pr.url })}
+                                className="px-2.5 py-1 rounded-lg text-[10px] bg-white border border-slate-200 hover:border-amber-400 hover:bg-amber-50/30 cursor-pointer font-semibold transition-all shadow-2xs"
+                              >
+                                {pr.label}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       </div>
 
                       {/* Slot 2 */}
-                      <div className="bg-slate-50/70 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                      <div className="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 space-y-3">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <span className="w-5 h-5 rounded-md bg-slate-700 text-white flex items-center justify-center text-[10px]">2</span>
@@ -1076,17 +1076,17 @@ export const ProductCatalogManager: React.FC = () => {
                           <span className="text-[10px] font-mono text-slate-400">Fabric Texture / Studio View</span>
                         </div>
 
-                        <input
-                          type="text"
+                        <ImageUploader
+                          label=""
+                          description="Upload fabric texture or studio close-up photo directly from computer"
                           value={formData.gallery1}
-                          onChange={(e) => setFormData({ ...formData, gallery1: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono bg-white"
-                          placeholder="https://images.unsplash.com/..."
+                          onChange={(url) => setFormData({ ...formData, gallery1: url })}
+                          aspectRatio="portrait"
                         />
                       </div>
 
                       {/* Slot 3 */}
-                      <div className="bg-slate-50/70 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                      <div className="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 space-y-3">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <span className="w-5 h-5 rounded-md bg-slate-700 text-white flex items-center justify-center text-[10px]">3</span>
@@ -1095,17 +1095,17 @@ export const ProductCatalogManager: React.FC = () => {
                           <span className="text-[10px] font-mono text-slate-400">Manufacturing / Workshop</span>
                         </div>
 
-                        <input
-                          type="text"
+                        <ImageUploader
+                          label=""
+                          description="Upload factory workshop or precision manufacturing photo"
                           value={formData.gallery2}
-                          onChange={(e) => setFormData({ ...formData, gallery2: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono bg-white"
-                          placeholder="https://images.unsplash.com/..."
+                          onChange={(url) => setFormData({ ...formData, gallery2: url })}
+                          aspectRatio="portrait"
                         />
                       </div>
 
                       {/* Slot 4 */}
-                      <div className="bg-slate-50/70 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                      <div className="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 space-y-3">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <span className="w-5 h-5 rounded-md bg-slate-700 text-white flex items-center justify-center text-[10px]">4</span>
@@ -1114,12 +1114,12 @@ export const ProductCatalogManager: React.FC = () => {
                           <span className="text-[10px] font-mono text-slate-400">Retail Pack / Lifestyle</span>
                         </div>
 
-                        <input
-                          type="text"
+                        <ImageUploader
+                          label=""
+                          description="Upload carton pack, pallet, or retail lifestyle photo"
                           value={formData.gallery3}
-                          onChange={(e) => setFormData({ ...formData, gallery3: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono bg-white"
-                          placeholder="https://images.unsplash.com/..."
+                          onChange={(url) => setFormData({ ...formData, gallery3: url })}
+                          aspectRatio="portrait"
                         />
                       </div>
 

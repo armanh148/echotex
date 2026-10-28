@@ -2067,20 +2067,12 @@ export const PageContentEditor: React.FC = () => {
                           <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                             <span>{slotIdx === 0 ? 'Slot 1 (Main Hero)' : `Slot ${slotIdx + 1} (Thumbnail)`}</span>
                           </div>
-                          <div className="w-full aspect-square bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center p-2 overflow-hidden">
-                            <img
-                              src={val || '/images/bag-green.png'}
-                              alt={`Slot ${slotIdx + 1}`}
-                              className="w-full h-full object-contain"
-                              onError={(e) => { (e.target as HTMLImageElement).src = '/images/bag-green.png'; }}
-                            />
-                          </div>
-                          <input
-                            type="text"
+                          <ImageUploader
+                            label=""
                             value={val}
-                            onChange={(e) => setPdpForm({ ...pdpForm, [key]: e.target.value })}
-                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-[11px] font-mono"
-                            placeholder="Image URL..."
+                            onChange={(url) => setPdpForm({ ...pdpForm, [key]: url })}
+                            aspectRatio="portrait"
+                            placeholderText="Upload photo from computer"
                           />
                         </div>
                       );
