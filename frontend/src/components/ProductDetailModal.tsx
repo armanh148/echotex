@@ -47,7 +47,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [addedToast, setAddedToast] = useState(false);
 
   const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
-    return DYE_COLORS.find(c => c.name.toLowerCase() === product.color?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
+    return DYE_COLORS.find(c => c.name.toLowerCase() === ((product as any).color || product.availableColors?.[0]?.name)?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
   });
 
   // Fixed product bag image (does not change on color swatch selection)

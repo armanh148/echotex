@@ -14,8 +14,7 @@ import {
 } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
-  const { settings, submitQuote } = useData();
-  const { siteSettings } = useStore();
+  const { siteSettings, createQuote } = useStore();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -40,17 +39,15 @@ export const ContactSection: React.FC = () => {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
     try {
-      if (submitQuote) {
-        await submitQuote({
-          name: fullName,
-          email: formData.email,
-          phone: '',
-          message: formData.message,
-          bagType: 'Direct Web Inquiry',
-          quantity: 5000,
-          status: 'New'
-        });
-      }
+      await createQuote({
+        name: fullName,
+        email: formData.email,
+        phone: '',
+        message: formData.message,
+        category: 'Direct Web Inquiry',
+        volume: '5,000 units',
+        status: 'New'
+      });
     } catch (err) {
       console.warn('Quote submission local fallback:', err);
     } finally {
@@ -60,9 +57,9 @@ export const ContactSection: React.FC = () => {
   };
 
   // Address and contacts configuration
-  const facilityAddress = siteSettings?.contactConfig?.facilityAddress || settings?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881';
-  const email = siteSettings?.contactConfig?.email || siteSettings?.email || settings?.email || 'orders@ecotexinc.com';
-  const phone = siteSettings?.contactConfig?.phone || siteSettings?.phone || settings?.phone || '+1 (951) 450-9773';
+  const facilityAddress = siteSettings?.contactConfig?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881';
+  const email = siteSettings?.contactConfig?.email || siteSettings?.email || 'orders@ecotexinc.com';
+  const phone = siteSettings?.contactConfig?.phone || siteSettings?.phone || '+1 (951) 450-9773';
   const website = 'ecotexinc.com';
 
   // Dynamic Google Maps URL from Admin Settings

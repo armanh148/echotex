@@ -5,7 +5,6 @@ import { Navbar } from './components/Navbar';
 import { BiteStyleHero } from './components/BiteStyleHero';
 import { AboutSection } from './components/AboutSection';
 import { ShopSection } from './components/ShopSection';
-import { QuoteCalculator } from './components/QuoteCalculator';
 import { VersatilityBannerSection } from './components/VersatilityBannerSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';

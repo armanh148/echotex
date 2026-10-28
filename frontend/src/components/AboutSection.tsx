@@ -15,7 +15,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { ActiveSection } from '../types';
-import { useData } from '../context/DataContext';
 import { useStore } from '../store/useStore';
 
 interface AboutSectionProps {
@@ -23,9 +22,8 @@ interface AboutSectionProps {
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
-  const { settings } = useData();
   const { siteSettings } = useStore();
-  const currentSettings = siteSettings || settings;
+  const currentSettings = siteSettings;
   const aConfig = siteSettings?.aboutConfig;
 
   const defaultFeatures = [

@@ -285,13 +285,21 @@ export const CustomerMessagesManager: React.FC = () => {
     }
   };
 
+  const handleUpdateStatus = (newStatus: CustomerThread['status']) => {
+    if (!activeThread) return;
+    const updated = threads.map((t) => (t.id === activeThread.id ? { ...t, status: newStatus } : t));
+    setThreads(updated);
+    saveStoredThreads(updated);
+    showToast(`Status updated to ${newStatus}`);
+  };
+
   // Delete Thread
   const handleDeleteThread = (threadId: string) => {
     if (window.confirm('Are you sure you want to delete this customer conversation thread?')) {
       deleteStoredThread(threadId);
       setThreads((prev) => prev.filter((t) => t.id !== threadId));
-      if (activeThreadId === threadId) {
-        setActiveThreadId(null);
+      if (selectedThreadId === threadId) {
+        setSelectedThreadId('');
       }
       showToast('Conversation deleted successfully.');
     }

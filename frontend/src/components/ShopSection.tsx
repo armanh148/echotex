@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Product } from '../types';
 import { PRODUCTS } from '../data/products';
 import { useStore } from '../store/useStore';
-import { useData } from '../context/DataContext';
 import { 
   ShoppingBag, 
   ShoppingCart,
@@ -54,17 +53,11 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const catalogRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
 
-  // Global Store Data
+  // Global Store Data (Direct & Static Synchronized)
   const { products: storeProducts, categories: storeCategories, siteSettings } = useStore();
-  const { products: backendProducts, categories: backendCategories } = useData();
 
-  const allProducts = (storeProducts && storeProducts.length > 0)
-    ? storeProducts
-    : (backendProducts && backendProducts.length > 0 ? backendProducts : PRODUCTS);
-
-  const rawCategories = (storeCategories && storeCategories.length > 0)
-    ? storeCategories
-    : (backendCategories && backendCategories.length > 0 ? backendCategories : []);
+  const allProducts = (storeProducts && storeProducts.length > 0) ? storeProducts : PRODUCTS;
+  const rawCategories = (storeCategories && storeCategories.length > 0) ? storeCategories : [];
 
   const displayCategories = React.useMemo(() => {
     return rawCategories.filter(c => c.id !== 'all');
@@ -457,7 +450,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                         {cat.label}
                       </h3>
                       <p className="text-[11px] text-stone-500 mb-2 font-medium line-clamp-1">
-                        {cat.subtitle || `${productCount} Models Available`}
+                        {cat.subtitle || `${catProducts.length} Models Available`}
                       </p>
 
                       {/* Size & GSM Below Heading and Paragraph */}

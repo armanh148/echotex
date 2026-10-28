@@ -744,9 +744,10 @@ export const OffersDealsManager: React.FC = () => {
           </div>
 
           <ImageUploader
-            currentImage={formData.customImage || selectedProduct?.image}
-            onImageSelect={(url) => setFormData({ ...formData, customImage: url })}
+            value={formData.customImage || selectedProduct?.image}
+            onChange={(url: string) => setFormData({ ...formData, customImage: url })}
             label="Upload Custom Offer Product Image"
+            aspectRatio="square"
           />
         </div>
 

@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CartItem } from '../types';
-import { useData } from '../context/DataContext';
 import { useStore } from '../store/useStore';
 import { Logo } from './Logo';
 import { 
   X, 
   ShoppingBag, 
-  CheckCircle2, 
+  CheckCircle2,
+  AlertCircle, 
   ArrowLeft,
   ArrowRight,
   Trash2,
@@ -52,7 +52,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [orderRef, setOrderRef] = useState('');
   const [whatsAppNoticeUrl, setWhatsAppNoticeUrl] = useState<string | null>(null);
   const [dispatchedNotifs, setDispatchedNotifs] = useState<{ email?: string; emailEnabled?: boolean; whatsapp?: string; whatsappEnabled?: boolean }>({});
-  const { refreshData } = useData();
   const { createOrder, siteSettings, categories } = useStore();
 
   // Close on Escape key and handle body overflow
@@ -140,9 +139,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     // Save order through store and sync to backend API
     try {
       await createOrder(orderPayload);
-      if (typeof refreshData === 'function') {
-        refreshData();
-      }
     } catch (err) {
       console.warn('Order submission handled locally:', err);
     }

@@ -532,9 +532,10 @@ export const CategoriesManager: React.FC = () => {
                 </label>
                 
                 <ImageUploader
-                  currentImageUrl={formData.image}
-                  onUploadSuccess={(url) => setFormData({ ...formData, image: url })}
+                  value={formData.image}
+                  onChange={(url: string) => setFormData({ ...formData, image: url })}
                   label="Upload Category Image"
+                  aspectRatio="square"
                 />
 
                 <input

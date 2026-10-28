@@ -788,17 +788,17 @@ export const useStore = create<StoreState>((set, get) => ({
         }
       }
 
-      if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value)) {
+      if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value) && prodRes.value.length > 0) {
         set({ products: prodRes.value });
         saveLocal('products', prodRes.value);
       }
 
-      if (catRes.status === 'fulfilled' && Array.isArray(catRes.value)) {
+      if (catRes.status === 'fulfilled' && Array.isArray(catRes.value) && catRes.value.length > 0) {
         set({ categories: catRes.value });
         saveLocal('categories', catRes.value);
       }
 
-      if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value)) {
+      if (ordsRes.status === 'fulfilled' && Array.isArray(ordsRes.value) && ordsRes.value.length > 0) {
         const serverOrders = ordsRes.value;
         set((state) => {
           const grossRev = serverOrders.reduce((sum, o) => sum + (Number(o.total || o.totalAmount) || 0), 0);
@@ -814,7 +814,7 @@ export const useStore = create<StoreState>((set, get) => ({
         saveLocal('orders', serverOrders);
       }
 
-      if (qtsRes.status === 'fulfilled' && Array.isArray(qtsRes.value)) {
+      if (qtsRes.status === 'fulfilled' && Array.isArray(qtsRes.value) && qtsRes.value.length > 0) {
         const serverQuotes = qtsRes.value;
         set((state) => ({
           quotes: serverQuotes,
@@ -1117,7 +1117,7 @@ export const useStore = create<StoreState>((set, get) => ({
       // Automatically deduct ordered stock from products inventory
       const updatedProducts = state.products.map((prod) => {
         const orderedItem = (newOrder.items || []).find(
-          (it) => (it.productId || it.id) === prod.id
+          (it) => (it.productId || (it as any).id) === prod.id
         );
         if (orderedItem) {
           const currentStock = typeof prod.stockQuantity === 'number' ? prod.stockQuantity : (prod.inStock !== false ? 50 : 0);
@@ -1338,8 +1338,34 @@ export const useStore = create<StoreState>((set, get) => ({
   }
 }));
 
-// Automatically trigger live data sync on client initialization
+// Automatically trigger live data sync on client initialization and listen to cross-tab storage changes
 if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (!e.key || !e.newValue) return;
+    try {
+      if (e.key === 'ecotex_products') {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed) && parsed.length > 0) useStore.setState({ products: parsed });
+      } else if (e.key === 'ecotex_categories') {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed) && parsed.length > 0) useStore.setState({ categories: parsed });
+      } else if (e.key === 'ecotex_hero_config') {
+        useStore.setState({ heroConfig: JSON.parse(e.newValue) });
+      } else if (e.key === 'ecotex_site_settings') {
+        useStore.setState({ siteSettings: JSON.parse(e.newValue) });
+      } else if (e.key === 'ecotex_orders') {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed)) useStore.setState({ orders: parsed });
+      } else if (e.key === 'ecotex_quotes') {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed)) useStore.setState({ quotes: parsed });
+      } else if (e.key === 'ecotex_media_library') {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed)) useStore.setState({ mediaLibrary: parsed });
+      }
+    } catch {}
+  });
+
   setTimeout(() => {
     useStore.getState().fetchAllData();
   }, 10);

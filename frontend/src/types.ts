@@ -189,14 +189,19 @@ export interface AboutConfig {
   heroTitle: string;
   heroSubtitle: string;
   heroBgImage?: string;
+  storyTitle?: string;
   missionQuote: string;
   storyParagraph1: string;
   storyParagraph2: string;
+  founderName?: string;
+  founderRole?: string;
   founderImage?: string;
   workshopImage?: string;
   whyChooseUsTitle: string;
   whyChooseUsSubtitle: string;
   whyChooseUsFeatures: AboutFeature[];
+  teamSectionTitle?: string;
+  teamSectionSubtitle?: string;
   teamMembers: TeamMemberConfig[];
 }
 

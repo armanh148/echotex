@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ActiveSection } from '../types';
-import { useData } from '../context/DataContext';
 import { useStore } from '../store/useStore';
 import { Logo } from './Logo';
 import { 
@@ -19,7 +18,6 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const { settings } = useData();
   const siteSettings = useStore((state) => state.siteSettings);
   const [newsletterEmail, setNewsletterEmail] = useState('');
 
@@ -64,7 +62,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Left: Heading */}
           <div className="text-center lg:text-left">
             <h3 className="text-lg sm:text-xl lg:text-2xl font-black uppercase tracking-[0.12em] text-white">
-              {siteSettings?.footerConfig?.newsletterTitle || settings?.newsletterTitle || 'Subscribe To Our Quarterly Newsletter'}
+              {siteSettings?.footerConfig?.newsletterTitle || 'Subscribe To Our Quarterly Newsletter'}
             </h3>
             {siteSettings?.footerConfig?.newsletterSubtitle && (
               <p className="text-xs text-slate-400 mt-1 max-w-lg">
@@ -121,14 +119,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             {/* Address & Email */}
             <div className="mt-6 space-y-1.5 text-xs text-slate-300 font-light leading-relaxed">
               <p className="font-normal text-white">
-                {siteSettings?.facilityAddress || siteSettings?.contactConfig?.facilityAddress || settings?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881'}
+                {siteSettings?.facilityAddress || siteSettings?.contactConfig?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881'}
               </p>
               <p className="pt-2">
                 <a 
-                  href={`mailto:${siteSettings?.email || siteSettings?.contactConfig?.email || settings?.email || 'orders@ecotexinc.com'}`} 
+                  href={`mailto:${siteSettings?.email || siteSettings?.contactConfig?.email || 'orders@ecotexinc.com'}`} 
                   className="text-[#86efac] hover:text-[#22c55e] transition-colors underline font-medium"
                 >
-                  {siteSettings?.email || siteSettings?.contactConfig?.email || settings?.email || 'orders@ecotexinc.com'}
+                  {siteSettings?.email || siteSettings?.contactConfig?.email || 'orders@ecotexinc.com'}
                 </a>
               </p>
             </div>
@@ -334,7 +332,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Right: Copyright */}
           <div className="text-right text-[11px] text-slate-400 font-light">
-            <span>{siteSettings?.footerConfig?.copyrightNotice || siteSettings?.copyrightNotice || settings?.copyrightNotice || 'Copyright 2026 © Ecotex Inc. All rights reserved.'}</span>
+            <span>{siteSettings?.footerConfig?.copyrightNotice || siteSettings?.copyrightNotice || 'Copyright 2026 © Ecotex Inc. All rights reserved.'}</span>
           </div>
 
 
