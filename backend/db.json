@@ -607,339 +607,339 @@
   "orders": [
     {
       "id": "ECX-615695",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:56.451Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:56.451Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:56.451Z"
+          "timestamp": "2026-10-28T09:02:56.451Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:56.451Z"
+          "timestamp": "2026-10-28T09:02:56.451Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-355978",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:54.428Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:54.428Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:54.428Z"
+          "timestamp": "2026-10-28T09:02:54.428Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:54.428Z"
+          "timestamp": "2026-10-28T09:02:54.428Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-479597",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:54.244Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:54.244Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:54.244Z"
+          "timestamp": "2026-10-28T09:02:54.244Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:54.244Z"
+          "timestamp": "2026-10-28T09:02:54.244Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-408248",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:54.060Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:54.060Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:54.060Z"
+          "timestamp": "2026-10-28T09:02:54.060Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:54.060Z"
+          "timestamp": "2026-10-28T09:02:54.060Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-545603",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:53.708Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:53.708Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:53.708Z"
+          "timestamp": "2026-10-28T09:02:53.708Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:53.708Z"
+          "timestamp": "2026-10-28T09:02:53.708Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-373334",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:52.429Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:52.429Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:52.429Z"
+          "timestamp": "2026-10-28T09:02:52.429Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:52.429Z"
+          "timestamp": "2026-10-28T09:02:52.429Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-964340",
-      "buyerName": "Arman Naqvi",
-      "customerName": "Arman Naqvi",
-      "companyName": "kynetic wear",
-      "customerCompany": "kynetic wear",
-      "email": "arman.naqvi@kyneticwear.com",
-      "customerEmail": "arman.naqvi@kyneticwear.com",
-      "phone": "",
-      "address": "5-d, کراچی, CA 75820",
-      "shippingAddress": "5-d, کراچی, CA 75820",
-      "city": "کراچی",
-      "state": "CA",
       "zip": "75820",
-      "paymentTerms": "Credit Card / Instant ACH",
-      "subtotal": 0.261,
-      "shipping": 50,
-      "total": 50.261,
-      "totalAmount": 50.261,
-      "status": "Pending",
+      "city": "کراچی",
       "date": "2026-10-28",
-      "createdAt": "2026-10-28T09:02:48.231Z",
+      "email": "arman.naqvi@kyneticwear.com",
       "items": [
         {
-          "productId": "eco-tshirt-grocery",
-          "productName": "Eco-Loop Grocery T-Shirt Sack",
           "name": "Eco-Loop Grocery T-Shirt Sack",
-          "quantity": 1,
-          "unitPrice": 0.261,
-          "price": 0.261,
-          "totalPrice": 0.261,
           "color": "Red",
-          "customPrint": false
+          "price": 0.261,
+          "quantity": 1,
+          "productId": "eco-tshirt-grocery",
+          "unitPrice": 0.261,
+          "totalPrice": 0.261,
+          "customPrint": false,
+          "productName": "Eco-Loop Grocery T-Shirt Sack"
         }
       ],
+      "phone": "",
+      "state": "CA",
+      "total": 50.261,
+      "status": "Pending",
+      "address": "5-d, کراچی, CA 75820",
+      "shipping": 50,
+      "subtotal": 0.261,
+      "buyerName": "Arman Naqvi",
+      "createdAt": "2026-10-28T09:02:48.231Z",
+      "companyName": "kynetic wear",
+      "totalAmount": 50.261,
+      "customerName": "Arman Naqvi",
+      "paymentTerms": "Credit Card / Instant ACH",
+      "customerEmail": "arman.naqvi@kyneticwear.com",
       "notifications": {
         "email": {
           "enabled": false,
-          "dispatchedTo": "orders@ecotexinc.com",
-          "timestamp": "2026-10-28T09:02:48.231Z"
+          "timestamp": "2026-10-28T09:02:48.231Z",
+          "dispatchedTo": "orders@ecotexinc.com"
         },
         "whatsapp": {
           "enabled": true,
-          "targetPhone": "+92 332 8784015",
-          "timestamp": "2026-10-28T09:02:48.231Z"
+          "timestamp": "2026-10-28T09:02:48.231Z",
+          "targetPhone": "+92 332 8784015"
         }
-      }
+      },
+      "customerCompany": "kynetic wear",
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-174201",

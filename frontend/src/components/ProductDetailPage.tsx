@@ -18,7 +18,8 @@ import {
   AlertCircle,
   Package,
   Lock,
-  Sparkles
+  Sparkles,
+  Edit3
 } from 'lucide-react';
 import { DYE_COLORS, DyeColor } from '../data/colors';
 import { useStore } from '../store/useStore';
@@ -32,6 +33,7 @@ interface ProductDetailPageProps {
   onOpenQuote: (product: Product) => void;
   onExpressCheckout?: (product: Product, selectedColor: string, quantity: number, orderType?: 'retail' | 'wholesale') => void;
   onSelectProduct?: (product: Product) => void;
+  onEditProduct?: (product: Product) => void;
 }
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
@@ -41,9 +43,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onAddToCart,
   onOpenQuote,
   onExpressCheckout,
-  onSelectProduct
+  onSelectProduct,
+  onEditProduct
 }) => {
-  const { products: storeProducts } = useStore();
+  const { products: storeProducts, isAuthenticated } = useStore();
   const allProducts = (storeProducts && storeProducts.length > 0) ? storeProducts : PRODUCTS;
 
   // 5 Related products for bottom section
@@ -294,13 +297,28 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </span>
           </div>
 
-          <button
-            onClick={onBack}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#166534] hover:text-[#14532d] uppercase tracking-wider transition-colors cursor-pointer ml-4 shrink-0"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Back to Shop</span>
-          </button>
+          <div className="flex items-center gap-2.5 ml-4 shrink-0">
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={() => onEditProduct ? onEditProduct(product) : onNavigateHome()}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+                title="Edit this product page in Admin Panel"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Edit Product (Admin)</span>
+                <span className="sm:hidden">Edit</span>
+              </button>
+            )}
+
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#166534] hover:text-[#14532d] uppercase tracking-wider transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Shop</span>
+            </button>
+          </div>
         </nav>
 
         {/* Main 2-Column Product Detail Layout */}
