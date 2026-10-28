@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Product } from '../types';
+import { Product, ProductColorVariant } from '../types';
 import { 
   Heart, 
   ShoppingBag, 
@@ -22,11 +22,26 @@ import {
   Sparkles,
   Edit3,
   X,
-  Save
+  Save,
+  Trash2,
+  Layers
 } from 'lucide-react';
 import { DYE_COLORS, DyeColor } from '../data/colors';
 import { useStore } from '../store/useStore';
 import { PRODUCTS } from '../data/products';
+
+const DEFAULT_PALETTE: ProductColorVariant[] = [
+  { id: 'white', name: 'White', hex: '#FFFFFF', stockQuantity: 25 },
+  { id: 'black', name: 'Black', hex: '#18181b', stockQuantity: 50 },
+  { id: 'royal-blue', name: 'Royal Blue', hex: '#2563eb', stockQuantity: 30 },
+  { id: 'red', name: 'Red', hex: '#dc2626', stockQuantity: 20 },
+  { id: 'dark-green', name: 'Dark Green', hex: '#166534', stockQuantity: 50 },
+  { id: 'navy-blue', name: 'Navy Blue', hex: '#1e3a8a', stockQuantity: 40 },
+  { id: 'yellow', name: 'Yellow', hex: '#eab308', stockQuantity: 15 },
+  { id: 'orange', name: 'Orange', hex: '#ea580c', stockQuantity: 20 },
+  { id: 'sky-blue', name: 'Sky Blue', hex: '#38bdf8', stockQuantity: 25 },
+  { id: 'beige-cream', name: 'Beige / Cream', hex: '#f5ecd7', stockQuantity: 35 }
+];
 
 interface ProductDetailPageProps {
   product: Product;
@@ -74,24 +89,104 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const wholesaleMoq = product.wholesaleMoq || 5;
   const retailMaxBoxes = product.retailMaxBoxes || 5;
   const pcsPerBox = product.pcsPerBox || 200;
-  const isOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
-  const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
+
+  // Fully dynamic product colors list from product configuration
+  const productColors: ProductColorVariant[] = useMemo(() => {
+    if (product.availableColors && product.availableColors.length > 0) {
+      return product.availableColors.map((c, i) => {
+        const id = c.id || ('col-' + i);
+        const stock = c.stockQuantity !== undefined 
+          ? c.stockQuantity 
+          : (product.colorStock?.[id] ?? (product.colorStock?.[c.name.toLowerCase()] ?? 25));
+        return {
+          id,
+          name: c.name,
+          hex: c.hex || '#166534',
+          stockQuantity: stock,
+          bestFor: c.bestFor || product.bestFor,
+          recommendedPrint: c.recommendedPrint || product.recommendedPrint
+        };
+      });
+    }
+    return DEFAULT_PALETTE.map(c => ({
+      ...c,
+      stockQuantity: product.colorStock?.[c.id] ?? c.stockQuantity
+    }));
+  }, [product.availableColors, product.colorStock, product.bestFor, product.recommendedPrint]);
+
+  const [selectedColor, setSelectedColor] = useState<ProductColorVariant>(() => {
+    const list = (product.availableColors && product.availableColors.length > 0)
+      ? product.availableColors
+      : DEFAULT_PALETTE;
+    const initialName = ((product as any).color || product.availableColors?.[0]?.name)?.toLowerCase();
+    const found = list.find(c => c.name.toLowerCase() === initialName);
+    return found || list[3] || list[0] || DEFAULT_PALETTE[3]; // Default: Red or first
+  });
+
+  // Sync selectedColor if productColors list updates
+  useEffect(() => {
+    if (productColors.length > 0 && !productColors.some(c => (c.id && c.id === selectedColor.id) || c.name.toLowerCase() === selectedColor.name.toLowerCase())) {
+      setSelectedColor(productColors[0]);
+    }
+  }, [productColors]);
+
+  // Helper to determine exact stock in boxes for any color variant
+  const getColorStock = (colorIdOrName: string): number => {
+    if (product.inStock === false) return 0;
+    const target = productColors.find(c => (c.id && c.id === colorIdOrName) || c.name.toLowerCase() === colorIdOrName.toLowerCase());
+    if (target && target.stockQuantity !== undefined) {
+      return Math.max(0, Number(target.stockQuantity) || 0);
+    }
+    if (product.colorStock && product.colorStock[colorIdOrName] !== undefined) {
+      return Math.max(0, Number(product.colorStock[colorIdOrName]) || 0);
+    }
+    const found = Object.entries(product.colorStock || {}).find(([k]) => k.toLowerCase() === colorIdOrName.toLowerCase());
+    if (found) return Math.max(0, Number(found[1]) || 0);
+    return typeof product.stockQuantity === 'number' ? product.stockQuantity : 50;
+  };
+
+  const activeColorStock = getColorStock(selectedColor.id || selectedColor.name);
+  const isColorOutOfStock = activeColorStock <= 0;
+  const availableStock = activeColorStock;
+  const isOutOfStock = product.inStock === false || isColorOutOfStock;
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
   const maxQuantity = orderType === 'retail' ? Math.min(retailMaxBoxes, availableStock) : availableStock;
   const [moqWarning, setMoqWarning] = useState<string | null>(null);
 
-  // Scroll to top on mount or when product changes
+  const handleSelectColor = (c: ProductColorVariant) => {
+    setSelectedColor(c);
+    const newStock = getColorStock(c.id || c.name);
+    const newMax = orderType === 'retail' ? Math.min(retailMaxBoxes, newStock) : newStock;
+    if (newStock <= 0) {
+      setQuantity(0);
+      setMoqWarning(`${c.name} is currently out of stock.`);
+      setTimeout(() => setMoqWarning(null), 4000);
+    } else {
+      if (quantity > newMax) {
+        setQuantity(Math.max(1, newMax));
+        setMoqWarning(`Quantity adjusted to ${newMax} boxes (maximum stock available for ${c.name}).`);
+        setTimeout(() => setMoqWarning(null), 4000);
+      } else if (quantity < minQuantity && newStock >= minQuantity) {
+        setQuantity(minQuantity);
+      } else if (quantity === 0 && newStock > 0) {
+        setQuantity(orderType === 'retail' ? 1 : Math.min(wholesaleMoq, newStock));
+      }
+    }
+  };
+
+  // Scroll to top on mount or when product/orderType changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveImageIndex(0);
     setMoqWarning(null);
-    setQuantity(orderType === 'retail' ? Math.min(1, availableStock) : Math.min(wholesaleMoq, availableStock));
-  }, [product, orderType, wholesaleMoq, availableStock]);
-
-  const [selectedColor, setSelectedColor] = useState<DyeColor>(() => {
-    return DYE_COLORS.find(c => c.name.toLowerCase() === ((product as any).color || product.availableColors?.[0]?.name)?.toLowerCase()) || DYE_COLORS[4]; // Default: Dark Green
-  });
+    const curStock = getColorStock(selectedColor.id || selectedColor.name);
+    if (curStock <= 0) {
+      setQuantity(0);
+    } else {
+      setQuantity(orderType === 'retail' ? Math.min(1, curStock) : Math.min(wholesaleMoq, curStock));
+    }
+  }, [product, orderType, wholesaleMoq]);
 
   // ========================================================
   // SINGLE PRODUCT PAGE CMS EDITOR STATE
@@ -125,6 +220,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     wholesaleMoq: product.wholesaleMoq || 5,
     pcsPerBox: product.pcsPerBox || 200,
     stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
+    availableColors: (product.availableColors && product.availableColors.length > 0)
+      ? product.availableColors.map((c, i) => ({
+          id: c.id || ('col-' + i),
+          name: c.name,
+          hex: c.hex || '#166534',
+          stockQuantity: c.stockQuantity !== undefined 
+            ? c.stockQuantity 
+            : (product.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+        }))
+      : DEFAULT_PALETTE.map(c => ({
+          ...c,
+          stockQuantity: product.colorStock?.[c.id] ?? c.stockQuantity
+        })),
+    colorStock: product.colorStock || {},
     inStock: product.inStock !== false,
     image: product.image || '/images/bag-green.png',
     gallery0: product.galleryImages?.[0] || product.image || '/images/bag-green.png',
@@ -176,6 +285,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       wholesaleMoq: product.wholesaleMoq || 5,
       pcsPerBox: product.pcsPerBox || 200,
       stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
+      availableColors: (product.availableColors && product.availableColors.length > 0)
+        ? product.availableColors.map((c, i) => ({
+            id: c.id || ('col-' + i),
+            name: c.name,
+            hex: c.hex || '#166534',
+            stockQuantity: c.stockQuantity !== undefined 
+              ? c.stockQuantity 
+              : (product.colorStock?.[c.id || c.name.toLowerCase()] ?? 25)
+          }))
+        : DEFAULT_PALETTE.map(c => ({
+            ...c,
+            stockQuantity: product.colorStock?.[c.id] ?? c.stockQuantity
+          })),
+      colorStock: product.colorStock || {},
       inStock: product.inStock !== false,
       image: product.image || '/images/bag-green.png',
       gallery0: product.galleryImages?.[0] || product.image || '/images/bag-green.png',
@@ -232,6 +355,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       wholesaleMoq: Math.max(1, Number(editForm.wholesaleMoq) || 5),
       pcsPerBox: Math.max(1, Number(editForm.pcsPerBox) || 200),
       stockQuantity: finalStockQuantity,
+      availableColors: (editForm.availableColors || []).map(c => ({
+        id: c.id || ('col-' + Math.random().toString(36).substring(2, 7)),
+        name: (c.name || '').trim() || 'Custom Color',
+        hex: c.hex || '#166534',
+        stockQuantity: Math.max(0, Number(c.stockQuantity) || 0)
+      })),
+      colorStock: (editForm.availableColors || []).reduce((acc, c) => {
+        const stock = Math.max(0, Number(c.stockQuantity) || 0);
+        const key = c.id || c.name.toLowerCase().replace(/\s+/g, '-');
+        return { ...acc, [key]: stock, [c.name.toLowerCase()]: stock };
+      }, {} as Record<string, number>),
       inStock: finalInStock,
       image: editForm.image.trim(),
       galleryImages: [
@@ -649,41 +783,75 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <span>Color Dye:</span>
                   <span className="text-slate-900 font-extrabold capitalize text-sm">{selectedColor.name}</span>
                 </label>
-                <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                  10 Commercial Options
-                </span>
+                <div className="flex items-center gap-2">
+                  {activeColorStock > 0 ? (
+                    <span className="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2.5 py-0.5 rounded-full shadow-2xs">
+                      {activeColorStock} boxes in stock
+                    </span>
+                  ) : (
+                    <span className="text-[11px] font-mono font-bold text-rose-800 bg-rose-100/90 border border-rose-300 px-2.5 py-0.5 rounded-full shadow-2xs animate-pulse">
+                      🔴 Out of Stock
+                    </span>
+                  )}
+                  <span className="hidden sm:inline-block text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                    {productColors.length} Commercial Options
+                  </span>
+                </div>
               </div>
 
-              {/* 10 Swatch Circles */}
-              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2.5">
-                {DYE_COLORS.map((c) => {
-                  const isSelected = selectedColor.id === c.id;
+              {/* Dynamic Swatch Circles from Configured Colors */}
+              <div className="flex flex-wrap gap-2.5">
+                {productColors.map((c, index) => {
+                  const isSelected = (c.id && c.id === selectedColor.id) || c.name.toLowerCase() === selectedColor.name.toLowerCase();
+                  const cStock = getColorStock(c.id || c.name);
+                  const isSoldOut = cStock <= 0;
+                  const isLight = ['#ffffff', '#fff', '#ffffff', '#f5ecd7', '#ffff00', '#fafafa'].includes((c.hex || '').toLowerCase());
                   return (
                     <button
-                      key={c.id}
+                      key={c.id || index}
                       type="button"
-                      onClick={() => setSelectedColor(c)}
-                      title={`${c.name} - ${c.bestFor}`}
-                      className={`group relative aspect-square rounded-2xl transition-all duration-200 cursor-pointer flex flex-col items-center justify-center ${
+                      onClick={() => handleSelectColor(c)}
+                      title={`${c.name} - ${isSoldOut ? 'Out of Stock (0 boxes)' : `${cStock} boxes available in stock`}`}
+                      className={`group relative w-10 h-10 rounded-2xl transition-all duration-200 cursor-pointer flex flex-col items-center justify-center ${
                         isSelected 
-                          ? 'ring-2 ring-offset-2 ring-[#0f172a] scale-105 shadow-md z-10' 
+                          ? 'ring-2 ring-offset-2 ring-[#0f172a] scale-110 shadow-md z-10' 
+                          : isSoldOut
+                          ? 'opacity-40 hover:opacity-75 shadow-2xs'
                           : 'hover:scale-105 opacity-90 hover:opacity-100 shadow-2xs'
                       }`}
                       style={{ 
                         backgroundColor: c.hex,
-                        border: `1.5px solid ${c.borderColor || '#cbd5e1'}`
+                        border: '1.5px solid #cbd5e1'
                       }}
                     >
+                      {/* Diagonal Out-of-Stock Line */}
+                      {isSoldOut && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden rounded-2xl">
+                          <div className="w-[140%] h-[2px] bg-rose-600/90 -rotate-45 shadow-xs"></div>
+                        </div>
+                      )}
+
                       {isSelected ? (
                         <Check 
                           className="w-4 h-4 stroke-[3]" 
-                          style={{ color: c.textColor || '#ffffff' }}
+                          style={{ color: isLight ? '#0f172a' : '#ffffff' }}
                         />
                       ) : (
-                        <span className="text-[9px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: c.textColor || '#ffffff' }}>
-                          {c.name.slice(0, 3)}
+                        <span className="text-[9px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: isLight ? '#0f172a' : '#ffffff' }}>
+                          {isSoldOut ? '0' : c.name.slice(0, 3)}
                         </span>
                       )}
+
+                      {/* Small stock badge */}
+                      <span 
+                        className={`absolute -bottom-1 -right-1 text-[8px] font-mono font-bold px-1 py-0.1 rounded-full shadow-2xs border ${
+                          isSoldOut 
+                            ? 'bg-rose-100 text-rose-700 border-rose-300' 
+                            : 'bg-white text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        {isSoldOut ? '0' : cStock}
+                      </span>
                     </button>
                   );
                 })}
@@ -1599,7 +1767,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div>
                       <label className="block font-bold text-slate-700 mb-1 text-xs">
-                        Available Stock (Boxes)
+                        Master Stock (Boxes)
                       </label>
                       <input
                         type="number"
@@ -1632,6 +1800,140 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         />
                         <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166534]"></div>
                       </label>
+                    </div>
+                  </div>
+
+                  {/* Dynamic Color Palette & Stock Inventory Card in Modal */}
+                  <div className="bg-slate-50/70 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2.5">
+                      <div>
+                        <strong className="block text-xs font-extrabold uppercase text-slate-800 flex items-center gap-1.5">
+                          <Layers className="w-4 h-4 text-emerald-600" />
+                          <span>Dynamic Color Palette & Stock Inventory</span>
+                        </strong>
+                        <span className="text-[11px] text-slate-500">
+                          Apni marzi se koi bhi colour add karein, color shade chunein, aur stock set karein (jaise Red mein 20 boxes).
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+                          {(editForm.availableColors || []).reduce((acc: number, c: any) => acc + (Number(c.stockQuantity) || 0), 0)} Boxes
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const sum = (editForm.availableColors || []).reduce((acc: number, c: any) => acc + (Number(c.stockQuantity) || 0), 0);
+                            setEditForm({ ...editForm, stockQuantity: sum, inStock: sum > 0 });
+                          }}
+                          className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline cursor-pointer"
+                        >
+                          Sync Master
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newId = 'col-' + Date.now();
+                            const newColor: ProductColorVariant = {
+                              id: newId,
+                              name: 'Color ' + ((editForm.availableColors || []).length + 1),
+                              hex: '#166534',
+                              stockQuantity: 20
+                            };
+                            setEditForm({
+                              ...editForm,
+                              availableColors: [...(editForm.availableColors || []), newColor]
+                            });
+                          }}
+                          className="px-2.5 py-1 bg-[#166534] hover:bg-[#14532d] text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-xs cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>+ Add Color</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-1">
+                      {(editForm.availableColors || []).map((c: any, index: number) => {
+                        const stock = Number(c.stockQuantity) || 0;
+                        const isSoldOut = stock <= 0;
+                        return (
+                          <div 
+                            key={c.id || index} 
+                            className={`p-2.5 rounded-xl border transition-all flex flex-col justify-between space-y-2 ${
+                              isSoldOut ? 'bg-rose-50/40 border-rose-200' : 'bg-white border-slate-200'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <label 
+                                className="relative w-5 h-5 rounded-full shrink-0 shadow-2xs border border-slate-300 cursor-pointer overflow-hidden"
+                                style={{ backgroundColor: c.hex }}
+                                title="Click to pick color shade"
+                              >
+                                <input
+                                  type="color"
+                                  value={c.hex}
+                                  onChange={(e) => {
+                                    const updated = [...editForm.availableColors];
+                                    updated[index] = { ...updated[index], hex: e.target.value };
+                                    setEditForm({ ...editForm, availableColors: updated });
+                                  }}
+                                  className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                                />
+                              </label>
+                              <input
+                                type="text"
+                                value={c.name}
+                                onChange={(e) => {
+                                  const updated = [...editForm.availableColors];
+                                  updated[index] = { ...updated[index], name: e.target.value };
+                                  setEditForm({ ...editForm, availableColors: updated });
+                                }}
+                                className="w-full text-xs font-bold text-slate-800 border-b border-transparent focus:border-emerald-500 focus:outline-none bg-transparent"
+                                placeholder="Color"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = editForm.availableColors.filter((_: any, i: number) => i !== index);
+                                  setEditForm({ ...editForm, availableColors: updated });
+                                }}
+                                className="text-rose-400 hover:text-rose-600 p-0.5"
+                                title="Delete color"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={c.hex}
+                                onChange={(e) => {
+                                  const updated = [...editForm.availableColors];
+                                  updated[index] = { ...updated[index], hex: e.target.value };
+                                  setEditForm({ ...editForm, availableColors: updated });
+                                }}
+                                className="w-16 px-1 py-0.5 text-[9px] font-mono text-slate-500 bg-slate-50 border border-slate-200 rounded text-center"
+                              />
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={stock}
+                                onChange={(e) => {
+                                  const val = Math.max(0, parseInt(e.target.value) || 0);
+                                  const updated = [...editForm.availableColors];
+                                  updated[index] = { ...updated[index], stockQuantity: val };
+                                  setEditForm({ ...editForm, availableColors: updated });
+                                }}
+                                className={`flex-1 px-1.5 py-0.5 text-center font-mono font-bold text-xs rounded border ${
+                                  isSoldOut ? 'border-rose-300 bg-rose-50/50 text-rose-700' : 'border-slate-200 bg-slate-50 text-slate-800'
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
