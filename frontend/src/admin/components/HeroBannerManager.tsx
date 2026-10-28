@@ -219,67 +219,13 @@ export const HeroBannerManager: React.FC = () => {
             </div>
           </div>
 
-          {/* Card 2: Featured Hero Product Image */}
-          <div className="bg-white rounded-3xl p-6 border border-[#B2E2C5]/30 shadow-xs space-y-5">
-            <div className="border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-[#0f172a] uppercase tracking-wider">
-                2. Featured Product Bag Shot
-              </h3>
-              <p className="text-xs text-slate-400">
-                The centerpiece transparent bag shown floating on the right side of the hero section.
-              </p>
-            </div>
-
-            {/* Presets Selector */}
-            <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-2">
-                Quick Select Warehouse Colorway:
-              </label>
-              <div className="flex flex-wrap items-center gap-2">
-                {BAG_PRESETS.map((preset) => {
-                  const isSelected = localHero.productImage === preset.url;
-                  return (
-                    <button
-                      key={preset.url}
-                      type="button"
-                      onClick={() => {
-                        setLocalHero(prev => ({ ...prev, productImage: preset.url }));
-                      }}
-                      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#4E9F76] text-white border-[#4E9F76] shadow-sm'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#86C59E]'
-                      }`}
-                    >
-                      <span
-                        className="w-3 h-3 rounded-full border border-black/15 shrink-0"
-                        style={{ backgroundColor: preset.color }}
-                      />
-                      <span>{preset.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <ImageUploader
-              label="Custom Featured Bag Cutout (PNG / WebP)"
-              description="Upload a transparent product bag image from your computer or paste a direct image URL"
-              value={localHero.productImage || '/images/bag-green.png'}
-              onChange={(newUrl) => {
-                setLocalHero(prev => ({ ...prev, productImage: newUrl || '/images/bag-green.png' }));
-              }}
-              aspectRatio="square"
-            />
-          </div>
-
-          {/* Card 3: Hero Background Image */}
+          {/* Card 2: Hero Background Image */}
           <div className="bg-white rounded-3xl p-6 border border-[#B2E2C5]/30 shadow-xs space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-black text-[#0f172a] uppercase tracking-wider">
-                    3. Panoramic Hero Backdrop
+                    2. Panoramic Hero Backdrop
                   </h3>
                   {currentBgImage ? (
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
