@@ -40,6 +40,8 @@ export interface Product {
   volumeNo?: string;
   galleryImages?: string[];
   retailPricePerUnit?: number;
+  retailOriginalPrice?: number;
+  retailMaxBoxes?: number;
   originalPrice?: number;
   recommendedPrint?: string;
   brandName?: string;
