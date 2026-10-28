@@ -870,79 +870,239 @@ export const ProductCatalogManager: React.FC = () => {
                   </div>
 
                   {/* Pricing, Packaging & Minimums Card */}
-                  <div className="bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 space-y-3.5">
-                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                      <DollarSign className="w-4 h-4 text-emerald-600" />
-                      <span>Pricing, Packaging Units & Minimum Orders</span>
-                    </h4>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {/* Packaging Specification Card */}
+                  <div className="bg-gradient-to-r from-emerald-50/70 to-teal-50/50 p-4 rounded-2xl border border-emerald-200/80 space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
-                        <label className="block text-xs font-bold text-emerald-800 mb-1">
-                          Price / Box ($) *
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            required
-                            value={formData.pricePerUnit}
-                            onChange={(e) => setFormData({ ...formData, pricePerUnit: parseFloat(e.target.value) || 0 })}
-                            className="w-full pl-6 pr-3 py-2 rounded-xl border border-emerald-300 text-xs sm:text-sm font-bold text-[#166534] bg-white focus:outline-none focus:border-emerald-500"
-                          />
-                        </div>
+                        <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-950 flex items-center gap-1.5">
+                          <Package className="w-4 h-4 text-emerald-600" />
+                          <span>Master Packaging Spec (Pieces Per Box)</span>
+                        </h4>
+                        <p className="text-[11px] text-emerald-800/80 mt-0.5">
+                          Har 1 box mein kitne pieces pack hain. Yeh calculation Wholesale & Retail dono prices pr live apply hoti hai.
+                        </p>
                       </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-1">
-                          Original Price (Strike)
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={formData.originalPrice}
-                            onChange={(e) => setFormData({ ...formData, originalPrice: parseFloat(e.target.value) || 0 })}
-                            className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-500 bg-white"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-amber-900 mb-1">
-                          Pcs per Box *
-                        </label>
-                        <div className="relative">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-emerald-900 whitespace-nowrap">1 Box =</span>
+                        <div className="relative w-32">
                           <input
                             type="number"
                             step="10"
                             min="1"
                             required
                             value={formData.pcsPerBox}
-                            onChange={(e) => setFormData({ ...formData, pcsPerBox: parseInt(e.target.value) || 200 })}
-                            className="w-full pl-3 pr-11 py-2 rounded-xl border border-amber-300 text-xs sm:text-sm font-bold text-amber-900 bg-amber-50/50"
+                            onChange={(e) => setFormData({ ...formData, pcsPerBox: Math.max(1, parseInt(e.target.value) || 200) })}
+                            className="w-full pl-3 pr-10 py-1.5 rounded-xl border border-emerald-300 text-xs sm:text-sm font-bold text-emerald-950 bg-white shadow-2xs focus:outline-none focus:border-emerald-600"
                           />
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-amber-700">pcs/box</span>
+                          <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-emerald-700 font-mono">Pcs</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dual Pricing Grid: Wholesale Order vs Retail Order */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* 1. WHOLESALE ORDER MODE CARD */}
+                    <div className="bg-emerald-50/40 p-4.5 rounded-2xl border-2 border-emerald-200 space-y-3.5 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-emerald-200/80 pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                          <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#166534]">
+                            1. Wholesale Order Mode (Bulk)
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300/80 px-2 py-0.5 rounded-full">
+                          MOQ: {formData.wholesaleMoq} Boxes
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-emerald-900 mb-1">
+                            Wholesale Box Price ($) *
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              required
+                              value={formData.pricePerUnit}
+                              onChange={(e) => setFormData({ ...formData, pricePerUnit: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-3 py-2 rounded-xl border border-emerald-300 text-sm font-bold text-[#166534] bg-white focus:outline-none focus:border-emerald-600"
+                              placeholder="59.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-emerald-700 mt-1 block">
+                            ≈ ${( (formData.pricePerUnit || 0) / (formData.pcsPerBox || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">
+                            Wholesale Strike Price ($)
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={formData.originalPrice}
+                              onChange={(e) => setFormData({ ...formData, originalPrice: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 bg-white"
+                              placeholder="74.99"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">
+                            Strikethrough compare-at price
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Wholesale MOQ (Boxes) *
+                          </label>
+                          <input
+                            type="number"
+                            step="1"
+                            min="1"
+                            required
+                            value={formData.wholesaleMoq}
+                            onChange={(e) => setFormData({ ...formData, wholesaleMoq: Math.max(1, parseInt(e.target.value) || 5) })}
+                            className="w-full px-3 py-2 rounded-xl border border-emerald-200 text-xs font-bold text-slate-800 bg-white"
+                            placeholder="5"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Wholesale Tab Label
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.wholesaleTabLabel}
+                            onChange={(e) => setFormData({ ...formData, wholesaleTabLabel: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#166534] bg-white"
+                            placeholder="Wholesale Order"
+                          />
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Wholesale MOQ (Boxes)
+                          Wholesale Policy Notice Text
                         </label>
-                        <div className="relative">
+                        <textarea
+                          rows={2}
+                          value={formData.wholesalePolicyText}
+                          onChange={(e) => setFormData({ ...formData, wholesalePolicyText: e.target.value })}
+                          className="w-full p-2 rounded-xl border border-emerald-200 text-xs bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+                          placeholder="Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain..."
+                        />
+                      </div>
+                    </div>
+
+                    {/* 2. RETAIL ORDER MODE CARD */}
+                    <div className="bg-amber-50/40 p-4.5 rounded-2xl border-2 border-amber-200 space-y-3.5 shadow-xs">
+                      <div className="flex items-center justify-between border-b border-amber-200/80 pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+                          <h4 className="text-xs font-extrabold uppercase tracking-wider text-amber-900">
+                            2. Retail Order Mode (Small Quantities)
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100/80 border border-amber-300/80 px-2 py-0.5 rounded-full">
+                          Max: {formData.retailMaxBoxes} Boxes
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-amber-950 mb-1">
+                            Retail Box Price ($) *
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-700">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              required
+                              value={formData.retailPricePerUnit}
+                              onChange={(e) => setFormData({ ...formData, retailPricePerUnit: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-3 py-2 rounded-xl border border-amber-300 text-sm font-bold text-[#d97706] bg-white focus:outline-none focus:border-amber-600"
+                              placeholder="86.99"
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono text-amber-700 mt-1 block">
+                            ≈ ${( (formData.retailPricePerUnit || 0) / (formData.pcsPerBox || 200) ).toFixed(3)} / pc
+                          </span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">
+                            Retail Strike Price ($)
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={formData.retailOriginalPrice}
+                              onChange={(e) => setFormData({ ...formData, retailOriginalPrice: parseFloat(e.target.value) || 0 })}
+                              className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 bg-white"
+                              placeholder="108.73"
+                            />
+                          </div>
+                          <span className="text-[10px] text-slate-400 mt-1 block">
+                            Strikethrough compare-at price
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Retail Max Allowed (Boxes) *
+                          </label>
                           <input
                             type="number"
                             step="1"
                             min="1"
-                            value={formData.wholesaleMoq}
-                            onChange={(e) => setFormData({ ...formData, wholesaleMoq: parseInt(e.target.value) || 5 })}
-                            className="w-full pl-3 pr-11 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-800 bg-white"
+                            required
+                            value={formData.retailMaxBoxes}
+                            onChange={(e) => setFormData({ ...formData, retailMaxBoxes: Math.max(1, parseInt(e.target.value) || 5) })}
+                            className="w-full px-3 py-2 rounded-xl border border-amber-200 text-xs font-bold text-slate-800 bg-white"
+                            placeholder="5"
                           />
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400">boxes</span>
                         </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Retail Tab Label
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.retailTabLabel}
+                            onChange={(e) => setFormData({ ...formData, retailTabLabel: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-amber-900 bg-white"
+                            placeholder="Retail Order"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Retail Policy Notice Text
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={formData.retailPolicyText}
+                          onChange={(e) => setFormData({ ...formData, retailPolicyText: e.target.value })}
+                          className="w-full p-2 rounded-xl border border-amber-200 text-xs bg-white text-slate-800 focus:outline-none focus:border-amber-600"
+                          placeholder="Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye..."
+                        />
                       </div>
                     </div>
                   </div>
