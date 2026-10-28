@@ -211,7 +211,7 @@
       "material": "Virgin & Pre-Consumer Recycled Polypropylene (Non-Woven)",
       "subtitle": "High-volume supermarket & retail carry-out bags engineered for high load bearing",
       "pcsPerBox": 201,
-      "updatedAt": "2026-10-27T10:51:12.164Z",
+      "updatedAt": "2026-10-28T10:02:03.306Z",
       "dimensions": "11.5\"W x 21\"H x 6.5\" Gusset",
       "description": "Engineered specifically for supermarkets, convenience chains, and retail grocers aiming to comply with single-use plastic bans without blowing operating budgets. Ultrasonic heat-sealed handles offer extraordinary tensile strength.",
       "volumeTiers": [
@@ -230,7 +230,7 @@
       ],
       "pricePerUnit": 0.18,
       "categoryLabel": "T-Shirt Bags",
-      "stockQuantity": 43,
+      "stockQuantity": 100,
       "availableColors": [
         {
           "hex": "#1b4329",
