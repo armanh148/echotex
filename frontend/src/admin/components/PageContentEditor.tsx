@@ -123,7 +123,7 @@ export const PageContentEditor: React.FC = () => {
             }))
           : DEFAULT_PALETTE.map(c => ({
               ...c,
-              stockQuantity: activeSelectedProduct.colorStock?.[c.id] ?? c.stockQuantity
+              stockQuantity: (c.id && activeSelectedProduct.colorStock ? (activeSelectedProduct.colorStock as any)[c.id] : undefined) ?? c.stockQuantity
             })),
         colorStock: activeSelectedProduct.colorStock && Object.keys(activeSelectedProduct.colorStock).length > 0 ? { ...activeSelectedProduct.colorStock } : {
           'white': 25,

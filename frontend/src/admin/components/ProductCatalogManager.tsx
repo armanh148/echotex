@@ -338,7 +338,7 @@ export const ProductCatalogManager: React.FC = () => {
           }))
         : DEFAULT_PALETTE.map(c => ({
             ...c,
-            stockQuantity: p.colorStock?.[c.id] ?? c.stockQuantity
+            stockQuantity: (c.id && p.colorStock ? (p.colorStock as any)[c.id] : undefined) ?? c.stockQuantity
           })),
       colorStock: p.colorStock && Object.keys(p.colorStock).length > 0 ? { ...p.colorStock } : {
         'white': 25,
