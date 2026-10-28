@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+  Sparkles,
   Package,
   Truck,
   AlertCircle,
@@ -1473,6 +1474,384 @@ export const PageContentEditor: React.FC = () => {
         )}
 
         {/* ========================================================
+            TAB: HOMEPAGE SHOP & BANNERS
+           ======================================================== */}
+        {activeTab === 'shop' && (
+          <div className="space-y-6 animate-fadeIn">
+            
+            {/* 1. Shop Hero Panoramic Banner */}
+            <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                <Tag className="w-4 h-4 text-[#d97706]" />
+                <span>Shop Page Top Hero Banner & Podium</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Pill Badge Text</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.heroBannerBadge || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, heroBannerBadge: e.target.value }
+                    })}
+                    placeholder="LIMITED TIME ONLY"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-emerald-800"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Floating Discount Badge</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.heroBannerDiscountBadge || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, heroBannerDiscountBadge: e.target.value }
+                    })}
+                    placeholder="UP TO 50% OFF"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-[#FF5722]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Headline (Supports line break with \n)</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.heroBannerTitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, heroBannerTitle: e.target.value }
+                    })}
+                    placeholder="Shop More,\nSave More!"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">CTA Button Text</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.heroBannerBtnText || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, heroBannerBtnText: e.target.value }
+                    })}
+                    placeholder="EXPLORE COLLECTION"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Subtitle</label>
+                <textarea
+                  rows={2}
+                  value={formData.shopConfig?.heroBannerSubtitle || ''}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    shopConfig: { ...formData.shopConfig!, heroBannerSubtitle: e.target.value }
+                  })}
+                  placeholder="Discover amazing deals on your favorite sustainable products..."
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-white text-xs font-medium"
+                />
+              </div>
+
+              <ImageUploader
+                label="Shop Hero Podium Showcase Image"
+                description="Upload custom photography for the shop hero podium."
+                value={formData.shopConfig?.heroBannerImage || '/images/shop-hero-podium.jpg'}
+                onChange={(newUrl) => setFormData({
+                  ...formData,
+                  shopConfig: { ...formData.shopConfig!, heroBannerImage: newUrl }
+                })}
+                aspectRatio="wide"
+              />
+
+              {/* 3 Value Props */}
+              <div className="pt-2 border-t border-slate-200/60">
+                <label className="block text-xs font-bold text-slate-800 mb-2">3 Value Proposition Badges</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase">Badge 1</span>
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp1Title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp1Title: e.target.value }
+                      })}
+                      placeholder="Best Prices"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                    />
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp1Subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp1Subtitle: e.target.value }
+                      })}
+                      placeholder="Guaranteed"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                    />
+                  </div>
+
+                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase">Badge 2</span>
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp2Title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp2Title: e.target.value }
+                      })}
+                      placeholder="Secure"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                    />
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp2Subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp2Subtitle: e.target.value }
+                      })}
+                      placeholder="Payments"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                    />
+                  </div>
+
+                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase">Badge 3</span>
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp3Title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp3Title: e.target.value }
+                      })}
+                      placeholder="Fast Delivery"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                    />
+                    <input
+                      type="text"
+                      value={formData.shopConfig?.valueProp3Subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        shopConfig: { ...formData.shopConfig!, valueProp3Subtitle: e.target.value }
+                      })}
+                      placeholder="Worldwide"
+                      className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. 4-Item Trust Bar Strip */}
+            <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>4-Item Trust Propositions Bar</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Item 1 (Truck)</span>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar1Title || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar1Title: e.target.value }
+                    })}
+                    placeholder="Free Shipping"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                  />
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar1Subtitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar1Subtitle: e.target.value }
+                    })}
+                    placeholder="On orders over $75"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                  />
+                </div>
+
+                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Item 2 (Returns)</span>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar2Title || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar2Title: e.target.value }
+                    })}
+                    placeholder="Easy Returns"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                  />
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar2Subtitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar2Subtitle: e.target.value }
+                    })}
+                    placeholder="30-day returns"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                  />
+                </div>
+
+                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Item 3 (Quality)</span>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar3Title || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar3Title: e.target.value }
+                    })}
+                    placeholder="Premium Quality"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                  />
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar3Subtitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar3Subtitle: e.target.value }
+                    })}
+                    placeholder="100% original products"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                  />
+                </div>
+
+                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Item 4 (Support)</span>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar4Title || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar4Title: e.target.value }
+                    })}
+                    placeholder="24/7 Support"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+                  />
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.trustBar4Subtitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, trustBar4Subtitle: e.target.value }
+                    })}
+                    placeholder="We're here to help"
+                    className="w-full px-2 py-1 rounded-lg border border-slate-200 text-[11px] text-slate-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Section Titles & Buttons */}
+            <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-[#d97706]" />
+                <span>Section Headers, Catalog Titles & Buttons</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Categories Section Title</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.categoriesHeading || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, categoriesHeading: e.target.value }
+                    })}
+                    placeholder="Shop By Category"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Categories Section Subtitle</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.categoriesSubheading || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, categoriesSubheading: e.target.value }
+                    })}
+                    placeholder="Explore our full range of certified industrial & retail packaging collections."
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">New Arrivals Title</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.newArrivalsHeading || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, newArrivalsHeading: e.target.value }
+                    })}
+                    placeholder="New Arrivals"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">New Arrivals View All Button</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.newArrivalsBtnText || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, newArrivalsBtnText: e.target.value }
+                    })}
+                    placeholder="View All"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-[#FF5722]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Full Catalog Title</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.catalogTitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, catalogTitle: e.target.value }
+                    })}
+                    placeholder="Full Manufacturing & Retail Catalog"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Full Catalog Subtitle</label>
+                  <input
+                    type="text"
+                    value={formData.shopConfig?.catalogSubtitle || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      shopConfig: { ...formData.shopConfig!, catalogSubtitle: e.target.value }
+                    })}
+                    placeholder="Explore our full manufacturing catalog with wholesale pricing tiers."
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================
             TAB 7: FOOTER & LEGAL
            ======================================================== */}
         {activeTab === 'footer' && (
@@ -1887,6 +2266,115 @@ export const PageContentEditor: React.FC = () => {
                       value={pdpForm.outOfStockNotice}
                       onChange={(e) => setPdpForm({ ...pdpForm, outOfStockNotice: e.target.value })}
                       className="w-full p-2.5 rounded-xl border border-rose-200 bg-white text-xs font-medium text-rose-900"
+                    />
+                  </div>
+                </div>
+
+                {/* 5. Custom Buttons & Related Products Section */}
+                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3.5">
+                  <h5 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#d97706]" />
+                    <span>5. Buttons, Tab Labels & Related Products Section</span>
+                  </h5>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Checkout Button Text</label>
+                      <input
+                        type="text"
+                        value={pdpForm.checkoutButtonText || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, checkoutButtonText: e.target.value })}
+                        placeholder="→ Express Checkout"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-[#d97706]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Sold Out Button Text</label>
+                      <input
+                        type="text"
+                        value={pdpForm.outOfStockButtonText || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, outOfStockButtonText: e.target.value })}
+                        placeholder="Purchases Temporarily Closed (Sold Out)"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Retail Order Tab Label</label>
+                      <input
+                        type="text"
+                        value={pdpForm.retailTabLabel || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, retailTabLabel: e.target.value })}
+                        placeholder="Retail Order"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Wholesale Order Tab Label</label>
+                      <input
+                        type="text"
+                        value={pdpForm.wholesaleTabLabel || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, wholesaleTabLabel: e.target.value })}
+                        placeholder="Wholesale Order"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-[#166534]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Specifications Section Heading</label>
+                      <input
+                        type="text"
+                        value={pdpForm.specsHeading || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, specsHeading: e.target.value })}
+                        placeholder="Description"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Related Products Tag</label>
+                      <input
+                        type="text"
+                        value={pdpForm.relatedTag || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, relatedTag: e.target.value })}
+                        placeholder="Explore More Options"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Related Products Title</label>
+                      <input
+                        type="text"
+                        value={pdpForm.relatedTitle || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, relatedTitle: e.target.value })}
+                        placeholder="Related Products"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Related Back Button Text</label>
+                      <input
+                        type="text"
+                        value={pdpForm.relatedBackBtnText || ''}
+                        onChange={(e) => setPdpForm({ ...pdpForm, relatedBackBtnText: e.target.value })}
+                        placeholder="View Full Catalog"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Related Products Subtitle</label>
+                    <input
+                      type="text"
+                      value={pdpForm.relatedSubtitle || ''}
+                      onChange={(e) => setPdpForm({ ...pdpForm, relatedSubtitle: e.target.value })}
+                      placeholder="Frequently ordered together or alternative sizing options for your business."
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium"
                     />
                   </div>
                 </div>

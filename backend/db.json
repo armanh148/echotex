@@ -61,7 +61,16 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "prod-1791786437631",
@@ -122,7 +131,16 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "prod-1791183909856",
@@ -167,7 +185,16 @@
           "hex": "#0f172a",
           "name": "Deep Slate"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-muqua379",
@@ -196,7 +223,16 @@
           "hex": "#166534",
           "name": "Ecotex Forest"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-tshirt-grocery",
@@ -244,7 +280,16 @@
           "hex": "#e8e2d5",
           "name": "Natural Sand"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-tshirt-supermarket",
@@ -285,7 +330,16 @@
           "hex": "#1b4329",
           "name": "Eco Green"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-loop-classic",
@@ -330,7 +384,16 @@
           "hex": "#f0ece1",
           "name": "Cream"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-soft-laminated",
@@ -371,7 +434,16 @@
           "hex": "#111827",
           "name": "Obsidian Black"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-dcut-heavy",
@@ -412,7 +484,16 @@
           "hex": "#78350f",
           "name": "Earth Clay"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-dcut-boutique",
@@ -453,7 +534,16 @@
           "hex": "#475569",
           "name": "Graphite Grey"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-slider-eva",
@@ -494,7 +584,16 @@
           "hex": "#38bdf8",
           "name": "Sky Blue Tint"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     },
     {
       "id": "eco-food-cooler",
@@ -535,7 +634,16 @@
           "hex": "#166534",
           "name": "Deep Green"
         }
-      ]
+      ],
+      "checkoutButtonText": "→ Express Checkout",
+      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
+      "retailTabLabel": "Retail Order",
+      "wholesaleTabLabel": "Wholesale Order",
+      "specsHeading": "Description",
+      "relatedTag": "Explore More Options",
+      "relatedTitle": "Related Products",
+      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
+      "relatedBackBtnText": "View Full Catalog"
     }
   ],
   "categories": [
@@ -2797,5 +2905,36 @@
       "lastUpdated": "Just now",
       "customerName": "WhatsApp Client (03351591331)"
     }
-  ]
+  ],
+  "siteSettings": {
+    "shopConfig": {
+      "heroBannerBadge": "LIMITED TIME ONLY",
+      "heroBannerTitle": "Shop More,\nSave More!",
+      "heroBannerSubtitle": "Discover amazing deals on your favorite sustainable products & eco-friendly essentials.",
+      "heroBannerBtnText": "EXPLORE COLLECTION",
+      "heroBannerImage": "/images/shop-hero-podium.jpg",
+      "heroBannerDiscountBadge": "UP TO 50% OFF",
+      "valueProp1Title": "Best Prices",
+      "valueProp1Subtitle": "Guaranteed",
+      "valueProp2Title": "Secure",
+      "valueProp2Subtitle": "Payments",
+      "valueProp3Title": "Fast Delivery",
+      "valueProp3Subtitle": "Worldwide",
+      "trustBar1Title": "Free Shipping",
+      "trustBar1Subtitle": "On orders over $75",
+      "trustBar2Title": "Easy Returns",
+      "trustBar2Subtitle": "30-day returns",
+      "trustBar3Title": "Premium Quality",
+      "trustBar3Subtitle": "100% original products",
+      "trustBar4Title": "24/7 Support",
+      "trustBar4Subtitle": "We're here to help",
+      "categoriesHeading": "Shop By Category",
+      "categoriesSubheading": "Explore our full range of certified industrial & retail packaging collections.",
+      "newArrivalsHeading": "New Arrivals",
+      "newArrivalsBtnText": "View All",
+      "newArrivalsHideBtnText": "Hide Full Catalog",
+      "catalogTitle": "Full Manufacturing & Retail Catalog",
+      "catalogSubtitle": "Explore our full range of certified industrial & retail packaging collections with wholesale pricing tiers."
+    }
+  }
 }
