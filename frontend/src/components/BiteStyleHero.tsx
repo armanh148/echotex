@@ -52,24 +52,24 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
         </div>
       )}
 
-      {/* Hero Content: Centered over background, or 2-Column Grid if product cutout is active */}
-      <div className={`relative z-10 w-full ${hasProductImage ? 'max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center' : 'max-w-4xl mx-auto flex flex-col justify-center items-center text-center'}`}>
+      {/* Hero Content: Positioned on the left corner over the panoramic background scene */}
+      <div className={`relative z-10 w-full max-w-[1600px] mx-auto ${hasProductImage ? 'grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center' : 'flex items-center justify-start'}`}>
         
         {/* ======================================================
-            HEADING, PARAGRAPH, AND BUTTON
+            HEADING, PARAGRAPH, AND BUTTON (Left Corner)
            ====================================================== */}
         <motion.div 
-          initial={{ opacity: 0, y: hasProductImage ? 0 : 30, x: hasProductImage ? -40 : 0 }}
-          animate={{ opacity: 1, y: 0, x: 0 }}
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-          className={hasProductImage ? "lg:col-span-6 xl:col-span-7 flex flex-col justify-center items-center text-center lg:items-start lg:text-left order-1" : "flex flex-col justify-center items-center text-center"}
+          className={hasProductImage ? "lg:col-span-6 xl:col-span-7 flex flex-col justify-center items-start text-left order-1" : "w-full max-w-2xl xl:max-w-3xl flex flex-col justify-center items-start text-left"}
         >
           {/* Main Headline */}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className={`font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] ${hasProductImage ? 'max-w-2xl' : 'max-w-4xl'}`}
+            className="font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] max-w-2xl"
           >
             {titleLines.map((line, idx) => (
               <React.Fragment key={idx}>
