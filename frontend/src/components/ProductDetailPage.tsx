@@ -144,6 +144,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     retailPolicyText: product.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
     wholesalePolicyText: product.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
     outOfStockNotice: product.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.',
+    checkoutButtonText: product.checkoutButtonText || '→ Express Checkout',
+    outOfStockButtonText: product.outOfStockButtonText || 'Purchases Temporarily Closed (Sold Out)',
+    retailTabLabel: product.retailTabLabel || 'Retail Order',
+    wholesaleTabLabel: product.wholesaleTabLabel || 'Wholesale Order',
+    specsHeading: product.specsHeading || 'Description',
+    relatedTag: product.relatedTag || 'Explore More Options',
+    relatedTitle: product.relatedTitle || 'Related Products',
+    relatedSubtitle: product.relatedSubtitle || 'Frequently ordered together or alternative sizing options for your business.',
+    relatedBackBtnText: product.relatedBackBtnText || 'View Full Catalog →',
   });
 
   useEffect(() => {
@@ -183,6 +192,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       retailPolicyText: product.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
       wholesalePolicyText: product.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
       outOfStockNotice: product.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.',
+      checkoutButtonText: product.checkoutButtonText || '→ Express Checkout',
+      outOfStockButtonText: product.outOfStockButtonText || 'Purchases Temporarily Closed (Sold Out)',
+      retailTabLabel: product.retailTabLabel || 'Retail Order',
+      wholesaleTabLabel: product.wholesaleTabLabel || 'Wholesale Order',
+      specsHeading: product.specsHeading || 'Description',
+      relatedTag: product.relatedTag || 'Explore More Options',
+      relatedTitle: product.relatedTitle || 'Related Products',
+      relatedSubtitle: product.relatedSubtitle || 'Frequently ordered together or alternative sizing options for your business.',
+      relatedBackBtnText: product.relatedBackBtnText || 'View Full Catalog →',
     });
   }, [product]);
 
@@ -229,6 +247,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       retailPolicyText: editForm.retailPolicyText.trim(),
       wholesalePolicyText: editForm.wholesalePolicyText.trim(),
       outOfStockNotice: editForm.outOfStockNotice.trim(),
+      checkoutButtonText: editForm.checkoutButtonText.trim(),
+      outOfStockButtonText: editForm.outOfStockButtonText.trim(),
+      retailTabLabel: editForm.retailTabLabel.trim(),
+      wholesaleTabLabel: editForm.wholesaleTabLabel.trim(),
+      specsHeading: editForm.specsHeading.trim(),
+      relatedTag: editForm.relatedTag.trim(),
+      relatedTitle: editForm.relatedTitle.trim(),
+      relatedSubtitle: editForm.relatedSubtitle.trim(),
+      relatedBackBtnText: editForm.relatedBackBtnText.trim(),
     };
 
     updateProduct(product.id, updates);
@@ -679,7 +706,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     : 'text-slate-500 hover:text-[#111827]'
                 }`}
               >
-                Retail Order
+                {product.retailTabLabel || 'Retail Order'}
               </button>
               <button
                 type="button"
@@ -690,7 +717,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     : 'text-slate-500 hover:text-[#111827]'
                 }`}
               >
-                Wholesale Order
+                {product.wholesaleTabLabel || 'Wholesale Order'}
               </button>
             </div>
 
@@ -943,7 +970,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   className="w-full h-12 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 cursor-not-allowed"
                 >
                   <Lock className="w-4 h-4 text-slate-300" />
-                  <span>Purchases Temporarily Closed (Sold Out)</span>
+                  <span>{product.outOfStockButtonText || 'Purchases Temporarily Closed (Sold Out)'}</span>
                 </button>
               ) : (
                 <button
@@ -951,7 +978,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={handleExpressCheckout}
                   className="w-full h-12 rounded-xl border-2 border-[#0f172a] hover:bg-[#0f172a] hover:text-white text-[#0f172a] font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 active:scale-98 cursor-pointer"
                 >
-                  <span>→ Express Checkout</span>
+                  <span>{product.checkoutButtonText || '→ Express Checkout'}</span>
                 </button>
               )}
             </div>
@@ -960,7 +987,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="mt-8 pt-6 border-t border-slate-200/70">
               <div className="border-b border-slate-200/70 pb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
-                  Description
+                  {product.specsHeading || 'Description'}
                 </span>
               </div>
 
@@ -1024,13 +1051,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] mb-1 block">
-                Explore More Options
+                {product.relatedTag || 'Explore More Options'}
               </span>
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f172a] tracking-tight">
-                Related Products
+                {product.relatedTitle || 'Related Products'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Frequently ordered together or alternative sizing options for your business.
+                {product.relatedSubtitle || 'Frequently ordered together or alternative sizing options for your business.'}
               </p>
             </div>
             <button
@@ -1038,7 +1065,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               onClick={onBack}
               className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0d3419] hover:text-[#FF5722] transition-colors cursor-pointer self-start sm:self-auto"
             >
-              <span>View Full Catalog</span>
+              <span>{product.relatedBackBtnText || 'View Full Catalog'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
