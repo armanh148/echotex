@@ -49,6 +49,7 @@ import { ImageUploader } from './ImageUploader';
 type EditorTab =
   | 'logo'
   | 'navbar'
+  | 'shop'
   | 'versatility'
   | 'about'
   | 'contact'
@@ -112,7 +113,16 @@ export const PageContentEditor: React.FC = () => {
         trustBadge3: activeSelectedProduct.trustBadge3 || 'Easy Return',
         retailPolicyText: activeSelectedProduct.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
         wholesalePolicyText: activeSelectedProduct.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
-        outOfStockNotice: activeSelectedProduct.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.'
+        outOfStockNotice: activeSelectedProduct.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.',
+        checkoutButtonText: activeSelectedProduct.checkoutButtonText || '→ Express Checkout',
+        outOfStockButtonText: activeSelectedProduct.outOfStockButtonText || 'Purchases Temporarily Closed (Sold Out)',
+        retailTabLabel: activeSelectedProduct.retailTabLabel || 'Retail Order',
+        wholesaleTabLabel: activeSelectedProduct.wholesaleTabLabel || 'Wholesale Order',
+        specsHeading: activeSelectedProduct.specsHeading || 'Description',
+        relatedTag: activeSelectedProduct.relatedTag || 'Explore More Options',
+        relatedTitle: activeSelectedProduct.relatedTitle || 'Related Products',
+        relatedSubtitle: activeSelectedProduct.relatedSubtitle || 'Frequently ordered together or alternative sizing options for your business.',
+        relatedBackBtnText: activeSelectedProduct.relatedBackBtnText || 'View Full Catalog'
       });
     }
   }, [activeSelectedProduct]);
@@ -162,7 +172,16 @@ export const PageContentEditor: React.FC = () => {
       trustBadge3: pdpForm.trustBadge3.trim(),
       retailPolicyText: pdpForm.retailPolicyText.trim(),
       wholesalePolicyText: pdpForm.wholesalePolicyText.trim(),
-      outOfStockNotice: pdpForm.outOfStockNotice.trim()
+      outOfStockNotice: pdpForm.outOfStockNotice.trim(),
+      checkoutButtonText: (pdpForm.checkoutButtonText || '').trim(),
+      outOfStockButtonText: (pdpForm.outOfStockButtonText || '').trim(),
+      retailTabLabel: (pdpForm.retailTabLabel || '').trim(),
+      wholesaleTabLabel: (pdpForm.wholesaleTabLabel || '').trim(),
+      specsHeading: (pdpForm.specsHeading || '').trim(),
+      relatedTag: (pdpForm.relatedTag || '').trim(),
+      relatedTitle: (pdpForm.relatedTitle || '').trim(),
+      relatedSubtitle: (pdpForm.relatedSubtitle || '').trim(),
+      relatedBackBtnText: (pdpForm.relatedBackBtnText || '').trim()
     });
 
     setProductSaveSuccess(true);
@@ -387,6 +406,7 @@ export const PageContentEditor: React.FC = () => {
     { id: 'versatility', label: 'Versatility & Cards', icon: Layers, desc: 'Feature value cards' },
     { id: 'about', label: 'About Us & Team', icon: Users, desc: 'Company story & leadership' },
     { id: 'contact', label: 'Contact & Facilities', icon: Phone, desc: 'Locations & sales lines' },
+    { id: 'shop', label: 'Homepage Shop & Banners', icon: Tag, desc: 'Hero banner, trust bar & headings' },
     { id: 'footer', label: 'Footer & Legal', icon: Globe, desc: 'Links, copyright & badges' },
     { id: 'single-product', label: 'Single Product Page', icon: Package, desc: 'Specs, gallery & policies' },
   ];
