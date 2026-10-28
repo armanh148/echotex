@@ -33,6 +33,28 @@ export interface Product {
   volumeTiers: { minQty: number; price: number }[];
   image?: string;
   badge?: string;
+
+  // Single Product Detail Page Extended Fields
+  rating?: number;
+  articleNo?: string;
+  volumeNo?: string;
+  galleryImages?: string[];
+  retailPricePerUnit?: number;
+  originalPrice?: number;
+  recommendedPrint?: string;
+  brandName?: string;
+  fabricDetails?: string;
+  handles?: string;
+  printingMethod?: string;
+  compliance?: string;
+  packingDetails?: string;
+  guaranteedFabric?: string;
+  enrouteQuality?: string;
+  retailPolicyText?: string;
+  wholesalePolicyText?: string;
+  trustBadge1?: string;
+  trustBadge2?: string;
+  trustBadge3?: string;
 }
 
 

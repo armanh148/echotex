@@ -89,8 +89,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // Fixed product bag image (does not change on color swatch selection)
   const bagCutout = product.image || '/images/bag-green.png';
 
-  // 4 Gallery images tailored for this product
-  const galleryImages = [
+  // 4 Gallery images tailored for this product (dynamic from product with studio fallbacks)
+  const defaultGalleryImages = [
     { 
       url: bagCutout, 
       label: 'Front Product Shot',
@@ -113,11 +113,38 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     }
   ];
 
+  const galleryImages = [
+    { 
+      url: product.galleryImages?.[0] || bagCutout, 
+      label: 'Front Product Shot',
+      badge: 'Studio Cutout'
+    },
+    { 
+      url: product.galleryImages?.[1] || defaultGalleryImages[1].url, 
+      label: 'Lifestyle Editorial',
+      badge: 'Editorial'
+    },
+    { 
+      url: product.galleryImages?.[2] || defaultGalleryImages[2].url, 
+      label: 'Fabric Macro & Seam',
+      badge: 'Macro Seam'
+    },
+    { 
+      url: product.galleryImages?.[3] || defaultGalleryImages[3].url, 
+      label: 'Production Detail',
+      badge: 'Workshop'
+    }
+  ];
+
   // Pricing calculations
-  const retailUnitPrice = product.pricePerUnit ? (product.pricePerUnit * 1.45) : 0.45;
+  const retailUnitPrice = product.retailPricePerUnit !== undefined && product.retailPricePerUnit > 0
+    ? product.retailPricePerUnit
+    : (product.pricePerUnit ? (product.pricePerUnit * 1.45) : 0.45);
   const wholesaleUnitPrice = product.pricePerUnit || 0.25;
   const currentPrice = orderType === 'retail' ? retailUnitPrice : wholesaleUnitPrice;
-  const originalPrice = (currentPrice * 1.25);
+  const originalPrice = product.originalPrice !== undefined && product.originalPrice > 0
+    ? product.originalPrice
+    : (currentPrice * 1.25);
 
   const handleIncrement = () => {
     if (orderType === 'retail') {
@@ -373,7 +400,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <span className="text-slate-300 font-light">—</span>
               <div className="flex items-center gap-1 text-xs font-bold text-[#d97706]">
                 <Star className="w-3.5 h-3.5 fill-[#d97706] text-[#d97706]" />
-                <span>4.9</span>
+                <span>{product.rating !== undefined ? product.rating.toFixed(1) : '4.9'}</span>
               </div>
             </div>
 
@@ -389,7 +416,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   ARTICLE NO.
                 </span>
                 <span className="font-bold text-[#111827]">
-                  EP-{product.id.slice(0, 6).toUpperCase()}
+                  {product.articleNo || `EP-${product.id.slice(0, 6).toUpperCase()}`}
                 </span>
               </div>
               <div>
@@ -397,7 +424,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   VOLUME NO.
                 </span>
                 <span className="font-bold text-[#111827]">
-                  {product.gsm} GSM LUXURY
+                  {product.volumeNo || `${product.gsm || 45} GSM LUXURY`}
                 </span>
               </div>
             </div>
@@ -463,14 +490,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       style={{ backgroundColor: selectedColor.hex, border: `1px solid ${selectedColor.borderColor || '#cbd5e1'}` }} 
                     />
                     <span className="text-slate-500 font-medium">Best For:</span>
-                    <strong className="text-slate-900">{selectedColor.bestFor}</strong>
+                    <strong className="text-slate-900">{product.bestFor || selectedColor.bestFor}</strong>
                   </div>
                 </div>
                 <div className="mt-2 pt-2 border-t border-slate-200/60 flex items-start sm:items-center gap-2 text-[11px] text-slate-600">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
                   <div>
                     <span className="text-slate-500 font-medium">Recommended Print: </span>
-                    <span className="font-bold text-slate-900">{selectedColor.recommendedPrint}</span>
+                    <span className="font-bold text-slate-900">{product.recommendedPrint || selectedColor.recommendedPrint}</span>
                   </div>
                 </div>
               </div>
@@ -729,7 +756,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {orderType === 'retail' && !moqWarning && !isOutOfStock && (
                 <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/70 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                  <span>Retail order policy: <strong>1 se 5 boxes maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</span>
+                  <span>{product.retailPolicyText ? product.retailPolicyText : <>Retail order policy: <strong>1 se 5 boxes maximum</strong>. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar <strong>Wholesale Order</strong> select karein.</>}</span>
                 </div>
               )}
 
@@ -737,7 +764,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {orderType === 'wholesale' && !moqWarning && !isOutOfStock && (
                 <div className="mt-2 text-[11px] text-emerald-800 bg-emerald-50/70 border border-emerald-200/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>Wholesale order: starting <strong>5 boxes</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</span>
+                  <span>{product.wholesalePolicyText ? product.wholesalePolicyText : <>Wholesale order: starting <strong>5 boxes</strong> se hai aur sabhi orders <strong>5 ke multiples</strong> mein place hote hain (5, 10, 15, 20...).</>}</span>
                 </div>
               )}
             </div>
@@ -775,15 +802,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* Specifications Bullet List */}
               <div className="pt-5 text-xs text-slate-600 leading-relaxed">
                 <ul className="space-y-2 font-light">
-                  <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
-                  <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
-                  <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
-                  <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
-                  <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
-                  <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
-                  <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
-                  <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
-                  <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
+                  <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> {product.brandName || 'ECOTEX INC.'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.fabricDetails || `${product.gsm || 45} GSM Virgin Non-Woven Polypropylene`}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '11.5"W x 21"H x 6.5" Gusset'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Handles :</strong> {product.handles || 'Ultrasonic Thermal Welded Loops'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Printing :</strong> {product.printingMethod || 'High-Precision Flexographic / Gravure Custom Imprint'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> {product.compliance || 'Certified California SB 270 & ASTM D6400'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> {product.packingDetails || 'Export-Grade Heavy Duty Corrugated Cartons'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> {product.guaranteedFabric || '100% Virgin Grade Recyclable Polypropylene'}</li>
+                  <li>• <strong className="font-semibold text-slate-800">{product.enrouteQuality || 'Enroute to Quality Standard'}</strong></li>
                 </ul>
               </div>
             </div>
@@ -795,7 +822,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <Truck className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Fast Delivery
+                  {product.trustBadge1 || 'Fast Delivery'}
                 </span>
               </div>
 
@@ -804,7 +831,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Secure Store
+                  {product.trustBadge2 || 'Secure Store'}
                 </span>
               </div>
 
@@ -813,7 +840,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <RotateCcw className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Easy Return
+                  {product.trustBadge3 || 'Easy Return'}
                 </span>
               </div>
             </div>
