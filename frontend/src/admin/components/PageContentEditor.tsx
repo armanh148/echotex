@@ -46,6 +46,7 @@ import {
   ShopConfig,
   TeamMemberConfig,
   TestimonialConfig
+} from '../../types';
 import { Product, ProductCategory, ProductColorVariant } from '../../types';
 
 const DEFAULT_PALETTE: ProductColorVariant[] = [
