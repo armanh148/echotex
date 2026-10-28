@@ -24,6 +24,12 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
       ? null 
       : (heroConfig.backgroundImage || '/images/home-hero-bg.jpg');
 
+  const hasProductImage = Boolean(
+    heroConfig.productImage && 
+    heroConfig.productImage.trim() !== '' && 
+    heroConfig.productImage !== 'none'
+  );
+
   return (
     <section 
       className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-center justify-center font-sans antialiased text-[#0f172a] overflow-hidden py-12 sm:py-16 lg:py-24 px-4 sm:px-8 lg:px-12 xl:px-16"
@@ -46,24 +52,24 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
         </div>
       )}
 
-      {/* 2-Column Hero Grid: Left Content (Heading, Para, Button) + Right Product Bag Image */}
-      <div className="relative z-10 w-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
+      {/* Hero Content: Centered over background, or 2-Column Grid if product cutout is active */}
+      <div className={`relative z-10 w-full ${hasProductImage ? 'max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center' : 'max-w-4xl mx-auto flex flex-col justify-center items-center text-center'}`}>
         
         {/* ======================================================
-            LEFT: HEADING, PARAGRAPH, AND BUTTON
+            HEADING, PARAGRAPH, AND BUTTON
            ====================================================== */}
         <motion.div 
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: hasProductImage ? 0 : 30, x: hasProductImage ? -40 : 0 }}
+          animate={{ opacity: 1, y: 0, x: 0 }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-6 xl:col-span-7 flex flex-col justify-center items-center text-center lg:items-start lg:text-left order-1"
+          className={hasProductImage ? "lg:col-span-6 xl:col-span-7 flex flex-col justify-center items-center text-center lg:items-start lg:text-left order-1" : "flex flex-col justify-center items-center text-center"}
         >
           {/* Main Headline */}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] max-w-2xl"
+            className={`font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] ${hasProductImage ? 'max-w-2xl' : 'max-w-4xl'}`}
           >
             {titleLines.map((line, idx) => (
               <React.Fragment key={idx}>
