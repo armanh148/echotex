@@ -70,14 +70,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [addedToast, setAddedToast] = useState(false);
 
-  // Wholesale minimum order quantity starts at 5 boxes and goes in multiples of 5
-  const wholesaleMoq = 5;
+  // Dynamic Wholesale MOQ & Retail Limits from Product Settings
+  const wholesaleMoq = product.wholesaleMoq || 5;
+  const retailMaxBoxes = product.retailMaxBoxes || 5;
   const pcsPerBox = product.pcsPerBox || 200;
   const isOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
   const availableStock = typeof product.stockQuantity === 'number' ? product.stockQuantity : (product.inStock !== false ? 50 : 0);
 
   const minQuantity = orderType === 'wholesale' ? wholesaleMoq : 1;
-  const maxQuantity = orderType === 'retail' ? Math.min(5, availableStock) : availableStock;
+  const maxQuantity = orderType === 'retail' ? Math.min(retailMaxBoxes, availableStock) : availableStock;
   const [moqWarning, setMoqWarning] = useState<string | null>(null);
 
   // Scroll to top on mount or when product changes
@@ -116,8 +117,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     articleNo: product.articleNo || `EP-${product.id.slice(0, 6).toUpperCase()}`,
     volumeNo: product.volumeNo || `${product.gsm || 45} GSM LUXURY`,
     description: product.description || '',
-    pricePerUnit: product.pricePerUnit || 0.25,
-    originalPrice: product.originalPrice || ((product.pricePerUnit || 0.25) * 1.25),
+    pricePerUnit: product.pricePerUnit || 59.99,
+    originalPrice: product.originalPrice || ((product.pricePerUnit || 59.99) * 1.25),
+    retailPricePerUnit: product.retailPricePerUnit !== undefined && product.retailPricePerUnit > 0 ? product.retailPricePerUnit : Number(((product.pricePerUnit || 59.99) * 1.45).toFixed(2)),
+    retailOriginalPrice: product.retailOriginalPrice !== undefined && product.retailOriginalPrice > 0 ? product.retailOriginalPrice : Number(((product.retailPricePerUnit || ((product.pricePerUnit || 59.99) * 1.45)) * 1.25).toFixed(2)),
+    retailMaxBoxes: product.retailMaxBoxes || 5,
     wholesaleMoq: product.wholesaleMoq || 5,
     pcsPerBox: product.pcsPerBox || 200,
     stockQuantity: product.stockQuantity !== undefined ? product.stockQuantity : 50,
@@ -315,15 +319,21 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     }
   ];
 
-  // Pricing calculations
+  // Pricing calculations: Dedicated Retail & Wholesale options
   const retailUnitPrice = product.retailPricePerUnit !== undefined && product.retailPricePerUnit > 0
     ? product.retailPricePerUnit
-    : (product.pricePerUnit ? (product.pricePerUnit * 1.45) : 0.45);
-  const wholesaleUnitPrice = product.pricePerUnit || 0.25;
+    : (product.pricePerUnit ? Number((product.pricePerUnit * 1.45).toFixed(2)) : 86.99);
+
+  const wholesaleUnitPrice = product.pricePerUnit || 59.99;
   const currentPrice = orderType === 'retail' ? retailUnitPrice : wholesaleUnitPrice;
-  const originalPrice = product.originalPrice !== undefined && product.originalPrice > 0
-    ? product.originalPrice
-    : (currentPrice * 1.25);
+
+  const originalPrice = orderType === 'retail'
+    ? (product.retailOriginalPrice !== undefined && product.retailOriginalPrice > 0 
+        ? product.retailOriginalPrice 
+        : Number((retailUnitPrice * 1.25).toFixed(2)))
+    : (product.originalPrice !== undefined && product.originalPrice > 0 
+        ? product.originalPrice 
+        : Number((wholesaleUnitPrice * 1.25).toFixed(2)));
 
   const handleIncrement = () => {
     if (orderType === 'retail') {
