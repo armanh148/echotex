@@ -141,6 +141,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     trustBadge1: product.trustBadge1 || 'Fast Delivery',
     trustBadge2: product.trustBadge2 || 'Secure Store',
     trustBadge3: product.trustBadge3 || 'Easy Return',
+    retailPolicyText: product.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
+    wholesalePolicyText: product.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
+    outOfStockNotice: product.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.',
   });
 
   useEffect(() => {
@@ -177,6 +180,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       trustBadge1: product.trustBadge1 || 'Fast Delivery',
       trustBadge2: product.trustBadge2 || 'Secure Store',
       trustBadge3: product.trustBadge3 || 'Easy Return',
+      retailPolicyText: product.retailPolicyText || 'Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.',
+      wholesalePolicyText: product.wholesalePolicyText || 'Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).',
+      outOfStockNotice: product.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.',
     });
   }, [product]);
 
@@ -220,6 +226,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       trustBadge1: editForm.trustBadge1.trim(),
       trustBadge2: editForm.trustBadge2.trim(),
       trustBadge3: editForm.trustBadge3.trim(),
+      retailPolicyText: editForm.retailPolicyText.trim(),
+      wholesalePolicyText: editForm.wholesalePolicyText.trim(),
+      outOfStockNotice: editForm.outOfStockNotice.trim(),
     };
 
     updateProduct(product.id, updates);
@@ -894,7 +903,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <div>
                     <p className="font-bold">Yeh item abhi out of stock ho chuka hai</p>
                     <p className="mt-0.5 text-rose-700/90 leading-relaxed">
-                      Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.
+                      {product.outOfStockNotice || 'Product specifications aur details check ki ja sakti hain, magar ordering filhal closed hai. Stock replenish hotay hi buy button dobara live ho jayega.'}
                     </p>
                   </div>
                 </div>
@@ -1753,6 +1762,45 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                           placeholder="Easy Return"
                         />
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4 space-y-3">
+                    <label className="block font-bold text-slate-800">
+                      Ordering Policies & Out of Stock Notification
+                    </label>
+
+                    <div>
+                      <span className="text-[11px] font-semibold text-slate-600 block mb-1">Retail Order Policy Text</span>
+                      <textarea
+                        rows={2}
+                        value={editForm.retailPolicyText}
+                        onChange={(e) => setEditForm({ ...editForm, retailPolicyText: e.target.value })}
+                        className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium"
+                        placeholder="Retail policy notice..."
+                      />
+                    </div>
+
+                    <div>
+                      <span className="text-[11px] font-semibold text-slate-600 block mb-1">Wholesale Order Policy Text</span>
+                      <textarea
+                        rows={2}
+                        value={editForm.wholesalePolicyText}
+                        onChange={(e) => setEditForm({ ...editForm, wholesalePolicyText: e.target.value })}
+                        className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium"
+                        placeholder="Wholesale policy notice..."
+                      />
+                    </div>
+
+                    <div>
+                      <span className="text-[11px] font-semibold text-rose-700 block mb-1">Out of Stock Notice Text (When Stock is 0)</span>
+                      <textarea
+                        rows={2}
+                        value={editForm.outOfStockNotice}
+                        onChange={(e) => setEditForm({ ...editForm, outOfStockNotice: e.target.value })}
+                        className="w-full p-2.5 rounded-xl border border-rose-200 bg-rose-50/50 text-xs font-medium text-rose-900"
+                        placeholder="Out of stock notification..."
+                      />
                     </div>
                   </div>
                 </div>

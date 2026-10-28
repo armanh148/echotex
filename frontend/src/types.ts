@@ -55,6 +55,7 @@ export interface Product {
   trustBadge1?: string;
   trustBadge2?: string;
   trustBadge3?: string;
+  outOfStockNotice?: string;
 }
 
 
