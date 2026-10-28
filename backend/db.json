@@ -1974,14 +1974,8 @@
     },
     "heroConfig": {
       "title": "It's time to\npack better.",
-      "subtitle": "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
       "ctaText": "Shop Now",
-      "badgeDoctor": "Recommended by doctors",
-      "badgeTrust": "Trusted by 21,000+ People",
-      "productImage": "/images/bag-black.png",
-      "backgroundImage": "/uploads/Gemini_Generated_Image_syieb6s-1793100472147-uspvk.jpg",
-      "showcasePrice": 0.25,
-      "casePackSize": 1000,
+      "subtitle": "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
       "variants": [
         {
           "id": "v1",
@@ -2031,7 +2025,13 @@
           "image": "/images/bag-green.png",
           "colorName": "New Custom Colorway"
         }
-      ]
+      ],
+      "badgeTrust": "Trusted by 21,000+ People",
+      "badgeDoctor": "Recommended by doctors",
+      "casePackSize": 1000,
+      "productImage": "/images/bag-black.png",
+      "showcasePrice": 0.25,
+      "backgroundImage": "/uploads/Gemini_Generated_Image_syieb6s-1793100472147-uspvk.jpg"
     },
     "logoConfig": {
       "subtitle": "Sustainable Packaging",
