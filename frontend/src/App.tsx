@@ -7,6 +7,7 @@ import { AboutSection } from './components/AboutSection';
 import { ShopSection } from './components/ShopSection';
 import { VersatilityBannerSection } from './components/VersatilityBannerSection';
 import { ContactSection } from './components/ContactSection';
+import { HomepageAboutFacilitiesSection } from './components/HomepageAboutFacilitiesSection';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailModal } from './components/ProductDetailModal';
@@ -203,6 +204,9 @@ export default function App() {
                 onNavigateToShop={() => handleNavigate('shop')}
                 onNavigateToContact={() => handleNavigate('contact')}
               />
+
+              {/* About Ecotex & Manufacturing Facilities Section */}
+              <HomepageAboutFacilitiesSection onNavigate={handleNavigate} />
 
               {/* Direct Mill & Corona Contact Section */}
               <ContactSection />
