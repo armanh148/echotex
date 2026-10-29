@@ -298,16 +298,16 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
           <button
             type="button"
             onClick={handleSaveAll}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+            className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer whitespace-nowrap"
           >
             {saveSuccess ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-emerald-200 animate-bounce" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
                 <span>Published Live!</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 shrink-0" />
                 <span>Save All Sections</span>
               </>
             )}
@@ -1116,24 +1116,25 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
 
       
           {/* Bottom Save Bar inside Right Content Area */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-200 bg-white p-6 rounded-3xl shadow-xs">
-            <p className="text-xs text-slate-500 font-medium">
-              Sabhi changes database aur browser storage mein foran live sync ho jayenge.
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-slate-200 bg-white p-5 sm:p-6 rounded-3xl shadow-xs">
+            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span>Sabhi changes database aur browser storage mein foran live sync ho jayenge.</span>
+            </div>
 
             <button
               type="button"
               onClick={handleSaveAll}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+              className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-2xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-xl transition-all hover:scale-[1.02] active:scale-98 cursor-pointer whitespace-nowrap"
             >
               {saveSuccess ? (
                 <>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
                   <span>Published Live!</span>
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4" />
+                  <Save className="w-4 h-4 shrink-0" />
                   <span>Save & Publish Live</span>
                 </>
               )}

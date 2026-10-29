@@ -133,7 +133,7 @@ export const HeroBannerManager: React.FC = () => {
 
           <button
             onClick={handleSaveAll}
-            className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`w-full sm:w-auto shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
               hasUnpublishedChanges
                 ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
                 : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
@@ -141,12 +141,12 @@ export const HeroBannerManager: React.FC = () => {
           >
             {saveSuccess ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-[#B2E2C5]" />
+                <CheckCircle2 className="w-4 h-4 text-[#B2E2C5] shrink-0" />
                 <span>Published to Storefront!</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 shrink-0" />
                 <span>{hasUnpublishedChanges ? 'Publish Updates Now' : 'Published'}</span>
               </>
             )}

@@ -203,16 +203,16 @@ export const OffersDealsManager: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className="flex-1 sm:flex-initial justify-center px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#22c55e] hover:from-[#15803d] hover:to-[#16a34a] text-white text-xs font-black tracking-wide uppercase shadow-lg shadow-green-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 cursor-pointer text-center"
+            className="flex-1 sm:flex-initial shrink-0 whitespace-nowrap justify-center px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#22c55e] hover:from-[#15803d] hover:to-[#16a34a] text-white text-xs font-black tracking-wide uppercase shadow-lg shadow-green-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 cursor-pointer text-center"
           >
             {saveSuccess ? (
               <>
-                <Check className="w-4 h-4 stroke-[3]" />
+                <Check className="w-4 h-4 stroke-[3] shrink-0" />
                 <span>SAVED!</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 shrink-0" />
                 <span>SAVE & PUBLISH</span>
               </>
             )}
