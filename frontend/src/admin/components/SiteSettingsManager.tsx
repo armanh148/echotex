@@ -79,38 +79,6 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
 
   const [activeTab, setActiveTab] = useState<SettingsTab>('identity');
 
-  // Horizontal Slider state for Navigation Tabs
-  const tabsContainerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkTabsScroll = () => {
-    if (!tabsContainerRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = tabsContainerRef.current;
-    setCanScrollLeft(scrollLeft > 6);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 6);
-  };
-
-  useEffect(() => {
-    checkTabsScroll();
-    const el = tabsContainerRef.current;
-    if (el) {
-      el.addEventListener('scroll', checkTabsScroll);
-      window.addEventListener('resize', checkTabsScroll);
-    }
-    return () => {
-      if (el) el.removeEventListener('scroll', checkTabsScroll);
-      window.removeEventListener('resize', checkTabsScroll);
-    };
-  }, []);
-
-  const slideTabs = (direction: 'left' | 'right') => {
-    if (!tabsContainerRef.current) return;
-    const offset = direction === 'left' ? -260 : 260;
-    tabsContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
-    setTimeout(checkTabsScroll, 350);
-  };
-
   const [isSaving, setIsSaving] = useState(false);
   const [saveToast, setSaveToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
@@ -152,7 +120,16 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
       const timer = setTimeout(() => {
         setSaveToast(prev => ({ ...prev, show: false }));
       }, 3500);
-      return () => clearTimeout(timer);
+      const settingsTabs: { id: SettingsTab; label: string; desc: string; icon: React.ElementType }[] = [
+    { id: 'identity', label: 'Site Identity & SEO', desc: 'Brand title, favicon & SEO meta', icon: Globe },
+    { id: 'account', label: 'Admin Security', desc: 'Password & administrator credentials', icon: User },
+    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Chatbot channels & order alerts', icon: Bell },
+    { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
+    { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
+    { id: 'commerce', label: 'Store Defaults', desc: 'Order limits, plates & lead times', icon: DollarSign }
+  ];
+
+  return () => clearTimeout(timer);
     }
   }, [saveToast.show]);
 
@@ -457,78 +434,66 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
         </div>
       </div>
 
-      {/* Navigation Tabs Bar with Horizontal Slider Controls */}
-      <div className="relative group bg-slate-50/90 p-1.5 rounded-2xl border border-slate-200/90 mb-6 flex items-center shadow-2xs">
+      {/* 2-Column Responsive Layout: Left Sticky Vertical Navigation Sidebar + Right Content Panel */}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         
-        {/* Slider Left Arrow Button */}
-        <button
-          type="button"
-          onClick={() => slideTabs('left')}
-          disabled={!canScrollLeft}
-          className={`p-2.5 rounded-xl transition-all duration-200 shrink-0 z-10 flex items-center justify-center cursor-pointer ${
-            canScrollLeft
-              ? 'bg-white text-slate-800 hover:bg-[#166534] hover:text-white border border-slate-200/80 shadow-xs hover:shadow-md active:scale-95'
-              : 'text-slate-300 bg-transparent border border-transparent cursor-not-allowed opacity-30'
-          }`}
-          title="Slide Tabs Left"
-          aria-label="Previous tabs"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
+        {/* Left Sticky Vertical Navigation Sidebar */}
+        <aside className="w-full lg:w-72 xl:w-80 shrink-0 lg:sticky lg:top-24 space-y-3">
+          <div className="bg-white rounded-3xl p-3.5 sm:p-4 border border-[#B2E2C5]/50 shadow-xs">
+            <div className="px-3 py-2.5 mb-2.5 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                  Settings Menu
+                </span>
+                <span className="text-xs font-bold text-slate-900">
+                  System Preferences
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#166534] bg-emerald-100/80 border border-emerald-300/60 px-2.5 py-0.5 rounded-full shadow-2xs">
+                {settingsTabs.length} Tabs
+              </span>
+            </div>
 
-        {/* Scrollable Tabs Carousel Track */}
-        <div
-          ref={tabsContainerRef}
-          className="flex items-center gap-1.5 overflow-x-auto scroll-smooth scrollbar-none py-0.5 px-2 flex-1 no-scrollbar"
-        >
-          {[
-            { id: 'identity', label: 'Site Identity & SEO', icon: Globe },
-            { id: 'account', label: 'Admin Account & Security', icon: User },
-            { id: 'notifications', label: 'WhatsApp & Email Channels (Chatbot & Alerts)', icon: Bell },
-            { id: 'announcement', label: 'Header Announcement', icon: Megaphone },
-            { id: 'business', label: 'Business & Contacts', icon: Building2 },
-            { id: 'commerce', label: 'Store Defaults', icon: DollarSign }
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={(e) => {
-                  setActiveTab(tab.id as SettingsTab);
-                  e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 border ${
-                  isActive
-                    ? 'border-[#166534] text-[#166534] bg-white shadow-xs font-black'
-                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-white/70'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#166534]' : 'text-slate-400'}`} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
+            <nav className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-thin">
+              {settingsTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id as SettingsTab)}
+                    className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer w-full text-left border group ${
+                      isActive
+                        ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 lg:translate-x-1 font-extrabold'
+                        : 'bg-white text-slate-700 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                      isActive 
+                        ? 'bg-white/20 text-white shadow-2xs' 
+                        : 'bg-slate-100 text-slate-500 group-hover:bg-[#B2E2C5]/30 group-hover:text-[#166534]'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="truncate flex-1 min-w-0">
+                      <span className="block truncate font-bold text-xs">{tab.label}</span>
+                      <span className={`block text-[10px] font-normal truncate mt-0.5 ${isActive ? 'text-emerald-100' : 'text-slate-400'}`}>
+                        {tab.desc}
+                      </span>
+                    </div>
+                    {isActive && (
+                      <div className="w-1.5 h-6 rounded-full bg-white shrink-0 hidden lg:block" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
 
-        {/* Slider Right Arrow Button */}
-        <button
-          type="button"
-          onClick={() => slideTabs('right')}
-          disabled={!canScrollRight}
-          className={`p-2.5 rounded-xl transition-all duration-200 shrink-0 z-10 flex items-center justify-center cursor-pointer ${
-            canScrollRight
-              ? 'bg-white text-slate-800 hover:bg-[#166534] hover:text-white border border-slate-200/80 shadow-xs hover:shadow-md active:scale-95'
-              : 'text-slate-300 bg-transparent border border-transparent cursor-not-allowed opacity-30'
-          }`}
-          title="Slide Tabs Right"
-          aria-label="Next tabs"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-
-      </div>
-
+        {/* Right Content Panel */}
+        <div className="flex-1 min-w-0 w-full space-y-6">
       {/* ========================================================
           TAB 1: SITE IDENTITY & SEO (FAVICON, SITE TITLE, META)
          ======================================================== */}
@@ -1450,23 +1415,25 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
         </div>
       )}
 
-      {/* Bottom Sticky Action Bar */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Configured settings will instantly apply to both admin and customer storefront.</span>
+          {/* Bottom Sticky Action Bar */}
+          <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Configured settings will instantly apply to both admin and customer storefront.</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveSettings}
+              disabled={isSaving}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50"
+            >
+              {isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              <span>{isSaving ? 'Saving Changes...' : 'Save Settings'}</span>
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={handleSaveSettings}
-          disabled={isSaving}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50"
-        >
-          {isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          <span>{isSaving ? 'Saving Changes...' : 'Save Settings'}</span>
-        </button>
-      </div>
 
+      </div>
     </div>
   );
 };
