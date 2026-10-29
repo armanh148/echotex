@@ -7,7 +7,6 @@ import {
   Package, 
   FileText, 
   Inbox, 
-  MessageSquare,
   Image as ImageIcon,
   LogOut,
   ChevronRight,
@@ -30,7 +29,6 @@ export type AdminSection =
   | 'offers'
   | 'content'
   | 'rfq-orders'
-  | 'messages'
   | 'media'
   | 'settings';
 
@@ -55,38 +53,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 }) => {
   const { products, orders, quotes, adminUser, categories } = useStore();
 
-  const [unreadMessagesCount, setUnreadMessagesCount] = React.useState<number>(() => {
-    try {
-      const saved = typeof window !== 'undefined' ? localStorage.getItem('ecotex_customer_messages_v1') : null;
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.filter((t: { isUnread?: boolean }) => t.isUnread).length;
-      }
-    } catch {}
-    return 1;
-  });
-
-  React.useEffect(() => {
-    const updateCount = (threadsList?: any[]) => {
-      try {
-        const list = threadsList || JSON.parse(localStorage.getItem('ecotex_customer_messages_v1') || '[]');
-        const count = list.filter((t: any) => t.isUnread).length;
-        setUnreadMessagesCount(count);
-      } catch {}
-    };
-
-    updateCount();
-    const handleUpdated = (e: any) => updateCount(e.detail);
-    const handleStorage = () => updateCount();
-
-    window.addEventListener('ecotex_messages_updated', handleUpdated);
-    window.addEventListener('storage', handleStorage);
-    return () => {
-      window.removeEventListener('ecotex_messages_updated', handleUpdated);
-      window.removeEventListener('storage', handleStorage);
-    };
-  }, []);
-
   const navItems: { id: AdminSection; label: string; icon: React.ElementType; badge?: string | number }[] = [
     { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'homepage', label: 'Homepage', icon: Home, badge: 'All Sections' },
@@ -94,7 +60,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'products', label: 'Products & Single Pages', icon: Package, badge: products.length },
     { id: 'offers', label: 'Special Offers & Deals', icon: Flame, badge: 'HOT' },
     { id: 'rfq-orders', label: 'Orders & Quotes', icon: Inbox, badge: (quotes.filter(q => q.status === 'New').length + orders.filter(o => o.status === 'Pending').length) || undefined },
-    { id: 'messages', label: 'Customer Messages', icon: MessageSquare, badge: unreadMessagesCount || undefined },
     { id: 'media', label: 'Media Library', icon: ImageIcon }
   ];
 

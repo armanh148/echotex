@@ -13,7 +13,6 @@ import {
   ArrowRight,
   ShieldCheck,
   ShoppingBag,
-  MessageSquare,
   Edit3,
   X,
   Save,
@@ -209,13 +208,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             >
               <Sparkles className="w-4 h-4 text-[#B2E2C5] shrink-0" />
               <span>Customize Hero 3D Showcase</span>
-            </button>
-            <button
-              onClick={() => onNavigateToSection('messages')}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-            >
-              <MessageSquare className="w-4 h-4 text-[#B2E2C5] shrink-0" />
-              <span>Customer Messages</span>
             </button>
           </div>
         </div>

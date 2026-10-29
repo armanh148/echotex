@@ -12,7 +12,6 @@ import { ProductCatalogManager } from './ProductCatalogManager';
 import { OffersDealsManager } from './OffersDealsManager';
 import { PageContentEditor } from './PageContentEditor';
 import { RfqOrdersInbox } from './RfqOrdersInbox';
-import { CustomerMessagesManager } from './CustomerMessagesManager';
 import { MediaLibraryManager } from './MediaLibraryManager';
 import { SiteSettingsManager } from './SiteSettingsManager';
 import { X } from 'lucide-react';
@@ -81,7 +80,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case 'offers': return 'Special Offers & Flash Deals';
       case 'content': return 'Website Pages & Content Editor';
       case 'rfq-orders': return 'Customer Orders & Quote Inquiries';
-      case 'messages': return 'Customer Messages & Live Connect';
       case 'media': return 'Media & Image Library';
       case 'settings': return 'Site Settings & System Preferences';
       default: return 'Admin Studio';
@@ -189,10 +187,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {activeSection === 'rfq-orders' && (
             <RfqOrdersInbox />
-          )}
-
-          {activeSection === 'messages' && (
-            <CustomerMessagesManager />
           )}
 
           {activeSection === 'media' && (

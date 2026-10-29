@@ -13,7 +13,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { ProductDetailPage } from './components/ProductDetailPage';
 import { SearchModal } from './components/SearchModal';
-import { CustomerChatbot } from './components/CustomerChatbot';
+import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { AdminDashboard } from './admin/components/AdminDashboard';
 import { AdminLogin } from './admin/AdminLogin';
 import { useStore } from './store/useStore';
@@ -302,8 +302,8 @@ export default function App() {
         }}
       />
 
-      {/* Real-Time Live Customer Chatbot (Connected to Admin Messages) */}
-      <CustomerChatbot />
+      {/* Direct WhatsApp Floating Connect Button */}
+      <WhatsAppFloatingButton />
 
     </div>
   );
