@@ -370,6 +370,7 @@ export interface ShopConfig {
   categoriesHeading?: string;
   categoriesSubheading?: string;
   newArrivalsHeading?: string;
+  allProductsHeading?: string;
   newArrivalsBtnText?: string;
   newArrivalsHideBtnText?: string;
 }
