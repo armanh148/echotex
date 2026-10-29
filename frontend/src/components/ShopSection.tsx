@@ -23,8 +23,15 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Lock
 } from 'lucide-react';
+
+const SORT_OPTIONS: { id: 'featured' | 'price' | 'moq'; label: string }[] = [
+  { id: 'featured', label: 'Featured' },
+  { id: 'price', label: 'Price: Low to High' },
+  { id: 'moq', label: 'MOQ: Low to High' }
+];
 
 interface ShopSectionProps {
   onQuickView: (product: Product) => void;
@@ -51,6 +58,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   // Category & Filter State
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price' | 'moq'>('featured');
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [cartToast, setCartToast] = useState<string | null>(null);
   const [showFullCatalog, setShowFullCatalog] = useState<boolean>(true);
@@ -151,6 +160,19 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     e.stopPropagation();
     setWishlist(prev => ({ ...prev, [id]: !prev[id] }));
   };
+
+  // Close custom sort dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSortOpen]);
 
   const handleQuickAdd = (product: Product, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -869,17 +891,45 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     Showing <strong className="text-stone-900">{displayedProducts.length}</strong> {displayedProducts.length === 1 ? 'item' : 'items'}
                   </span>
 
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-stone-400 font-bold hidden xs:inline">Sort:</span>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      className="bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-stone-700 focus:outline-none focus:border-[#0d3419]"
+                  {/* Custom Styled Sort Dropdown */}
+                  <div ref={sortRef} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsSortOpen((prev) => !prev)}
+                      className="bg-white border border-stone-200 hover:border-stone-300 rounded-xl px-3 py-1.5 text-xs font-bold text-stone-800 flex items-center gap-2 shadow-2xs hover:shadow-xs transition-all cursor-pointer select-none"
+                      aria-haspopup="listbox"
+                      aria-expanded={isSortOpen}
                     >
-                      <option value="featured">Featured</option>
-                      <option value="price">Price: Low to High</option>
-                      <option value="moq">MOQ: Low to High</option>
-                    </select>
+                      <span className="text-stone-400 font-semibold text-[11px] hidden xs:inline">Sort:</span>
+                      <span>{SORT_OPTIONS.find(o => o.id === sortBy)?.label || 'Featured'}</span>
+                      <ChevronDown className={`w-3.5 h-3.5 text-stone-400 transition-transform duration-200 ${isSortOpen ? 'rotate-180 text-[#0d3419]' : ''}`} />
+                    </button>
+
+                    {isSortOpen && (
+                      <div className="absolute right-0 top-full mt-1.5 w-48 bg-white rounded-2xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-fadeIn overflow-hidden">
+                        {SORT_OPTIONS.map((opt) => {
+                          const isSelected = sortBy === opt.id;
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => {
+                                setSortBy(opt.id);
+                                setIsSortOpen(false);
+                              }}
+                              className={`w-full px-3.5 py-2 text-left text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                                isSelected
+                                  ? 'bg-emerald-50 text-emerald-800 font-extrabold'
+                                  : 'text-stone-700 hover:bg-stone-50 hover:text-stone-900'
+                              }`}
+                            >
+                              <span>{opt.label}</span>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
