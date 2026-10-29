@@ -158,7 +158,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         />
 
         {/* Dynamic Studio Views */}
-        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
           {activeSection === 'overview' && (
             <DashboardOverview onNavigateToSection={(sec) => setActiveSection(sec)} />
           )}
