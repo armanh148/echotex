@@ -43,6 +43,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           1. TOP NEWSLETTER BANNER (EXACT LAYOUT OF REFERENCE IMAGE 2)
              Photographic background with fused pill subscription bar
          ======================================================== */}
+      {siteSettings?.footerConfig?.newsletterActive !== false && (
       <div className="relative w-full overflow-hidden py-12 sm:py-16 px-6 md:px-12 lg:px-16 border-b border-white/10">
         
         {/* Background Editorial Photo with Dark Emerald Tint */}
@@ -88,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     type="submit"
                     className="px-6 sm:px-8 py-3 bg-[#22c55e] hover:bg-[#16a34a] text-[#07140e] font-black text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    Subscribe
+                    {siteSettings?.footerConfig?.newsletterBtnText || 'Subscribe'}
                   </button>
                 </div>
               </form>
@@ -102,6 +103,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         </div>
       </div>
+      )}
 
       {/* ========================================================
           2. MAIN FOOTER BODY (5 COLUMNS - EXACT MATCH TO IMAGE 2)
@@ -117,7 +119,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
 
             {/* Address & Email */}
-            <div className="mt-6 space-y-1.5 text-xs text-slate-300 font-light leading-relaxed">
+            {(siteSettings?.footerConfig?.tagline || siteSettings?.footerTagline || siteSettings?.tagline) && (
+              <p className="mt-4 text-xs text-slate-400 font-light leading-relaxed max-w-sm">
+                {siteSettings?.footerConfig?.tagline || siteSettings?.footerTagline || siteSettings?.tagline}
+              </p>
+            )}
+
+            {/* Address & Email */}
+            <div className="mt-5 space-y-1.5 text-xs text-slate-300 font-light leading-relaxed">
               <p className="font-normal text-white">
                 {siteSettings?.facilityAddress || siteSettings?.contactConfig?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881'}
               </p>
@@ -136,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 2: ECOTEX Navigation (2 cols) */}
           <div className="lg:col-span-2">
             <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              ECOTEX
+              {siteSettings?.footerConfig?.col1Title || 'ECOTEX'}
             </h5>
             <ul className="space-y-2.5 text-xs text-slate-300">
               <li>
@@ -183,7 +192,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 3: SERVICES / PRODUCTS (2 cols) */}
           <div className="lg:col-span-2">
             <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              SERVICES
+              {siteSettings?.footerConfig?.col2Title || 'SERVICES'}
             </h5>
             <ul className="space-y-2.5 text-xs text-slate-300">
               <li>
@@ -228,7 +237,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 4: EVENTS / STANDARDS (2 cols) */}
           <div className="lg:col-span-2">
             <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              EVENTS
+              {siteSettings?.footerConfig?.col3Title || 'EVENTS'}
             </h5>
             <ul className="space-y-2.5 text-xs text-slate-300">
               <li>
@@ -261,7 +270,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h5>
             <div className="flex items-center gap-3 text-slate-300">
               <a 
-                href={siteSettings?.contactConfig?.twitterUrl || "https://twitter.com"} 
+                href={siteSettings?.footerConfig?.socialTwitter || siteSettings?.contactConfig?.twitterUrl || "https://twitter.com"} 
                 target="_blank" 
                 rel="noreferrer" 
                 aria-label="Twitter"
@@ -270,7 +279,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Twitter className="w-4 h-4" />
               </a>
               <a 
-                href={siteSettings?.contactConfig?.facebookUrl || "https://facebook.com"} 
+                href={siteSettings?.footerConfig?.socialFacebook || siteSettings?.contactConfig?.facebookUrl || "https://facebook.com"} 
                 target="_blank" 
                 rel="noreferrer" 
                 aria-label="Facebook"
@@ -279,7 +288,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Facebook className="w-4 h-4" />
               </a>
               <a 
-                href={siteSettings?.contactConfig?.linkedinUrl || "https://linkedin.com"} 
+                href={siteSettings?.footerConfig?.socialLinkedin || siteSettings?.contactConfig?.linkedinUrl || "https://linkedin.com"} 
                 target="_blank" 
                 rel="noreferrer" 
                 aria-label="LinkedIn"
@@ -288,7 +297,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Linkedin className="w-4 h-4" />
               </a>
               <a 
-                href="https://youtube.com" 
+                href={siteSettings?.footerConfig?.socialYoutube || "https://youtube.com"} 
                 target="_blank" 
                 rel="noreferrer" 
                 aria-label="YouTube"
@@ -297,7 +306,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Youtube className="w-4 h-4" />
               </a>
               <a 
-                href={siteSettings?.contactConfig?.instagramUrl || "https://instagram.com"} 
+                href={siteSettings?.footerConfig?.socialInstagram || siteSettings?.contactConfig?.instagramUrl || "https://instagram.com"} 
                 target="_blank" 
                 rel="noreferrer" 
                 aria-label="Instagram"
@@ -318,13 +327,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Left: TERMS & CONDITIONS, PRIVACY POLICY, SITEMAP */}
           <div className="flex items-center gap-6 font-semibold tracking-wider uppercase text-[11px]">
             <a href="#privacy" className="hover:text-[#22c55e] transition-colors">
-              TERMS & CONDITIONS
+              {siteSettings?.footerConfig?.termsNotice || 'TERMS & CONDITIONS'}
             </a>
             <a href="#privacy" className="hover:text-[#22c55e] transition-colors">
-              PRIVACY POLICY
+              {siteSettings?.footerConfig?.privacyNotice || 'PRIVACY POLICY'}
             </a>
             <a href="#sitemap" className="hover:text-[#22c55e] transition-colors">
-              SITEMAP
+              {siteSettings?.footerConfig?.sitemapNotice || 'SITEMAP'}
             </a>
           </div>
 

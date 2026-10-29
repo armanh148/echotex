@@ -90,9 +90,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   // Price & calculations
   const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  const freeFreightThreshold = 1000;
+  const freeFreightThreshold = siteSettings?.shippingConfig?.freeShippingThreshold ?? siteSettings?.quoteCalcConfig?.freeFreightThreshold ?? 1000;
+  const standardShippingRate = siteSettings?.shippingConfig?.standardShippingRate ?? 50;
   const isFreeFreight = subtotal >= freeFreightThreshold || items.length === 0;
-  const estimatedShipping = isFreeFreight ? 0 : 50;
+  const estimatedShipping = isFreeFreight ? 0 : standardShippingRate;
   const grandTotal = subtotal + estimatedShipping;
   const totalBagsDisplaced = items.reduce((sum, item) => sum + item.quantity * 250, 0);
   const freightProgress = Math.min(100, Math.round((subtotal / freeFreightThreshold) * 100));
