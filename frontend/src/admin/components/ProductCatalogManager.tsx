@@ -791,7 +791,7 @@ export const ProductCatalogManager: React.FC = () => {
             </div>
 
             {/* 4 Navigation Tabs */}
-            <div className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 pt-3 border-b border-slate-100 bg-slate-50/50 shrink-0 overflow-x-auto">
+            <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 pt-3 border-b border-slate-100 bg-slate-50/50 shrink-0 overflow-x-auto scrollbar-none">
               {[
                 { id: 'basic' as const, label: '1. General & Pricing', icon: Package },
                 { id: 'gallery' as const, label: '2. 4-Photo Gallery', icon: ImageIcon },
@@ -992,7 +992,7 @@ export const ProductCatalogManager: React.FC = () => {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="block text-xs font-bold text-emerald-900 mb-1">
                             Wholesale Box Price ($) *
@@ -1094,7 +1094,7 @@ export const ProductCatalogManager: React.FC = () => {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="block text-xs font-bold text-amber-950 mb-1">
                             Retail Box Price ($) *
