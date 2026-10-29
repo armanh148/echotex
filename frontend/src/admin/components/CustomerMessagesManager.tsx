@@ -21,6 +21,7 @@ import {
   Calendar,
   Sparkles,
   HelpCircle,
+  ChevronLeft,
   ChevronRight,
   ShieldCheck,
   RefreshCw,
@@ -504,7 +505,7 @@ export const CustomerMessagesManager: React.FC = () => {
         {/* ========================================================
             LEFT PANE: THREADS LIST (COL 1-4)
            ======================================================== */}
-        <div className="lg:col-span-4 border-r border-slate-100 flex flex-col bg-[#fcfdfc]">
+        <div className={"lg:col-span-4 border-r border-slate-100 flex flex-col bg-[#fcfdfc] " + (selectedThreadId ? "hidden lg:flex" : "flex")}>
           
           {/* Search & Filter Bar */}
           <div className="p-4 border-b border-slate-100 space-y-3">
@@ -633,11 +634,20 @@ export const CustomerMessagesManager: React.FC = () => {
         {/* ========================================================
             RIGHT PANE: ACTIVE CONVERSATION & REPLY (COL 5-12)
            ======================================================== */}
-        <div className="lg:col-span-8 flex flex-col bg-white">
+        <div className={"lg:col-span-8 flex flex-col bg-white " + (selectedThreadId ? "flex" : "hidden lg:flex")}>
           {activeThread ? (
             <>
               {/* Active Thread Header */}
-              <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#fbfdfb]">
+              <div className="p-3.5 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-[#fbfdfb]">
+                {/* Back to Conversations Button on Mobile */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedThreadId('')}
+                  className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer self-start"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Back to Conversations</span>
+                </button>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-2xl bg-[#4E9F76] text-white font-black text-sm flex items-center justify-center shadow-xs">
                     {activeThread.customerName.charAt(0).toUpperCase()}

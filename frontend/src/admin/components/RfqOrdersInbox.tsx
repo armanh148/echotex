@@ -755,7 +755,7 @@ export const RfqOrdersInbox: React.FC = () => {
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl shadow-black/40 border border-slate-200/80 space-y-5 animate-in fade-in zoom-in-95 duration-200"
+            className="relative bg-white rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl shadow-black/40 border border-slate-200/80 space-y-5 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
@@ -862,7 +862,7 @@ export const RfqOrdersInbox: React.FC = () => {
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl shadow-black/40 border border-slate-200/80 space-y-5 animate-in fade-in zoom-in-95 duration-200"
+            className="relative bg-white rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl shadow-black/40 border border-slate-200/80 space-y-5 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
