@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Product } from '../types';
 import { PRODUCTS } from '../data/products';
 import { useStore } from '../store/useStore';
@@ -68,6 +69,25 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const [filterDealsOnly, setFilterDealsOnly] = useState(false);
   const [filterPriceRange, setFilterPriceRange] = useState<{ min: string; max: string }>({ min: '', max: '' });
   const [selectedMaterial, setSelectedMaterial] = useState<string>('all');
+
+  // Prevent background scroll and support ESC key when Filter Drawer is open
+  useEffect(() => {
+    if (!isFilterDrawerOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsFilterDrawerOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isFilterDrawerOpen]);
 
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [cartToast, setCartToast] = useState<string | null>(null);
