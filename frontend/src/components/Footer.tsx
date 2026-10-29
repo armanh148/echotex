@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
              Photographic background with fused pill subscription bar
          ======================================================== */}
       {siteSettings?.footerConfig?.newsletterActive !== false && (
-      <div className="relative w-full overflow-hidden py-12 sm:py-16 px-6 md:px-12 lg:px-16 border-b border-white/10">
+      <div className="relative w-full overflow-hidden py-10 sm:py-16 px-4 md:px-12 lg:px-16 border-b border-white/10">
         
         {/* Background Editorial Photo with Dark Emerald Tint */}
         <div className="absolute inset-0">
@@ -83,11 +83,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     placeholder="Enter your email address"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="w-full px-5 py-3 text-xs sm:text-sm text-[#0f172a] placeholder:text-slate-400 bg-transparent focus:outline-none rounded-l-full"
+                    className="w-full px-3.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#0f172a] placeholder:text-slate-400 bg-transparent focus:outline-none rounded-l-full"
                   />
                   <button
                     type="submit"
-                    className="px-6 sm:px-8 py-3 bg-[#22c55e] hover:bg-[#16a34a] text-[#07140e] font-black text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+                    className="px-4 sm:px-8 py-2.5 sm:py-3 bg-[#22c55e] hover:bg-[#16a34a] text-[#07140e] font-black text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
                   >
                     {siteSettings?.footerConfig?.newsletterBtnText || 'Subscribe'}
                   </button>
@@ -108,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       {/* ========================================================
           2. MAIN FOOTER BODY (5 COLUMNS - EXACT MATCH TO IMAGE 2)
          ======================================================== */}
-      <div className="w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 pt-16 pb-12">
+      <div className="w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 pt-12 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
           
           {/* Column 1: Brand Logo & Address (4 cols) */}
@@ -328,7 +328,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           
           {/* Left: TERMS & CONDITIONS, PRIVACY POLICY, SITEMAP */}
-          <div className="flex items-center gap-6 font-semibold tracking-wider uppercase text-[11px]">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 font-semibold tracking-wider uppercase text-[10px] sm:text-[11px]">
             <a href="#privacy" className="hover:text-[#22c55e] transition-colors">
               {siteSettings?.footerConfig?.termsNotice || 'TERMS & CONDITIONS'}
             </a>
@@ -343,7 +343,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
 
           {/* Right: Copyright */}
-          <div className="text-right text-[11px] text-slate-400 font-light">
+          <div className="text-center sm:text-right text-[10px] sm:text-[11px] text-slate-400 font-light">
             <span>{siteSettings?.footerConfig?.copyrightNotice || siteSettings?.copyrightNotice || 'Copyright 2026 © Ecotex Inc. All rights reserved.'}</span>
           </div>
 

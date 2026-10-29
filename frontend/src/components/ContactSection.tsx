@@ -66,7 +66,7 @@ export const ContactSection: React.FC = () => {
   const googleMapsUrl = siteSettings?.contactConfig?.googleMapsUrl || `https://maps.google.com/?q=${encodeURIComponent(facilityAddress)}`;
 
   return (
-    <section id="contact-us" className="relative w-full overflow-hidden bg-[#07170e] py-16 sm:py-24 lg:py-32 selection:bg-[#22c55e] selection:text-[#07170e] border-t border-[#22c55e]/20">
+    <section id="contact-us" className="relative w-full overflow-hidden bg-[#07170e] py-12 sm:py-24 lg:py-32 selection:bg-[#22c55e] selection:text-[#07170e] border-t border-[#22c55e]/20">
 
       {/* ========================================================
           FULL-WIDTH CINEMATIC BACKGROUND (EDGE-TO-EDGE)
@@ -102,7 +102,7 @@ export const ContactSection: React.FC = () => {
       {/* ========================================================
           CONTENT CONTAINER (WIDE & PROPORTIONED)
          ======================================================== */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-10 lg:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
           {/* ====================================================
@@ -112,7 +112,7 @@ export const ContactSection: React.FC = () => {
 
             {/* Big Title */}
             <div>
-              <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
+              <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
                 Get in<br />
                 <span className="text-white">touch</span><span className="text-[#22c55e]">.</span>
               </h2>
@@ -206,7 +206,7 @@ export const ContactSection: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
 
                 {/* Row 1: First Name & Last Name (2 Equal Columns) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
                   <div>
                     <label
                       htmlFor="contact-first-name"
@@ -286,7 +286,7 @@ export const ContactSection: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 sm:py-4 px-6 bg-white hover:bg-[#22c55e] text-[#07170e] font-black text-sm uppercase tracking-[0.2em] rounded-xs transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-[0.99] cursor-pointer"
+                    className="w-full py-3 sm:py-4 px-6 bg-white hover:bg-[#22c55e] text-[#07170e] font-black text-sm uppercase tracking-[0.2em] rounded-xs transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-[0.99] cursor-pointer"
                   >
                     {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
                   </button>

@@ -234,7 +234,7 @@ Notification automatically generated via EcoTex Storefront.`;
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full px-6 sm:px-12 lg:px-16 py-5 sm:py-6 flex items-center justify-between border-b border-[#cfc8bd]/50 shrink-0 bg-[#f6f3ed]/90 backdrop-blur-xs sticky top-0 z-20"
+            className="w-full px-4 sm:px-12 lg:px-16 py-4 sm:py-6 flex items-center justify-between border-b border-[#cfc8bd]/50 shrink-0 bg-[#f6f3ed]/90 backdrop-blur-xs sticky top-0 z-20"
           >
             {/* Left: Brand Logo + Back link */}
             <div className="flex items-center gap-4">
@@ -266,7 +266,7 @@ Notification automatically generated via EcoTex Storefront.`;
           {/* ========================================================
               MAIN BODY
              ======================================================== */}
-          <main className="flex-1 max-w-6xl w-full mx-auto px-6 sm:px-12 lg:px-16 py-8 sm:py-12">
+          <main className="flex-1 max-w-6xl w-full mx-auto px-3.5 sm:px-12 lg:px-16 py-6 sm:py-12">
             
             {/* ----------------------------------------------------
                 STEP 1: BAG REVIEW
@@ -387,7 +387,7 @@ Notification automatically generated via EcoTex Storefront.`;
                     <div className="lg:col-span-8 w-full">
                       
                       {/* Column Headers */}
-                      <div className="grid grid-cols-12 pb-3 border-b border-[#cfc8bd] text-xs sm:text-sm font-serif text-[#666] uppercase tracking-wider">
+                      <div className="hidden sm:grid grid-cols-12 pb-3 border-b border-[#cfc8bd] text-xs sm:text-sm font-serif text-[#666] uppercase tracking-wider">
                         <div className="col-span-3 sm:col-span-2">Product</div>
                         <div className="col-span-4 sm:col-span-5 pl-2 sm:pl-4">Description</div>
                         <div className="col-span-2 text-center">Quantity</div>
@@ -408,6 +408,13 @@ Notification automatically generated via EcoTex Storefront.`;
 
                           const rowTotal = item.unitPrice * item.quantity;
 
+                          const isWholesaleItem = item.orderType === 'wholesale' || (!item.orderType && (item.quantity > 5 || (item.quantity % 5 === 0 && item.unitPrice <= (item.product.pricePerUnit || 0.35))));
+                          const availableStock = typeof item.product.stockQuantity === 'number' ? item.product.stockQuantity : (item.product.inStock !== false ? 50 : 0);
+                          const minQty = isWholesaleItem ? 5 : 1;
+                          const maxQty = isWholesaleItem ? availableStock : Math.min(5, availableStock);
+                          const isAtMin = item.quantity <= minQty;
+                          const isAtMax = item.quantity >= maxQty;
+
                           return (
                             <motion.div 
                               key={item.id}
@@ -415,8 +422,96 @@ Notification automatically generated via EcoTex Storefront.`;
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, x: -20, height: 0 }}
                               transition={{ duration: 0.35, delay: index * 0.05 }}
-                              className="grid grid-cols-12 items-center py-5 sm:py-6 group"
+                              className="py-4 sm:py-6 group"
                             >
+                              {/* ----------------- MOBILE STACKED VIEW (< sm) ----------------- */}
+                              <div className="sm:hidden flex flex-col gap-3">
+                                <div className="flex items-start gap-3">
+                                  <div className="w-16 h-18 bg-white rounded-md overflow-hidden p-1.5 flex items-center justify-center border border-[#cfc8bd]/50 shrink-0 shadow-2xs">
+                                    <img src={bagThumbnail} alt={item.product.name} className="w-full h-full object-contain" />
+                                  </div>
+                                  <div className="flex-1 min-w-0 pr-1">
+                                    <div className="flex items-start justify-between gap-1">
+                                      <h3 className="font-serif text-sm text-[#1c1b18] font-semibold leading-tight line-clamp-1">
+                                        {item.product.name}
+                                      </h3>
+                                      <button
+                                        type="button"
+                                        onClick={() => onRemoveItem(item.id)}
+                                        className="text-[#888] hover:text-[#dc2626] p-1 -mt-1 -mr-1 cursor-pointer"
+                                        aria-label="Remove item"
+                                      >
+                                        <X className="w-4 h-4 stroke-[1.5]" />
+                                      </button>
+                                    </div>
+                                    <p className="text-[11px] text-[#777] font-light mt-0.5">
+                                      {item.product.gsm} GSM · {item.product.dimensions}
+                                    </p>
+                                    <div className="mt-1 flex flex-wrap items-center gap-1">
+                                      {isWholesaleItem ? (
+                                        <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                                          Wholesale
+                                        </span>
+                                      ) : (
+                                        <span className="text-[9px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                                          Retail
+                                        </span>
+                                      )}
+                                      <span className="text-[9px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                                        📦 {item.product.pcsPerBox || 200} pcs/box
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between pt-1">
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      type="button"
+                                      disabled={isAtMin}
+                                      onClick={() => {
+                                        if (isWholesaleItem) {
+                                          onUpdateQuantity(item.id, Math.max(5, item.quantity - 5));
+                                        } else {
+                                          onUpdateQuantity(item.id, Math.max(1, item.quantity - 1));
+                                        }
+                                      }}
+                                      className={`w-7 h-7 rounded-full border flex items-center justify-center font-bold text-sm cursor-pointer ${
+                                        isAtMin ? 'border-slate-200 text-slate-300 bg-slate-50 cursor-not-allowed' : 'border-[#cfc8bd] text-[#1c1b18] hover:bg-white'
+                                      }`}
+                                    >
+                                      –
+                                    </button>
+                                    <span className="font-mono text-xs font-bold min-w-[28px] text-center">
+                                      {item.quantity.toLocaleString()} boxes
+                                    </span>
+                                    <button
+                                      type="button"
+                                      disabled={isAtMax}
+                                      onClick={() => {
+                                        if (isAtMax) return;
+                                        if (isWholesaleItem) {
+                                          onUpdateQuantity(item.id, Math.min(maxQty, item.quantity + 5));
+                                        } else {
+                                          onUpdateQuantity(item.id, Math.min(maxQty, item.quantity + 1));
+                                        }
+                                      }}
+                                      className={`w-7 h-7 rounded-full border flex items-center justify-center font-bold text-sm cursor-pointer ${
+                                        isAtMax ? 'border-slate-200 text-slate-300 bg-slate-50 cursor-not-allowed' : 'border-[#cfc8bd] text-[#1c1b18] hover:bg-white'
+                                      }`}
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+
+                                  <div className="text-right font-serif text-base font-bold text-[#166534]">
+                                    ${rowTotal < 100 ? rowTotal.toFixed(2) : Math.round(rowTotal).toLocaleString()}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* ----------------- DESKTOP TABLE VIEW (sm:) ----------------- */}
+                              <div className="hidden sm:grid grid-cols-12 items-center">
                               {/* 1. Thumbnail */}
                               <div className="col-span-3 sm:col-span-2">
                                 <div className="w-16 h-18 sm:w-20 sm:h-22 bg-white rounded-md overflow-hidden p-2 flex items-center justify-center border border-[#cfc8bd]/50 group-hover:border-[#166534]/40 transition-colors shadow-2xs">
@@ -544,6 +639,7 @@ Notification automatically generated via EcoTex Storefront.`;
                                 >
                                   <X className="w-4 h-4 stroke-[1.5]" />
                                 </motion.button>
+                              </div>
                               </div>
 
                             </motion.div>
@@ -802,7 +898,7 @@ Notification automatically generated via EcoTex Storefront.`;
                     />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="col-span-1">
                       <label className="block text-xs font-serif text-[#1c1b18] mb-1.5 uppercase tracking-wider">
                         City *

@@ -373,10 +373,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#fbfcfb] text-[#111827] min-h-screen py-6 sm:py-10 selection:bg-[#166534] selection:text-white animate-fadeInUp">
+    <div className="w-full bg-[#fbfcfb] text-[#111827] min-h-screen py-4 sm:py-10 selection:bg-[#166534] selection:text-white animate-fadeInUp">
       
       {/* Maximum Container matching Reference Image */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-6 md:px-8 lg:px-12">
         
         {/* Top Breadcrumb Header Bar */}
         <nav aria-label="Breadcrumb" className="mb-6 sm:mb-10 flex items-center justify-between border-b border-slate-200/60 pb-4">
@@ -420,7 +420,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="lg:col-span-6 flex flex-col">
             
             {/* Main Image Frame (Rounded-3xl, Drop Shadow, Heart Button, Brand Watermark) */}
-            <div className="relative w-full aspect-[4/5] bg-white rounded-[28px] sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xl flex items-center justify-center p-6 sm:p-10 group">
+            <div className="relative w-full aspect-[4/5] bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xl flex items-center justify-center p-4 sm:p-10 group">
               
               {/* Product Visual */}
               <img
@@ -459,7 +459,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
 
             {/* 4 Thumbnails Gallery Strip */}
-            <div className="mt-4 sm:mt-5 grid grid-cols-4 gap-3 sm:gap-4">
+            <div className="mt-3 sm:mt-5 grid grid-cols-4 gap-2 sm:gap-4">
               {galleryImages.map((thumb, idx) => {
                 const isActive = activeImageIndex === idx;
                 return (
@@ -513,7 +513,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
 
             {/* Product Title (Luxury Editorial Serif Font) */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-normal text-[#111827] tracking-tight leading-[1.12] [text-wrap:balance]">
+            <h1 className="font-serif text-2xl sm:text-4xl lg:text-[42px] font-normal text-[#111827] tracking-tight leading-[1.12] [text-wrap:balance]">
               {product.name}
             </h1>
 
@@ -997,7 +997,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           RELATED PRODUCTS (Full Width across screen)
          ======================================================== */}
       {relatedProducts.length > 0 && (
-        <section className="w-full max-w-[1840px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 mt-16 sm:mt-24 pt-12 border-t border-slate-200/80">
+        <section className="w-full max-w-[1840px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 mt-12 sm:mt-24 pt-12 border-t border-slate-200/80">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] mb-1 block">
@@ -1021,7 +1021,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
 
           {/* 5-Column Grid across full width */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6 lg:gap-8">
             {relatedProducts.map((relProd) => {
               const relIsOutOfStock = relProd.inStock === false || (typeof relProd.stockQuantity === 'number' && relProd.stockQuantity <= 0);
 
