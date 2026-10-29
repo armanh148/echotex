@@ -228,19 +228,23 @@ export const CustomerChatbot: React.FC = () => {
         
         {/* Teaser greeting bubble */}
         {!isOpen && hasPromptedBanner && (
-          <div className="bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl shadow-black/10 border border-[#B2E2C5]/50 max-w-[280px] text-xs font-serif text-[#1c1b18] flex items-start justify-between gap-3 animate-fadeIn">
-            <div>
-              <div className="flex items-center gap-1.5 font-sans font-bold text-[#166534] text-[11px] mb-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>EcoTex Live Chat & WhatsApp</span>
-              </div>
-              <p className="text-[#444] font-light leading-relaxed">
-                Need wholesale bag pricing or free fabric swatches? Chat with us here or via WhatsApp!
-              </p>
+          <div
+            onClick={() => {
+              setIsOpen(true);
+              setHasPromptedBanner(false);
+            }}
+            className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full shadow-xl shadow-black/10 border border-[#B2E2C5]/50 text-xs text-[#1c1b18] flex items-center justify-between gap-2.5 animate-fadeIn cursor-pointer hover:border-[#166534] transition-all"
+          >
+            <div className="flex items-center gap-1.5 font-sans font-semibold text-[#166534] text-[11px] select-none">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>EcoTex Live Chat & WhatsApp</span>
             </div>
             <button
-              onClick={() => setHasPromptedBanner(false)}
-              className="text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
+              onClick={(e) => {
+                e.stopPropagation();
+                setHasPromptedBanner(false);
+              }}
+              className="text-slate-400 hover:text-slate-700 cursor-pointer p-0.5 rounded-full hover:bg-slate-100 transition-colors ml-1"
               title="Dismiss"
             >
               <X className="w-3.5 h-3.5" />
