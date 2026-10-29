@@ -231,7 +231,7 @@ export const OffersDealsManager: React.FC = () => {
       {/* ========================================================
           1. LIVE STOREFRONT PREVIEW (MATCHES USER SCREENSHOT EXACTLY)
          ======================================================== */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+      <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-200/80 shadow-xs">
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <Eye className="w-4 h-4 text-slate-500" />
@@ -248,7 +248,7 @@ export const OffersDealsManager: React.FC = () => {
         </div>
 
         {/* The Exact Banner Card */}
-        <div className="w-full rounded-[32px] sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-6 sm:p-10 lg:p-12 shadow-xs overflow-hidden">
+        <div className="w-full rounded-[32px] sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-4 sm:p-10 lg:p-12 shadow-xs overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             {/* Left Column: Deal Copy & CTA */}
@@ -275,7 +275,7 @@ export const OffersDealsManager: React.FC = () => {
 
             {/* Right Column: Clean White Product Card with Stock Bar & 4 Timer Boxes */}
             <div className="lg:col-span-7">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-stone-200/70 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+              <div className="bg-white rounded-3xl p-4 sm:p-8 shadow-lg border border-stone-200/70 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
                 
                 {/* Product Thumbnail */}
                 <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-52 lg:h-52 bg-stone-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-stone-100">

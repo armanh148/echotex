@@ -121,7 +121,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       {/* Floating Dropdown Menu */}
       {isOpen && (
         <div
-          className={`absolute z-50 mt-1.5 min-w-full w-max max-w-[280px] bg-white rounded-2xl border border-slate-200/90 shadow-xl p-1.5 animate-fadeIn backdrop-blur-md max-h-64 overflow-y-auto ${
+          className={`absolute z-50 mt-1.5 min-w-full w-max max-w-[calc(100vw-2rem)] sm:max-w-[280px] bg-white rounded-2xl border border-slate-200/90 shadow-xl p-1.5 animate-fadeIn backdrop-blur-md max-h-64 overflow-y-auto ${
             align === 'right' ? 'right-0' : 'left-0'
           } ${menuClassName}`}
           role="listbox"

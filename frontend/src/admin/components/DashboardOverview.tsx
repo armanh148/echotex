@@ -170,9 +170,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       )}
       
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4E9F76] via-[#007018] to-[#0f172a] text-white p-6 sm:p-8 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4E9F76] via-[#007018] to-[#0f172a] text-white p-4 sm:p-8 shadow-xl">
         <div className="relative z-10 max-w-3xl">
-          <div className="flex items-center justify-between gap-3 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-[#B2E2C5]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#B2E2C5]" />
               <span>{welcomeBadge}</span>
@@ -412,7 +412,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* Recent RFQ Inbox Preview */}
-        <div className="bg-white rounded-3xl p-6 border border-[#B2E2C5]/30 shadow-xs flex flex-col justify-between">
+        <div className="bg-white rounded-3xl p-4 sm:p-6 border border-[#B2E2C5]/30 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
@@ -476,7 +476,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
 
         {/* Recent Wholesale Production Orders */}
-        <div className="bg-white rounded-3xl p-6 border border-[#B2E2C5]/30 shadow-xs flex flex-col justify-between">
+        <div className="bg-white rounded-3xl p-4 sm:p-6 border border-[#B2E2C5]/30 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">

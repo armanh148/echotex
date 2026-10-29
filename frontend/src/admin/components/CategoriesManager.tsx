@@ -202,7 +202,7 @@ export const CategoriesManager: React.FC = () => {
       )}
 
       {/* Header Card */}
-      <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#B2E2C5]/30 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-4 sm:p-7 rounded-3xl border border-[#B2E2C5]/30 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-[#4E9F76]/15 text-[#4E9F76]">
@@ -232,7 +232,7 @@ export const CategoriesManager: React.FC = () => {
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Categories</div>

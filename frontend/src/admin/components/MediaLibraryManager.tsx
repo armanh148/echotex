@@ -98,7 +98,7 @@ export const MediaLibraryManager: React.FC = () => {
     <div className="space-y-6 animate-fadeInUp pb-12">
       
       {/* Header Card */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#B2E2C5]/30 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-3xl border border-[#B2E2C5]/30 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
             <span className="p-1 rounded-lg bg-[#B2E2C5]/20 text-[#4E9F76]">

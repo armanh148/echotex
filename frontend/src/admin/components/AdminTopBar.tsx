@@ -104,7 +104,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
   const displayedOrders = filterMode === 'unread' ? pendingOrders : allActiveOrders;
 
   return (
-    <header className="h-20 bg-white border-b border-[#B2E2C5]/25 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+    <header className="h-20 bg-white border-b border-[#B2E2C5]/25 px-3 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
       
       {/* Left: Sidebar Toggle Button (Mobile & Desktop) & Active Section Title */}
       <div className="flex items-center gap-3 sm:gap-4">
@@ -140,7 +140,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
               Ecotex Studio
             </span>
           </div>
-          <h1 className="text-lg sm:text-xl font-black text-[#0f172a] tracking-tight">
+          <h1 className="text-sm xs:text-base sm:text-xl font-black text-[#0f172a] tracking-tight truncate max-w-[130px] xs:max-w-[200px] sm:max-w-none">
             {activeSectionTitle}
           </h1>
         </div>

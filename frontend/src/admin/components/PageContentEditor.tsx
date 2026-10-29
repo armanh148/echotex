@@ -605,7 +605,7 @@ export const PageContentEditor: React.FC = () => {
         </aside>
 
         {/* Right Content Panel */}
-        <div className="flex-1 min-w-0 w-full bg-white rounded-3xl p-6 sm:p-8 border border-[#B2E2C5]/40 shadow-xs">
+        <div className="flex-1 min-w-0 w-full bg-white rounded-3xl p-4 sm:p-8 border border-[#B2E2C5]/40 shadow-xs">
 
           {/* Active Section Context Header */}
           {(() => {
