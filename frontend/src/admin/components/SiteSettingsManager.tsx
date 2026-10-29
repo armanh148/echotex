@@ -28,10 +28,6 @@ import {
   RefreshCw,
   Sparkles,
   Search,
-  Bell,
-  Smartphone,
-  Send,
-  MessageCircle,
   CheckCircle2,
   ChevronLeft,
   ChevronRight
@@ -44,7 +40,7 @@ interface SiteSettingsManagerProps {
   onLogout?: () => void;
 }
 
-type SettingsTab = 'identity' | 'shipping' | 'footer' | 'commerce' | 'announcement' | 'notifications' | 'business' | 'account';
+type SettingsTab = 'identity' | 'shipping' | 'footer' | 'commerce' | 'announcement' | 'business' | 'account';
 
 export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogout }) => {
   const { siteSettings, updateSiteSettings, adminUser, logout } = useStore();
@@ -428,7 +424,6 @@ return () => clearTimeout(timer);
   const settingsTabs: { id: SettingsTab; label: string; desc: string; icon: React.ElementType }[] = [
     { id: 'identity', label: 'Site Identity & SEO', desc: 'Brand title, favicon & SEO meta', icon: Globe },
     { id: 'account', label: 'Admin Security', desc: 'Password & administrator credentials', icon: User },
-    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Floating WhatsApp & order alerts', icon: Bell },
     { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
     { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
     { id: 'shipping', label: 'Shipping & Fulfillment', desc: 'Free threshold, rates & logistics', icon: Truck },
