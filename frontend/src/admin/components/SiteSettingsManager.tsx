@@ -428,7 +428,7 @@ return () => clearTimeout(timer);
   const settingsTabs: { id: SettingsTab; label: string; desc: string; icon: React.ElementType }[] = [
     { id: 'identity', label: 'Site Identity & SEO', desc: 'Brand title, favicon & SEO meta', icon: Globe },
     { id: 'account', label: 'Admin Security', desc: 'Password & administrator credentials', icon: User },
-    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Chatbot channels & order alerts', icon: Bell },
+    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Floating WhatsApp & order alerts', icon: Bell },
     { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
     { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
     { id: 'shipping', label: 'Shipping & Fulfillment', desc: 'Free threshold, rates & logistics', icon: Truck },
@@ -1348,7 +1348,7 @@ return () => clearTimeout(timer);
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
                 <span>Primary Sales & Support Email</span>
-                <span className="text-[10px] text-[#166534] font-bold">Chatbot Quotes</span>
+                <span className="text-[10px] text-[#166534] font-bold">Email Inquiries</span>
               </label>
               <input
                 type="email"
@@ -1361,7 +1361,7 @@ return () => clearTimeout(timer);
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
                 <span>Official Desk WhatsApp Number</span>
-                <span className="text-[10px] text-[#25D366] font-bold">Chatbot & Direct Chat</span>
+                <span className="text-[10px] text-[#25D366] font-bold">Website Floating Button</span>
               </label>
               <input
                 type="text"
