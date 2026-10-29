@@ -254,9 +254,9 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
     <div className="space-y-8 animate-fadeInUp pb-16 font-sans text-[#0f172a] select-none">
       
       {/* ========================================================
-          STICKY HEADER & PUBLISH CONTROLS
+          PAGE HEADER & PUBLISH CONTROLS
          ======================================================== */}
-      <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#B2E2C5]/40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 sticky top-20 z-30 backdrop-blur-md bg-white/95">
+      <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#B2E2C5]/40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
         <div>
           <div className="flex items-center gap-2.5 mb-1.5">
             <span className="p-2 rounded-xl bg-[#4E9F76] text-white shadow-xs">
@@ -346,7 +346,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
               </span>
             </div>
 
-            <nav className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-thin">
+            <nav className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -355,7 +355,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer shrink-0 min-w-[190px] lg:w-full text-left border group ${
+                    className={`flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 sm:px-3.5 sm:py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer shrink-0 min-w-[160px] xs:min-w-[180px] lg:w-full text-left border group ${
                       isActive
                         ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 lg:translate-x-1 font-extrabold'
                         : 'bg-white text-slate-700 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-slate-900'
