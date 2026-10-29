@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     <>
       {/* Top Announcement Bar if enabled */}
       {announcementActive && (
-        <div className="bg-[#4E9F76] text-white py-2 px-4 text-center text-xs font-semibold tracking-wide flex items-center justify-center gap-2 select-none">
+        <div className="bg-[#4E9F76] text-white py-2 px-3 text-center text-[11px] sm:text-xs font-semibold tracking-wide flex items-center justify-center gap-1.5 select-none">
           <span>{announcementText}</span>
         </div>
       )}
@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             : 'border-b border-slate-200/40 bg-white/65 backdrop-blur-lg'
           }`}
       >
-        <div className="w-full max-w-[1820px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
+        <div className="w-full max-w-[1820px] mx-auto px-3.5 sm:px-10 lg:px-14 xl:px-20">
           <div className="flex items-center justify-between h-18 sm:h-20">
 
             {/* 1. Left Zone: Brand Wordmark (matching reference image "CLASSIC" position) */}

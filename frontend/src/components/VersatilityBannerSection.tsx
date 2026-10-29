@@ -87,10 +87,10 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
           PART 1: SUSTAINABLE FASHION FOR A GREENER TOMORROW
          ======================================================== */}
       <section className="py-16 sm:py-20 bg-white">
-        <div className="w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 text-center">
+        <div className="w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 text-center">
           
           {/* Main Title & Subtitle */}
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight text-[#0f172a]">
+          <h2 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight text-[#0f172a]">
             {vConfig.sustainableFashionTitle}
           </h2>
           <p className="mt-3 text-xs sm:text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed">
@@ -98,11 +98,11 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
           </p>
 
           {/* 4 Feature Columns */}
-          <div className="mt-8 sm:mt-14 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 text-center">
+          <div className="mt-6 sm:mt-14 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8 text-center">
             {vConfig.featureCards.map((card, idx) => (
               <div 
                 key={card.id || idx}
-                className="flex flex-col items-center p-3.5 sm:p-5 rounded-2xl bg-[#fafbf9]/60 hover:bg-white border border-stone-200/60 hover:border-[#B2E2C5]/80 transition-all hover:shadow-lg group"
+                className="flex flex-col items-center p-3 sm:p-5 rounded-2xl bg-[#fafbf9]/60 hover:bg-white border border-stone-200/60 hover:border-[#B2E2C5]/80 transition-all hover:shadow-lg group"
               >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 mb-2.5 sm:mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                   {featureIcons[idx % featureIcons.length]}
@@ -110,7 +110,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
                 <h3 className="text-xs sm:text-base font-bold text-[#0f172a] mb-1 sm:mb-2 group-hover:text-[#4E9F76] transition-colors">
                   {card.title}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed max-w-xs">
+                <p className="text-[10px] xs:text-[11px] sm:text-xs text-slate-500 leading-relaxed max-w-xs">
                   {card.description}
                 </p>
               </div>
@@ -124,7 +124,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
           PART 2: EXPLORING THE VERSATILITY OF NON-WOVEN PP BAGS
           (FULL-WIDTH PANORAMIC BANNER)
          ======================================================== */}
-      <section className="relative w-full overflow-hidden min-h-[340px] sm:min-h-[420px] lg:min-h-[480px] flex items-center">
+      <section className="relative w-full overflow-hidden min-h-[300px] sm:min-h-[420px] lg:min-h-[480px] flex items-center">
         {/* Background Graphic */}
         <div className="absolute inset-0">
           <img
@@ -140,7 +140,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
         <div className="relative z-10 w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 py-16">
           <div className="max-w-xl lg:max-w-2xl ml-auto text-center lg:text-left">
             
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black uppercase text-white tracking-tight leading-[1.1] drop-shadow-md">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl lg:text-5xl font-black uppercase text-white tracking-tight leading-[1.1] drop-shadow-md">
               {vConfig.bannerTitle}
             </h2>
 
@@ -168,7 +168,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
          ======================================================== */}
       <section className="py-8 sm:py-10 bg-white">
         <div className="w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             
             {vConfig.bottomTrustBadges.map((badge, idx) => {
               const icons = [Clock, ThumbsUp, Globe2, HelpCircle];

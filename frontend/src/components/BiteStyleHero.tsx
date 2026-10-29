@@ -28,7 +28,7 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
 
   return (
     <section 
-      className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-center justify-center font-sans antialiased text-[#0f172a] overflow-hidden py-12 sm:py-16 lg:py-24 px-4 sm:px-8 lg:px-12 xl:px-16"
+      className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-center justify-center font-sans antialiased text-[#0f172a] overflow-hidden py-10 sm:py-16 lg:py-24 px-4 sm:px-8 lg:px-12 xl:px-16"
     >
       {/* Full Hero Panoramic Background Image with soft dark overlay for text contrast */}
       {currentBgImage ? (
@@ -65,7 +65,7 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] max-w-2xl"
+            className="font-editorial text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.06] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] max-w-2xl break-words"
           >
             {titleLines.map((line, idx) => (
               <React.Fragment key={idx}>
@@ -92,7 +92,7 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-6 sm:mt-7 text-base sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-xl font-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]"
+            className="mt-4 sm:mt-7 text-sm sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-xl font-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]"
           >
             {heroConfig.subtitle}
           </motion.p>
@@ -108,7 +108,7 @@ export const BiteStyleHero: React.FC<BiteStyleHeroProps> = ({
               onClick={onNavigateToShop}
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="relative overflow-hidden min-w-[220px] sm:min-w-[260px] py-4 sm:py-5 px-10 rounded-full bg-gradient-to-r from-[#16a34a] via-[#22c55e] to-[#10b981] text-white font-extrabold text-base sm:text-lg tracking-wide transition-all duration-300 shadow-[0_12px_30px_rgba(34,197,94,0.45)] hover:shadow-[0_18px_45px_rgba(34,197,94,0.6)] cursor-pointer flex items-center justify-center gap-3 group border border-emerald-300/40"
+              className="relative overflow-hidden w-full sm:w-auto min-w-0 sm:min-w-[260px] py-3.5 sm:py-5 px-7 sm:px-10 text-sm sm:text-lg rounded-full bg-gradient-to-r from-[#16a34a] via-[#22c55e] to-[#10b981] text-white font-extrabold text-base sm:text-lg tracking-wide transition-all duration-300 shadow-[0_12px_30px_rgba(34,197,94,0.45)] hover:shadow-[0_18px_45px_rgba(34,197,94,0.6)] cursor-pointer flex items-center justify-center gap-3 group border border-emerald-300/40"
             >
               {/* Shimmer Light Streak */}
               <motion.div 

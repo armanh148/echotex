@@ -105,7 +105,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
       {/* ========================================================
           1. EDITORIAL HERO BANNER (UMBRA REFERENCE STYLE)
          ======================================================== */}
-      <section className="relative w-full h-[480px] sm:h-[560px] md:h-[620px] bg-slate-950 overflow-hidden flex items-center justify-center">
+      <section className="relative w-full h-[360px] sm:h-[560px] md:h-[620px] bg-slate-950 overflow-hidden flex items-center justify-center">
         {/* Background Visual: Corporate studio founders environment */}
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-45 mix-blend-luminosity scale-105 transition-transform duration-1000 ease-out hover:scale-100"
@@ -123,7 +123,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
             Ecotex Inc. Packaging Heritage
           </span>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[0.18em] uppercase text-white leading-none">
+          <h1 className="text-3xl sm:text-6xl md:text-7xl font-extrabold tracking-[0.12em] sm:tracking-[0.18em] uppercase text-white leading-none">
             {aConfig?.heroTitle || 'About Us'}
           </h1>
 
@@ -148,7 +148,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
       {/* ========================================================
           2. "WE ARE ECOTEX" & FOUNDER SHOWCASE (SPLIT 2-COLUMN)
          ======================================================== */}
-      <section className="py-16 sm:py-24 lg:py-32 w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
+      <section className="py-16 sm:py-24 lg:py-32 w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center">
           
           {/* Left Column: Brand Story & Narrative */}

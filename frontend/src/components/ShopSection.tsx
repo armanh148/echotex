@@ -262,7 +262,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
           </div>
 
           {/* Banner Inner Content Container */}
-          <div className="w-full max-w-[1560px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-12 sm:py-16 lg:py-20 xl:py-24 relative z-10">
+          <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-10 lg:px-14 xl:px-20 py-10 sm:py-16 lg:py-20 xl:py-24 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-20 items-center">
               
               {/* Left Content Column */}
@@ -274,7 +274,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 </div>
 
                 {/* Headline: Shop More, Save More! */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tight leading-[1.06] mb-5 whitespace-pre-line">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tight leading-[1.06] mb-4 whitespace-pre-line">
                   {siteSettings?.shopConfig?.heroBannerTitle || "Shop More,\nSave More!"}
                 </h1>
 
@@ -365,13 +365,13 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
       )}
 
       {/* Main Container for Catalog, Categories & Deals - Ultra-Wide Responsive (Full Width) */}
-      <div className="w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 py-10 sm:py-14">
+      <div className="w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 sm:py-14">
 
         {/* ========================================================
             2. TRUST / VALUE PROPOSITIONS BAR (4 ITEMS STRIP)
            ======================================================== */}
-        <section className="w-full bg-[#FAF8F5] border border-stone-200/90 rounded-3xl p-6 sm:p-8 lg:p-10 mb-14 sm:mb-18 shadow-2xs">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-stone-200/80">
+        <section className="w-full bg-[#FAF8F5] border border-stone-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-10 mb-10 sm:mb-18 shadow-2xs">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 sm:divide-x divide-stone-200/80">
             
             {/* 1. Free Shipping */}
             <div className="flex items-center gap-4 pt-3 sm:pt-0 sm:px-5">
@@ -598,7 +598,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
             4. DEAL OF THE DAY (FULL-WIDTH EXPANSIVE SPLIT CARD)
            ======================================================== */}
         {showDeal && isDealEnabled && dealProduct && (
-          <section className="w-full rounded-[32px] sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-8 sm:p-12 lg:p-16 mb-16 sm:mb-20 shadow-xs overflow-hidden">
+          <section className="w-full rounded-2xl sm:rounded-[40px] bg-[#FFF5ED] border border-[#FFE0CC] p-4 xs:p-6 sm:p-12 lg:p-16 mb-12 sm:mb-20 shadow-xs overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 items-center">
               
               {/* Left Column: Deal Copy & CTA */}
@@ -606,7 +606,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 <span className="text-xs sm:text-sm font-black tracking-widest uppercase text-[#FF5722] mb-3 block">
                   {dealConfig?.badge || dealProduct.badge || 'ECO CHOICE'}
                 </span>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.08] mb-4 whitespace-pre-line">
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.08] mb-4 whitespace-pre-line">
                   {dealConfig?.title || "Grab It Before\nIt's Gone!"}
                 </h2>
                 <p className="text-base sm:text-lg text-stone-600 mb-8 font-medium max-w-md">
@@ -627,7 +627,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
               <div className="lg:col-span-7">
                 <div 
                   onClick={() => onQuickView(dealProduct)}
-                  className="bg-white rounded-3xl p-7 sm:p-9 lg:p-10 shadow-lg border border-stone-200/70 flex flex-col sm:flex-row items-center gap-8 lg:gap-10 group cursor-pointer hover:shadow-2xl transition-shadow"
+                  className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-9 lg:p-10 shadow-lg border border-stone-200/70 flex flex-col sm:flex-row items-center gap-5 sm:gap-10 group cursor-pointer hover:shadow-2xl transition-shadow"
                 >
                   
                   {/* Product Thumbnail */}
@@ -676,7 +676,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     </div>
 
                     {/* 4 Square Countdown Timer Boxes */}
-                    <div className="grid grid-cols-4 gap-3 max-w-sm">
+                    <div className="grid grid-cols-4 gap-1.5 sm:gap-3 max-w-sm">
                       
                       {/* HRS */}
                       <div className="rounded-2xl border border-stone-200/90 bg-stone-50/80 p-2.5 sm:p-3 text-center">

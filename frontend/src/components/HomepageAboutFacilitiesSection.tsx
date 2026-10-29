@@ -63,7 +63,7 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
       {/* ========================================================
           PART 1: ABOUT ECOTEX BRAND STORY & LEADERSHIP SHOWCASE
          ======================================================== */}
-      <section className="py-16 sm:py-24 lg:py-28 w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
+      <section className="py-12 sm:py-24 lg:py-28 w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center">
           
           {/* Left Column: Brand Story */}
@@ -75,11 +75,11 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0f172a] uppercase leading-[1.08] mb-6">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0f172a] uppercase leading-[1.08] mb-4 sm:mb-6">
               {aConfig?.storyTitle || siteSettings?.aboutTitle || 'We Are Ecotex'}
             </h2>
 
-            <blockquote className="border-l-4 border-[#166534] pl-5 sm:pl-6 my-2 text-lg sm:text-xl lg:text-2xl font-medium text-slate-900 leading-relaxed italic">
+            <blockquote className="border-l-4 border-[#166534] pl-3.5 sm:pl-6 my-2 text-sm sm:text-xl lg:text-2xl font-medium text-slate-900 leading-relaxed italic">
               "{aConfig?.missionQuote || siteSettings?.aboutMission || 'We engineered our circular manufacturing framework around a simple premise: commercial packaging can protect goods and elevate brands without ever polluting our natural world.'}"
             </blockquote>
 
@@ -168,9 +168,9 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
           </div>
 
           {/* 3 Metric Stat Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-14">
-            <div className="p-6 rounded-2xl bg-[#f0fdf4] border border-[#bbf7d0] text-center">
-              <p className="text-3xl sm:text-4xl font-black font-mono text-[#166534]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mb-10 sm:mb-14">
+            <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-[#f0fdf4] border border-[#bbf7d0] text-center">
+              <p className="text-2xl sm:text-4xl font-black font-mono text-[#166534]">
                 {fConfig?.annualCapacity || '50,000,000+'}
               </p>
               <p className="text-xs font-bold uppercase tracking-wider text-slate-700 mt-1">
@@ -214,7 +214,7 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
                 className="group rounded-3xl overflow-hidden border border-slate-200/90 bg-white shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
               >
                 {/* Photo Header */}
-                <div className="relative w-full h-56 sm:h-64 overflow-hidden bg-slate-900">
+                <div className="relative w-full h-44 sm:h-64 overflow-hidden bg-slate-900">
                   <img
                     src={hub.image || (idx === 0 ? 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80' : 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80')}
                     alt={hub.name}
@@ -234,7 +234,7 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
                 </div>
 
                 {/* Hub Details */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div className="flex items-start gap-2.5 text-xs text-slate-600">
                     <MapPin className="w-4 h-4 text-[#166534] shrink-0 mt-0.5" />
                     <span>{hub.address}</span>
