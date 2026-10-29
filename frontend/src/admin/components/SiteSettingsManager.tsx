@@ -199,6 +199,66 @@ return () => clearTimeout(timer);
     });
   };
 
+    // Shipping & Fulfillment Updater
+  const handleShippingChange = (field: keyof ShippingConfig, value: any) => {
+    setFormData(prev => {
+      const updatedShipping = {
+        ...(prev.shippingConfig || {
+          freeShippingThreshold: 1000,
+          standardShippingRate: 50,
+          expressShippingRate: 120,
+          estimatedTransitDays: '3-5 Business Days (Continental US)',
+          freightCarrier: 'Direct LTL Pallet Freight (FedEx Freight / R+L Carriers / Old Dominion)',
+          shippingPolicyNotice: 'All wholesale pallet orders ship FOB Corona, CA warehouse. Shrink-wrapped with corner guards on 40x48 heat-treated pallets.',
+          warehouseHub: 'Corona Distribution & Fulfillment Center, 1200 Industrial Parkway, Corona, CA 92881',
+          localPickupAvailable: true,
+          sampleDispatchNotice: 'Free fabric swatches & physical sample bags dispatched within 24 hours via USPS Priority Mail.'
+        }),
+        [field]: value
+      };
+      const extraUpdates: Partial<SiteSettings> = { shippingConfig: updatedShipping };
+      if (field === 'freeShippingThreshold') {
+        extraUpdates.quoteCalcConfig = {
+          plateFee: prev.quoteCalcConfig?.plateFee ?? 120,
+          freeFreightThreshold: Number(value),
+          leadTimeBlank: prev.quoteCalcConfig?.leadTimeBlank ?? '2-4 Business Days',
+          leadTimeCustom: prev.quoteCalcConfig?.leadTimeCustom ?? '10-14 Business Days'
+        };
+      }
+      return { ...prev, ...extraUpdates };
+    });
+  };
+
+  // Footer & Legal Configuration Updater
+  const handleFooterChange = (field: keyof FooterConfig, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      footerConfig: {
+        ...(prev.footerConfig || {
+          newsletterTitle: 'Subscribe To Our Quarterly Newsletter',
+          newsletterSubtitle: 'Receive direct mill pricing updates, material innovation whitepapers, and California SB 54 regulatory packaging briefs.',
+          newsletterBgImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=80',
+          newsletterBtnText: 'Subscribe',
+          newsletterActive: true,
+          tagline: 'Direct manufacturer of certified circular non-woven, compostable bio-PLA, and insulated wholesale packaging for global commercial enterprise.',
+          copyrightNotice: 'Copyright 2026 © Ecotex Inc. All rights reserved.',
+          col1Title: 'ECOTEX',
+          col2Title: 'SERVICES',
+          col3Title: 'EVENTS',
+          socialTwitter: 'https://twitter.com',
+          socialFacebook: 'https://facebook.com',
+          socialLinkedin: 'https://linkedin.com',
+          socialInstagram: 'https://instagram.com',
+          socialYoutube: 'https://youtube.com',
+          termsNotice: 'TERMS & CONDITIONS',
+          privacyNotice: 'PRIVACY POLICY',
+          sitemapNotice: 'SITEMAP'
+        }),
+        [field]: value
+      }
+    }));
+  };
+
   // Test WhatsApp Alert
   const handleTestWhatsApp = () => {
     const phone = formData.orderNotifications?.whatsappNumber || formData.phone || '+1 (951) 450-9773';
