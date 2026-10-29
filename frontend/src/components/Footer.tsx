@@ -109,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           2. MAIN FOOTER BODY (5 COLUMNS - EXACT MATCH TO IMAGE 2)
          ======================================================== */}
       <div className="w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 pt-16 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
           
           {/* Column 1: Brand Logo & Address (4 cols) */}
           <div className="lg:col-span-4">
@@ -142,125 +142,128 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
 
-          {/* Column 2: ECOTEX Navigation (2 cols) */}
-          <div className="lg:col-span-2">
-            <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              {siteSettings?.footerConfig?.col1Title || 'ECOTEX'}
-            </h5>
-            <ul className="space-y-2.5 text-xs text-slate-300">
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('home')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Home
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('about')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  About
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('shop')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Shop
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('contact')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Contact
-                </button>
-              </li>
-            </ul>
-          </div>
+          {/* Middle 3 Columns: ECOTEX, SERVICES, EVENTS (in 1 line on mobile & tablets) */}
+          <div className="lg:col-span-6 grid grid-cols-3 gap-3 sm:gap-6">
+            
+            {/* Column 2: ECOTEX Navigation */}
+            <div>
+              <h5 className="text-[11px] sm:text-xs font-black uppercase tracking-[0.12em] sm:tracking-[0.18em] text-white mb-3 sm:mb-4">
+                {siteSettings?.footerConfig?.col1Title || 'ECOTEX'}
+              </h5>
+              <ul className="space-y-2 sm:space-y-2.5 text-[11px] sm:text-xs text-slate-300">
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('home')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Home
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('about')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    About
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('shop')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Shop
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('contact')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Contact
+                  </button>
+                </li>
+              </ul>
+            </div>
 
+            {/* Column 3: SERVICES / PRODUCTS */}
+            <div>
+              <h5 className="text-[11px] sm:text-xs font-black uppercase tracking-[0.12em] sm:tracking-[0.18em] text-white mb-3 sm:mb-4">
+                {siteSettings?.footerConfig?.col2Title || 'SERVICES'}
+              </h5>
+              <ul className="space-y-2 sm:space-y-2.5 text-[11px] sm:text-xs text-slate-300">
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('shop')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Non-Woven Totes
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('shop')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    D-Cut Bags
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('shop')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Laminated Gift Bags
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNav('contact')} 
+                    className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
+                  >
+                    Custom Flexo Print
+                  </button>
+                </li>
+              </ul>
+            </div>
 
+            {/* Column 4: EVENTS / STANDARDS */}
+            <div>
+              <h5 className="text-[11px] sm:text-xs font-black uppercase tracking-[0.12em] sm:tracking-[0.18em] text-white mb-3 sm:mb-4">
+                {siteSettings?.footerConfig?.col3Title || 'EVENTS'}
+              </h5>
+              <ul className="space-y-2 sm:space-y-2.5 text-[11px] sm:text-xs text-slate-300">
+                <li>
+                  <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
+                    Pack Expo 2026
+                  </a>
+                </li>
+                <li>
+                  <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
+                    Sustainable Retail
+                  </a>
+                </li>
+                <li>
+                  <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
+                    SB 270 Workshops
+                  </a>
+                </li>
+                <li>
+                  <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
+                    Sample Roadshow
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-          {/* Column 3: SERVICES / PRODUCTS (2 cols) */}
-          <div className="lg:col-span-2">
-            <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              {siteSettings?.footerConfig?.col2Title || 'SERVICES'}
-            </h5>
-            <ul className="space-y-2.5 text-xs text-slate-300">
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('shop')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Non-Woven Totes
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('shop')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  D-Cut Bags
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('shop')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Laminated Gift Bags
-                </button>
-              </li>
-              <li>
-                <button 
-                  type="button" 
-                  onClick={() => handleNav('contact')} 
-                  className="hover:text-[#22c55e] transition-colors cursor-pointer text-left"
-                >
-                  Custom Flexo Print
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: EVENTS / STANDARDS (2 cols) */}
-          <div className="lg:col-span-2">
-            <h5 className="text-xs font-black uppercase tracking-[0.18em] text-white mb-4">
-              {siteSettings?.footerConfig?.col3Title || 'EVENTS'}
-            </h5>
-            <ul className="space-y-2.5 text-xs text-slate-300">
-              <li>
-                <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
-                  Pack Expo 2026
-                </a>
-              </li>
-              <li>
-                <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
-                  Sustainable Retail
-                </a>
-              </li>
-              <li>
-                <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
-                  SB 270 Workshops
-                </a>
-              </li>
-              <li>
-                <a href="#quote-form" className="hover:text-[#22c55e] transition-colors">
-                  Sample Roadshow
-                </a>
-              </li>
-            </ul>
           </div>
 
           {/* Column 5: FOLLOW (2 cols) */}

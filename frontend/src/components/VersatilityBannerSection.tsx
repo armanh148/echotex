@@ -47,7 +47,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
   // SVG icons mapping for the 4 feature cards
   const featureIcons = [
     // 1. Eco-friendly
-    <svg key="1" className="w-12 h-12 text-[#86C59E]" viewBox="0 0 48 48" fill="none">
+    <svg key="1" className="w-10 h-10 sm:w-12 sm:h-12 text-[#86C59E]" viewBox="0 0 48 48" fill="none">
       <rect x="12" y="16" width="24" height="26" rx="4" fill="#B2E2C5" />
       <path d="M18 16V12C18 8.686 20.686 6 24 6C27.314 6 30 8.686 30 12V16" stroke="#4E9F76" strokeWidth="3" strokeLinecap="round" />
       <path d="M8 24C6.5 28 8 33 12 36" stroke="#4E9F76" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
@@ -56,14 +56,14 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
       <path d="M21 29C23 27 25 25 27 23" stroke="#4E9F76" strokeWidth="1.5" strokeLinecap="round" />
     </svg>,
     // 2. Durable
-    <svg key="2" className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+    <svg key="2" className="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 48 48" fill="none">
       <path d="M12 16L16 42H32L36 16H12Z" fill="#86C59E" />
       <path d="M16 16V10C16 7.79 17.79 6 20 6H28C30.21 6 32 7.79 32 10V16" stroke="#4E9F76" strokeWidth="3" strokeLinecap="round" />
       <path d="M16 22H32" stroke="#B2E2C5" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
       <path d="M24 16V42" stroke="#4E9F76" strokeWidth="1.5" opacity="0.2" />
     </svg>,
     // 3. Customizable
-    <svg key="3" className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+    <svg key="3" className="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 48 48" fill="none">
       <rect x="10" y="8" width="28" height="34" rx="3" fill="#4E9F76" />
       <rect x="18" y="14" width="12" height="5" rx="2.5" fill="white" />
       <circle cx="20" cy="27" r="1.5" fill="#B2E2C5" />
@@ -71,7 +71,7 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
       <path d="M20 33C21.5 35 26.5 35 28 33" stroke="white" strokeWidth="2" strokeLinecap="round" />
     </svg>,
     // 4. Breathable
-    <svg key="4" className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+    <svg key="4" className="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 48 48" fill="none">
       <circle cx="24" cy="24" r="18" fill="#4E9F76" />
       <circle cx="24" cy="24" r="15" stroke="#B2E2C5" strokeWidth="1.5" strokeDasharray="2 2" />
       <path d="M18 25C18 20 22 17 28 17C28 23 25 27 20 27" fill="#B2E2C5" />
@@ -98,19 +98,19 @@ export const VersatilityBannerSection: React.FC<VersatilityBannerSectionProps> =
           </p>
 
           {/* 4 Feature Columns */}
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
+          <div className="mt-8 sm:mt-14 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 text-center">
             {vConfig.featureCards.map((card, idx) => (
               <div 
                 key={card.id || idx}
-                className="flex flex-col items-center p-5 rounded-2xl bg-[#fafbf9]/60 hover:bg-white border border-transparent hover:border-[#B2E2C5]/50 transition-all hover:shadow-lg group"
+                className="flex flex-col items-center p-3.5 sm:p-5 rounded-2xl bg-[#fafbf9]/60 hover:bg-white border border-stone-200/60 hover:border-[#B2E2C5]/80 transition-all hover:shadow-lg group"
               >
-                <div className="w-16 h-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mb-2.5 sm:mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                   {featureIcons[idx % featureIcons.length]}
                 </div>
-                <h3 className="text-base font-bold text-[#0f172a] mb-2 group-hover:text-[#4E9F76] transition-colors">
+                <h3 className="text-xs sm:text-base font-bold text-[#0f172a] mb-1 sm:mb-2 group-hover:text-[#4E9F76] transition-colors">
                   {card.title}
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
+                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed max-w-xs">
                   {card.description}
                 </p>
               </div>
