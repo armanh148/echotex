@@ -197,6 +197,7 @@ export default function App() {
                 onQuickView={handleOpenProductDetail}
                 onAddToCart={(p, color, qty) => addToCart(p, color, qty)}
                 onOpenQuoteForProduct={handleOpenQuoteForProduct}
+                onNavigateToShop={() => handleNavigate('shop')}
               />
 
               {/* Versatility Banner & Sustainable Fashion Section */}

@@ -33,6 +33,7 @@ interface ShopSectionProps {
   showHero?: boolean;
   showCategories?: boolean;
   showDeal?: boolean;
+  onNavigateToShop?: () => void;
 }
 
 export const ShopSection: React.FC<ShopSectionProps> = ({
@@ -41,7 +42,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   onOpenQuoteForProduct,
   showHero = true,
   showCategories = true,
-  showDeal = true
+  showDeal = true,
+  onNavigateToShop
 }) => {
   // Category & Filter State
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -55,6 +57,29 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const categoriesRef = useRef<HTMLDivElement>(null);
   const categorySliderRef = useRef<HTMLDivElement>(null);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+
+  const newArrivalsSliderRef = useRef<HTMLDivElement>(null);
+  const [activeNewArrivalsPage, setActiveNewArrivalsPage] = useState(0);
+
+  const scrollNewArrivals = (direction: 'left' | 'right') => {
+    if (newArrivalsSliderRef.current) {
+      const scrollAmount = newArrivalsSliderRef.current.clientWidth * 0.95;
+      newArrivalsSliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleNewArrivalsScroll = () => {
+    if (newArrivalsSliderRef.current) {
+      const { scrollLeft, clientWidth } = newArrivalsSliderRef.current;
+      const pageWidth = clientWidth * 0.90;
+      const page = Math.round(scrollLeft / (pageWidth || 1));
+      const maxPages = Math.ceil(featuredArrivals.length / 2) - 1;
+      setActiveNewArrivalsPage(Math.max(0, Math.min(page, Math.max(0, maxPages))));
+    }
+  };
 
   const scrollCategory = (direction: 'left' | 'right') => {
     if (categorySliderRef.current) {
@@ -702,32 +727,78 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
         )}
 
         {/* ========================================================
-            5. NEW ARRIVALS (4 PRODUCT CARDS - FULL-WIDTH EXPANSIVE GRID)
+            5. NEW ARRIVALS (2 PER LINE ON MOBILE CAROUSEL - RESPONSIVE)
            ======================================================== */}
         <section id="new-arrivals-section" className="mb-16 sm:mb-20">
           
-          {/* Header Row: Title */}
-          <div className="flex items-center justify-between mb-10 pb-4 border-b border-stone-200">
+          {/* Header Row: Title & See All Link + Mobile Controls */}
+          <div className="flex items-center justify-between mb-6 sm:mb-10 pb-3 sm:pb-4 border-b border-stone-200">
             <div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
                 {activeCategory !== 'all' 
                   ? (displayCategories.find(c => c.id === activeCategory)?.label || 'Products')
                   : (siteSettings?.shopConfig?.newArrivalsHeading || 'New Arrivals')}
               </h2>
             </div>
-            {activeCategory !== 'all' && (
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              {activeCategory !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory('all')}
+                  className="text-xs font-bold text-[#FF5722] hover:underline cursor-pointer mr-1"
+                >
+                  Clear Filter
+                </button>
+              )}
+
+              {/* Mobile Carousel Arrow Controls */}
+              {featuredArrivals.length > 2 && (
+                <div className="flex sm:hidden items-center gap-1.5 mr-1">
+                  <button
+                    type="button"
+                    onClick={() => scrollNewArrivals('left')}
+                    className="w-8 h-8 rounded-full bg-white border border-stone-200 shadow-2xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50"
+                    aria-label="Previous Products"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollNewArrivals('right')}
+                    className="w-8 h-8 rounded-full bg-white border border-stone-200 shadow-2xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50"
+                    aria-label="Next Products"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* SEE ALL LINK (Lands on Shop page) */}
               <button
                 type="button"
-                onClick={() => setActiveCategory('all')}
-                className="text-xs font-bold text-[#FF5722] hover:underline cursor-pointer"
+                onClick={() => {
+                  if (onNavigateToShop) {
+                    onNavigateToShop();
+                  } else {
+                    const shopEl = document.getElementById('shop-categories-section') || document.getElementById('new-arrivals-section');
+                    shopEl?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#0d3419] hover:bg-[#165a2d] text-white text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:scale-105 active:scale-95"
               >
-                Clear Filter (Show All)
+                <span>See All</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </button>
-            )}
+            </div>
           </div>
 
-          {/* 4 Product Cards Grid - Generous Sizing across 1820px */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+          {/* 2 Products per Line on Mobile Touch-Carousel / 4-Col Grid on Desktop */}
+          <div
+            ref={newArrivalsSliderRef}
+            onScroll={handleNewArrivalsScroll}
+            className="flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-3 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-2 lg:grid-cols-4 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+          >
             {featuredArrivals.map((product) => {
               const isWishlisted = !!wishlist[product.id];
               const isProdOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
@@ -736,17 +807,17 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 <div
                   key={product.id}
                   onClick={() => onQuickView(product)}
-                  className="group relative flex flex-col bg-white rounded-3xl border border-stone-200/90 p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer"
+                  className="group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl border border-stone-200/90 p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-8px)] sm:w-auto snap-start sm:snap-align-none"
                 >
                   
                   {/* Top Bar inside Card: NEW/SOLD OUT Badge on left, Heart Icon on right */}
-                  <div className="flex items-center justify-between w-full mb-4 relative z-10">
+                  <div className="flex items-center justify-between w-full mb-2.5 sm:mb-4 relative z-10">
                     {isProdOutOfStock ? (
-                      <span className="px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                      <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-rose-600 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider shadow-2xs">
                         SOLD OUT
                       </span>
                     ) : (
-                      <span className="px-3 py-1 rounded-full bg-stone-900 text-white text-[11px] font-black uppercase tracking-wider shadow-2xs">
+                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-stone-900 text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider shadow-2xs">
                         NEW
                       </span>
                     )}
@@ -754,16 +825,16 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
                       aria-label="Add to wishlist"
-                      className="w-9 h-9 rounded-full bg-white/95 hover:bg-white flex items-center justify-center text-stone-500 hover:text-red-500 shadow-2xs border border-stone-200/80 transition-transform active:scale-90"
+                      className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/95 hover:bg-white flex items-center justify-center text-stone-500 hover:text-red-500 shadow-2xs border border-stone-200/80 transition-transform active:scale-90"
                     >
-                      <Heart className={`w-4.5 h-4.5 transition-colors ${
+                      <Heart className={`w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 transition-colors ${
                         isWishlisted ? 'fill-red-500 text-red-500' : 'text-stone-600'
                       }`} />
                     </button>
                   </div>
 
                   {/* Clean Centered Product Image */}
-                  <div className="relative w-full aspect-square bg-[#FAF8F5] rounded-2xl flex items-center justify-center p-6 mb-5 overflow-hidden">
+                  <div className="relative w-full aspect-square bg-[#FAF8F5] rounded-xl sm:rounded-2xl flex items-center justify-center p-3 sm:p-6 mb-3 sm:mb-5 overflow-hidden">
                     <img
                       src={product.image || '/images/essential-hoodie.jpg'}
                       alt={product.name}
@@ -774,24 +845,24 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
 
                   {/* Bottom Info: Title, Price & Shopping Cart Button */}
                   <div className="mt-auto">
-                    <h3 className="font-extrabold text-base sm:text-lg text-stone-900 truncate mb-2 group-hover:text-[#0d3419] transition-colors">
+                    <h3 className="font-extrabold text-xs sm:text-base lg:text-lg text-stone-900 truncate mb-1 sm:mb-2 group-hover:text-[#0d3419] transition-colors">
                       {product.name}
                     </h3>
 
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="font-black text-xl sm:text-2xl text-stone-900 block leading-tight">
+                    <div className="flex items-end sm:items-center justify-between gap-1">
+                      <div className="min-w-0">
+                        <div className="flex items-baseline gap-1">
+                          <span className="font-black text-sm sm:text-xl lg:text-2xl text-stone-900 block leading-tight">
                             ${product.pricePerUnit.toFixed(2)}
                           </span>
-                          <span className="text-xs text-stone-500 font-bold">/ box</span>
+                          <span className="text-[10px] sm:text-xs text-stone-500 font-bold">/ box</span>
                         </div>
-                        <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                          <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/80">
-                            📦 {product.pcsPerBox || 200} pcs/box
+                        <div className="flex items-center gap-1 flex-wrap mt-1">
+                          <span className="text-[8px] sm:text-[10px] font-bold text-amber-800 bg-amber-50 px-1 sm:px-1.5 py-0.5 rounded border border-amber-200/80 truncate">
+                            📦 {product.pcsPerBox || 200} pcs
                           </span>
-                          <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200/70">
-                            {product.moq > 1 ? `MOQ: ${product.moq.toLocaleString()} boxes` : 'Min: 1 box'}
+                          <span className="hidden xs:inline-block text-[8px] sm:text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1 sm:px-1.5 py-0.5 rounded border border-emerald-200/70 truncate">
+                            {product.moq > 1 ? `MOQ: ${product.moq}` : 'Min: 1'}
                           </span>
                         </div>
                       </div>
@@ -801,17 +872,17 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                         <button
                           disabled={true}
                           title="Sold Out / Out of Stock"
-                          className="w-11 h-11 rounded-2xl border border-stone-200 bg-stone-100 text-stone-400 flex items-center justify-center cursor-not-allowed shrink-0"
+                          className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl border border-stone-200 bg-stone-100 text-stone-400 flex items-center justify-center cursor-not-allowed shrink-0"
                         >
-                          <Lock className="w-4 h-4 text-stone-400" />
+                          <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-stone-400" />
                         </button>
                       ) : (
                         <button
                           onClick={(e) => handleQuickAdd(product, e)}
                           aria-label={`Add ${product.name} to cart`}
-                          className="w-11 h-11 rounded-2xl border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors shadow-2xs active:scale-95 cursor-pointer shrink-0"
+                          className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors shadow-2xs active:scale-95 cursor-pointer shrink-0"
                         >
-                          <ShoppingCart className="w-5 h-5 stroke-[2]" />
+                          <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2]" />
                         </button>
                       )}
                     </div>
@@ -821,6 +892,30 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
               );
             })}
           </div>
+
+          {/* Mobile Carousel Indicator Dots */}
+          {featuredArrivals.length > 2 && (
+            <div className="flex sm:hidden justify-center items-center gap-1.5 mt-3.5">
+              {Array.from({ length: Math.ceil(featuredArrivals.length / 2) }).map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    if (newArrivalsSliderRef.current) {
+                      const scrollTarget = idx * (newArrivalsSliderRef.current.clientWidth * 0.95);
+                      newArrivalsSliderRef.current.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+                    }
+                  }}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    activeNewArrivalsPage === idx
+                      ? 'w-6 bg-[#0d3419]'
+                      : 'w-1.5 bg-stone-300 hover:bg-stone-400'
+                  }`}
+                  aria-label={`Go to page ${idx + 1}`}
+                />
+              ))}
+            </div>
+          )}
 
         </section>
 
