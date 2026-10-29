@@ -1,0 +1,1118 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { 
+  Home,
+  Sliders, 
+  Sparkles, 
+  Layers, 
+  Users, 
+  Factory, 
+  Phone, 
+  Save, 
+  RotateCcw, 
+  CheckCircle2, 
+  ExternalLink,
+  Eye,
+  Plus,
+  Trash2,
+  AlertCircle,
+  ArrowRight,
+  ShieldCheck,
+  Check,
+  MapPin,
+  Mail,
+  Globe,
+  Clock,
+  ThumbsUp,
+  HelpCircle
+} from 'lucide-react';
+import { useStore, HeroConfig } from '../../store/useStore';
+import { ImageUploader } from './ImageUploader';
+import { 
+  VersatilityConfig, 
+  AboutConfig, 
+  ContactConfig, 
+  FacilitiesConfig, 
+  SiteSettings 
+} from '../../types';
+
+type HomepageTab = 
+  | 'all'
+  | 'hero' 
+  | 'sustainable-fashion' 
+  | 'versatility' 
+  | 'about' 
+  | 'facilities' 
+  | 'contact';
+
+interface HomepageManagerProps {
+  onNavigateToSection?: (section: string) => void;
+}
+
+export const HomepageManager: React.FC<HomepageManagerProps> = () => {
+  const { 
+    heroConfig, 
+    updateHeroConfig, 
+    siteSettings, 
+    updateSiteSettings,
+    siteImages,
+    updateSiteImages
+  } = useStore();
+
+  const [activeTab, setActiveTab] = useState<HomepageTab>('hero');
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Local draft state for Hero
+  const [localHero, setLocalHero] = useState<HeroConfig>(heroConfig);
+
+  // Local draft state for Site Settings sections
+  const [localVersatility, setLocalVersatility] = useState<VersatilityConfig>(
+    siteSettings?.versatilityConfig || {
+      sustainableFashionTitle: 'Sustainable Fashion For A Greener Tomorrow',
+      sustainableFashionSubtitle: 'Discover our eco-friendly bags made from sustainable materials. Join the movement to reduce environmental impact without compromising style!',
+      featureCards: [
+        { id: 'vc1', title: 'Eco-Friendly', description: 'Non-woven polypropylene bags are considered eco-friendly because they are reusable and can replace single-use plastic bags.' },
+        { id: 'vc2', title: 'Durable', description: 'These bags are known for their strength and durability. They can withstand multiple uses and are capable of carrying heavy loads.' },
+        { id: 'vc3', title: 'Customizable', description: 'Non-woven polypropylene bags can be easily customized with various designs, colors, and logos, making them a popular choice.' },
+        { id: 'vc4', title: 'Breathable', description: 'The fabric structure allows air circulation, making it ideal for retail garments, food produce, and everyday merchandise.' }
+      ],
+      bannerTitle: 'Exploring The Versatility of Non-Woven PP Bags',
+      bannerSubtitle: 'Dive deeper into the various styles, sizes, and designs available in non-woven polypropylene bags.',
+      bannerButtonText: 'View Collection',
+      bannerImage: siteImages?.facilityPhoto || '/images/versatility-banner-bg.jpg',
+      bottomTrustBadges: [
+        'Fast Turnaround Times',
+        'A friendly, open and honest service',
+        'Ethical and Fairly Traded Products',
+        'Expert Customer Service'
+      ]
+    }
+  );
+
+  const [localAbout, setLocalAbout] = useState<AboutConfig>(
+    siteSettings?.aboutConfig || {
+      heroTitle: 'About Us',
+      heroSubtitle: 'A sustainable future for packaging. Engineered with purpose, manufactured for impact.',
+      storyTitle: 'We Are Ecotex',
+      missionQuote: 'We engineered our circular manufacturing framework around a simple premise: commercial packaging can protect goods and elevate brands without ever polluting our natural world.',
+      storyParagraph1: 'Founded to combat the global crisis of single-use plastic waste, Ecotex Inc. operates as a vertically integrated packaging manufacturer. We specialize in high-tensile reusable non-woven polypropylene totes, certified compostable cornstarch blends, and reclaimed post-industrial cotton wiping textiles.',
+      storyParagraph2: 'From our corporate headquarters in California to state-of-the-art automated manufacturing facilities, every product is subjected to rigorous tensile testing, automated ultrasonic seam welding, and non-toxic water-based printing. We empower grocery retailers, boutique lifestyle brands, and logistics operations across the globe to achieve zero-waste compliance with full chain-of-custody audit trails.',
+      founderName: 'Rashid Mahmood',
+      founderRole: 'Managing Director & Founder, Ecotex Inc.',
+      founderImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=85',
+      workshopImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=85',
+      whyChooseUsTitle: 'Why Choose Us',
+      whyChooseUsSubtitle: 'We combine German ultrasonic welding machinery, ISO 9001 certified batch audits, and non-toxic soy formulations to deliver high-capacity packaging engineered to outlast disposable plastic.',
+      whyChooseUsFeatures: [
+        { title: '100% Recyclable Fabrics', description: 'Manufactured with virgin and pre-consumer polypropylene, lab-certified for 125+ reuse cycles.' },
+        { title: 'Easy to Customize', description: 'Flexible sizing, ultrasonic handle sealing, custom gusset depths, and pantone-matched dyed fabrics.' }
+      ],
+      teamSectionTitle: 'Meet Our Team',
+      teamSectionSubtitle: 'The experts behind global sustainable packaging.',
+      teamMembers: []
+    }
+  );
+
+  const [localFacilities, setLocalFacilities] = useState<FacilitiesConfig>(
+    siteSettings?.facilitiesConfig || {
+      title: 'State-of-the-Art Manufacturing & Fulfillment Facilities',
+      subtitle: 'Dual-continental operations combining California wholesale fulfillment with high-speed automated manufacturing mills.',
+      storySnippet: 'From automated ultrasonic welding to high-definition 8-color flexographic printing, our facilities are engineered for maximum circularity and zero-landfill compliance.',
+      annualCapacity: '50,000,000+ Units / Year',
+      certificationsMetric: 'ISO 9001:2015 & ASTM D6400',
+      activeLinesMetric: '14 High-Speed Extrusion Lines',
+      showOnHomepage: true,
+      bannerImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=85',
+      hubs: [
+        {
+          name: 'Corona Distribution & Testing Hub',
+          tag: 'US Headquarters & Fulfillment',
+          address: '1200 Industrial Parkway, Corona, CA 92881',
+          capabilities: ['Same-Day Pallet Dispatch', 'ASTM Tensile Testing Lab', 'Custom Sample Prototyping'],
+          image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
+          googleMapsUrl: 'https://maps.google.com/?q=1200+Industrial+Parkway,+Corona,+CA+92881'
+        },
+        {
+          name: 'Primary Manufacturing Plant',
+          tag: 'Heavy Industrial Production',
+          address: 'Sector 15, Korangi Industrial Area, Karachi, PK',
+          capabilities: ['Automated Ultrasonic Welding', '8-Color Flexographic Printing', 'Virgin PP & Bio-PLA Extrusion'],
+          image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80',
+          googleMapsUrl: 'https://maps.google.com/?q=Korangi+Industrial+Area+Karachi'
+        }
+      ]
+    }
+  );
+
+  const [localContact, setLocalContact] = useState<ContactConfig>(
+    siteSettings?.contactConfig || {
+      headline: "Let's Engineer Your Sustainable Wholesale Packaging Solution",
+      email: siteSettings?.email || 'orders@ecotexinc.com',
+      phone: siteSettings?.phone || '+1 (951) 450-9773',
+      secondaryPhone: siteSettings?.secondaryPhone || '(951) 555-ECOTEX',
+      facilityAddress: siteSettings?.facilityAddress || '1200 Industrial Parkway, Corona, CA 92881',
+      plantAddress: siteSettings?.plantAddress || 'Sector 15, Korangi Industrial Area, Karachi, PK',
+      facebookUrl: 'https://facebook.com',
+      instagramUrl: 'https://instagram.com',
+      twitterUrl: 'https://twitter.com',
+      linkedinUrl: 'https://linkedin.com',
+      googleMapsUrl: 'https://maps.google.com/?q=1200+Industrial+Parkway,+Corona,+CA+92881',
+      googleMapsEmbedUrl: 'https://maps.google.com/maps?q=1200%20Industrial%20Parkway%2C%20Corona%2C%20CA%2092881&t=&z=14&ie=UTF8&iwloc=&output=embed'
+    }
+  );
+
+  // Keep state in sync if store updates externally
+  useEffect(() => {
+    if (heroConfig) setLocalHero(heroConfig);
+  }, [heroConfig]);
+
+  useEffect(() => {
+    if (siteSettings?.versatilityConfig) setLocalVersatility(siteSettings.versatilityConfig);
+    if (siteSettings?.aboutConfig) setLocalAbout(siteSettings.aboutConfig);
+    if (siteSettings?.facilitiesConfig) setLocalFacilities(siteSettings.facilitiesConfig);
+    if (siteSettings?.contactConfig) setLocalContact(siteSettings.contactConfig);
+  }, [siteSettings]);
+
+  // Save all homepage changes to store and localStorage
+  const handleSaveAll = () => {
+    // 1. Update Hero
+    updateHeroConfig(localHero);
+
+    // 2. Update Site Settings with all sub-configs
+    const updatedSettings: Partial<SiteSettings> = {
+      heroTitle: localHero.title || siteSettings.heroTitle,
+      heroSubtitle: localHero.subtitle || siteSettings.heroSubtitle,
+      facilityAddress: localContact.facilityAddress,
+      plantAddress: localContact.plantAddress,
+      email: localContact.email,
+      phone: localContact.phone,
+      secondaryPhone: localContact.secondaryPhone,
+      aboutTitle: localAbout.storyTitle || siteSettings.aboutTitle,
+      aboutMission: localAbout.missionQuote || siteSettings.aboutMission,
+      aboutStory: localAbout.storyParagraph1 || siteSettings.aboutStory,
+      versatilityConfig: localVersatility,
+      aboutConfig: localAbout,
+      facilitiesConfig: localFacilities,
+      contactConfig: localContact
+    };
+
+    updateSiteSettings(updatedSettings);
+
+    // Also update bannerImage in siteImages if changed
+    if (localVersatility.bannerImage) {
+      updateSiteImages({ facilityPhoto: localVersatility.bannerImage });
+    }
+
+    // Trigger cross-window live update
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('ecotex_homepage_updated', {
+        detail: { hero: localHero, settings: updatedSettings }
+      }));
+    }
+
+    setSaveSuccess(true);
+    setToastMessage('All Homepage sections updated & published live!');
+    setTimeout(() => {
+      setSaveSuccess(false);
+      setToastMessage(null);
+    }, 3500);
+  };
+
+  const handleResetToDefault = () => {
+    if (!window.confirm('Reset all homepage sections back to factory defaults? Any unsaved edits will be discarded.')) return;
+    
+    setLocalHero({
+      title: "It's time to\npack better.",
+      subtitle: "Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags for retail supermarkets, luxury boutiques, and global distributors.",
+      ctaText: "Shop Now",
+      badgeDoctor: "",
+      badgeTrust: "",
+      productImage: "/images/bag-green.png",
+      backgroundImage: "/images/home-hero-bg.jpg",
+      showcasePrice: 0.25,
+      casePackSize: 1000,
+      variants: []
+    });
+
+    setToastMessage('Homepage drafts reset to default. Click Save to publish.');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const tabs: { id: HomepageTab; label: string; icon: React.ElementType; badge?: string }[] = [
+    { id: 'hero', label: '1. Hero Section', icon: Sliders, badge: 'Main Banner' },
+    { id: 'sustainable-fashion', label: '2. Sustainable Fashion', icon: Sparkles, badge: '4 Value Cards' },
+    { id: 'versatility', label: '3. Versatility', icon: Layers, badge: 'Panoramic Banner' },
+    { id: 'about', label: '4. About Ecotex', icon: Users, badge: 'Story & Mission' },
+    { id: 'facilities', label: '5. Facilities', icon: Factory, badge: 'Plants & Machinery' },
+    { id: 'contact', label: '6. Contact Section', icon: Phone, badge: 'Direct Mill Hub' },
+  ];
+
+  const titleLines = (localHero.title || "It's time to\npack better.").split('\n');
+
+  return (
+    <div className="space-y-8 animate-fadeInUp pb-16 font-sans text-[#0f172a] select-none">
+      
+      {/* ========================================================
+          STICKY HEADER & PUBLISH CONTROLS
+         ======================================================== */}
+      <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#B2E2C5]/40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 sticky top-20 z-30 backdrop-blur-md bg-white/95">
+        <div>
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <span className="p-2 rounded-xl bg-[#4E9F76] text-white shadow-xs">
+              <Home className="w-5 h-5" />
+            </span>
+            <div>
+              <h2 className="text-xl font-black text-[#0f172a] uppercase tracking-tight">
+                Homepage Master CMS
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">
+                Pura Homepage edit karein: Hero, Sustainable Fashion, Versatility, Facilities, About, aur Contact.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={handleResetToDefault}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-bold transition-all cursor-pointer"
+            title="Reset to default text and images"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset Defaults</span>
+          </button>
+
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#B2E2C5] text-[#166534] hover:bg-[#F4F9F5] text-xs font-bold transition-all cursor-pointer"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>View Live Site</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
+
+          <button
+            type="button"
+            onClick={handleSaveAll}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+          >
+            {saveSuccess ? (
+              <>
+                <CheckCircle2 className="w-4 h-4 text-emerald-200 animate-bounce" />
+                <span>Published Live!</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Save All Homepage Sections</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Floating Success Feedback Toast */}
+      {toastMessage && (
+        <div className="fixed top-6 right-6 z-[9999] bg-[#0f172a] text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold animate-fadeIn border border-[#22c55e]/50">
+          <CheckCircle2 className="w-4 h-4 text-[#22c55e]" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* ========================================================
+          6-SECTION TAB NAVIGATION PILLS
+         ======================================================== */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap cursor-pointer border ${
+                isActive
+                  ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 scale-[1.02]'
+                  : 'bg-white text-slate-600 hover:text-[#0f172a] hover:bg-slate-50 border-slate-200/80'
+              }`}
+            >
+              <Icon className={`w-4 h-4 ${isActive ? 'text-[#86C59E]' : 'text-slate-400'}`} />
+              <span>{tab.label}</span>
+              {tab.badge && (
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                }`}>
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ========================================================
+          TAB 1: HERO SECTION
+         ======================================================== */}
+      {activeTab === 'hero' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Sliders className="w-5 h-5 text-[#4E9F76]" />
+                  <span>1. Hero Section (Headline, Tagline & Panoramic Scene)</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Customise the large opening visual at the very top of your homepage.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Form Controls */}
+              <div className="lg:col-span-7 space-y-5">
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-bold text-[#0f172a]">
+                      Hero Main Headline (Title)
+                    </label>
+                    <span className="text-[10px] font-semibold text-slate-400">
+                      Use Enter for new line. Last word highlights in green!
+                    </span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    value={localHero.title}
+                    onChange={(e) => setLocalHero({ ...localHero, title: e.target.value })}
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76] font-mono"
+                    placeholder="It's time to&#10;pack better."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                    Hero Subtitle (Paragraph Description)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={localHero.subtitle}
+                    onChange={(e) => setLocalHero({ ...localHero, subtitle: e.target.value })}
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76] leading-relaxed"
+                    placeholder="Engineered non-woven, compostable bio-PLA, and insulated wholesale carrier bags..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                      Primary CTA Button Text
+                    </label>
+                    <input
+                      type="text"
+                      value={localHero.ctaText || 'Shop Now'}
+                      onChange={(e) => setLocalHero({ ...localHero, ctaText: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#166534] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                      placeholder="Shop Now"
+                    />
+                  </div>
+                </div>
+
+                {/* Background Image Upload */}
+                <div className="pt-2 border-t border-slate-100">
+                  <ImageUploader
+                    label="Hero Panoramic Background Image"
+                    description="Upload an image from your computer or choose from presets below."
+                    value={localHero.backgroundImage || '/images/home-hero-bg.jpg'}
+                    onChange={(newUrl) => setLocalHero({ ...localHero, backgroundImage: newUrl })}
+                    aspectRatio="wide"
+                  />
+                </div>
+              </div>
+
+              {/* Live Preview Column */}
+              <div className="lg:col-span-5 flex flex-col">
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                  <span>Live Hero Visual Preview</span>
+                  <span className="text-[10px] text-emerald-600 font-bold">Auto-renders</span>
+                </div>
+                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border border-slate-800 bg-[#07170e] flex flex-col justify-center p-6 text-left group">
+                  {localHero.backgroundImage && localHero.backgroundImage !== 'none' && (
+                    <img 
+                      src={localHero.backgroundImage} 
+                      alt="Hero preview" 
+                      className="absolute inset-0 w-full h-full object-cover opacity-60" 
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60 pointer-events-none" />
+
+                  <div className="relative z-10 space-y-3">
+                    <h4 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                      {titleLines.map((line, idx) => (
+                        <span key={idx} className="block">
+                          {idx === titleLines.length - 1 ? (
+                            <>
+                              <span>{line.split(' ').slice(0, -1).join(' ')} </span>
+                              <span className="text-[#4ade80] underline decoration-[#4ade80]/40">
+                                {line.split(' ').slice(-1)}
+                              </span>
+                            </>
+                          ) : (
+                            line
+                          )}
+                        </span>
+                      ))}
+                    </h4>
+                    <p className="text-[11px] text-slate-200 line-clamp-3 leading-relaxed">
+                      {localHero.subtitle}
+                    </p>
+                    <div>
+                      <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full bg-[#22c55e] text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-md">
+                        {localHero.ctaText || 'Shop Now'} →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          TAB 2: SUSTAINABLE FASHION FOR A GREENER TOMORROW
+         ======================================================== */}
+      {activeTab === 'sustainable-fashion' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#4E9F76]" />
+                  <span>2. Sustainable Fashion For A Greener Tomorrow (4 Value Cards)</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Section heading, subtitle, and 4 feature value proposition cards.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Section Headline Title
+                </label>
+                <input
+                  type="text"
+                  value={localVersatility.sustainableFashionTitle}
+                  onChange={(e) => setLocalVersatility({
+                    ...localVersatility,
+                    sustainableFashionTitle: e.target.value
+                  })}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="Sustainable Fashion For A Greener Tomorrow"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Section Subtitle Description
+                </label>
+                <input
+                  type="text"
+                  value={localVersatility.sustainableFashionSubtitle}
+                  onChange={(e) => setLocalVersatility({
+                    ...localVersatility,
+                    sustainableFashionSubtitle: e.target.value
+                  })}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="Discover our eco-friendly bags made from sustainable materials..."
+                />
+              </div>
+            </div>
+
+            {/* 4 Feature Cards */}
+            <div>
+              <h4 className="text-xs font-black text-[#166534] uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span>4 Value Proposition Cards (Titles & Descriptions)</span>
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {(localVersatility.featureCards || []).map((card, idx) => (
+                  <div key={card.id || idx} className="p-5 rounded-2xl border border-slate-200 bg-[#F4F9F5]/50 hover:bg-white transition-all space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-[#4E9F76] uppercase tracking-wider">
+                        Feature Card #{idx + 1}
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Card Title</label>
+                      <input
+                        type="text"
+                        value={card.title}
+                        onChange={(e) => {
+                          const newCards = [...localVersatility.featureCards];
+                          newCards[idx] = { ...newCards[idx], title: e.target.value };
+                          setLocalVersatility({ ...localVersatility, featureCards: newCards });
+                        }}
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76]"
+                        placeholder="e.g. Eco-Friendly, Durable"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Card Description</label>
+                      <textarea
+                        rows={3}
+                        value={card.description}
+                        onChange={(e) => {
+                          const newCards = [...localVersatility.featureCards];
+                          newCards[idx] = { ...newCards[idx], description: e.target.value };
+                          setLocalVersatility({ ...localVersatility, featureCards: newCards });
+                        }}
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-white focus:outline-none focus:border-[#4E9F76] leading-relaxed"
+                        placeholder="Feature card explanation..."
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          TAB 3: VERSATILITY SECTION (EXPLORING THE VERSATILITY)
+         ======================================================== */}
+      {activeTab === 'versatility' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-[#4E9F76]" />
+                  <span>3. Exploring The Versatility of Non-Woven PP Bags</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Large photographic panoramic banner and 4 bottom trust badges.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Panoramic Banner Title
+                </label>
+                <input
+                  type="text"
+                  value={localVersatility.bannerTitle}
+                  onChange={(e) => setLocalVersatility({ ...localVersatility, bannerTitle: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Banner Subtitle
+                </label>
+                <input
+                  type="text"
+                  value={localVersatility.bannerSubtitle}
+                  onChange={(e) => setLocalVersatility({ ...localVersatility, bannerSubtitle: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  CTA Button Text
+                </label>
+                <input
+                  type="text"
+                  value={localVersatility.bannerButtonText || 'View Collection'}
+                  onChange={(e) => setLocalVersatility({ ...localVersatility, bannerButtonText: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#166534] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+            </div>
+
+            {/* Banner Background Image */}
+            <div className="pt-2 border-t border-slate-100">
+              <ImageUploader
+                label="Panoramic Banner Background Image"
+                description="Import high-resolution lifestyle packaging or warehouse background photo from your computer."
+                value={localVersatility.bannerImage}
+                onChange={(newUrl) => setLocalVersatility({ ...localVersatility, bannerImage: newUrl })}
+                aspectRatio="wide"
+              />
+            </div>
+
+            {/* 4 Bottom Trust Badges */}
+            <div className="pt-4 border-t border-slate-100">
+              <h4 className="text-xs font-black text-[#166534] uppercase tracking-wider mb-3">
+                4 Bottom Value Props / Trust Badges
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                {(localVersatility.bottomTrustBadges || []).map((badge, idx) => (
+                  <div key={idx} className="p-3 rounded-xl border border-slate-200 bg-slate-50/50">
+                    <label className="block text-[10px] font-bold text-slate-500 mb-1">
+                      Badge #{idx + 1}
+                    </label>
+                    <input
+                      type="text"
+                      value={badge}
+                      onChange={(e) => {
+                        const newBadges = [...localVersatility.bottomTrustBadges];
+                        newBadges[idx] = e.target.value;
+                        setLocalVersatility({ ...localVersatility, bottomTrustBadges: newBadges });
+                      }}
+                      className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76]"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          TAB 4: ABOUT SECTION
+         ======================================================== */}
+      {activeTab === 'about' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#4E9F76]" />
+                  <span>4. About Ecotex Section (Brand Story & Leadership)</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Mission quote, company narrative, founder message, and laboratory certification.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home & About
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  About Section Headline Title
+                </label>
+                <input
+                  type="text"
+                  value={localAbout.storyTitle || 'We Are Ecotex'}
+                  onChange={(e) => setLocalAbout({ ...localAbout, storyTitle: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="We Are Ecotex"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Founder Name & Title
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    value={localAbout.founderName || 'Rashid Mahmood'}
+                    onChange={(e) => setLocalAbout({ ...localAbout, founderName: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                    placeholder="Founder Name"
+                  />
+                  <input
+                    type="text"
+                    value={localAbout.founderRole || 'Managing Director & Founder'}
+                    onChange={(e) => setLocalAbout({ ...localAbout, founderRole: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                    placeholder="Founder Role"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                Core Mission Quote (Featured in italics)
+              </label>
+              <textarea
+                rows={2}
+                value={localAbout.missionQuote}
+                onChange={(e) => setLocalAbout({ ...localAbout, missionQuote: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 italic bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                placeholder="We engineered our circular manufacturing framework..."
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Story Paragraph 1 (Heritage & Products)
+                </label>
+                <textarea
+                  rows={4}
+                  value={localAbout.storyParagraph1}
+                  onChange={(e) => setLocalAbout({ ...localAbout, storyParagraph1: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76] leading-relaxed"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Story Paragraph 2 (Operations & Facilities)
+                </label>
+                <textarea
+                  rows={4}
+                  value={localAbout.storyParagraph2}
+                  onChange={(e) => setLocalAbout({ ...localAbout, storyParagraph2: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76] leading-relaxed"
+                />
+              </div>
+            </div>
+
+            {/* Photos Uploaders */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2 border-t border-slate-100">
+              <ImageUploader
+                label="Founder Portrait Photo"
+                description="Upload founder portrait photo from your computer."
+                value={localAbout.founderImage}
+                onChange={(newUrl) => setLocalAbout({ ...localAbout, founderImage: newUrl })}
+                aspectRatio="portrait"
+              />
+
+              <ImageUploader
+                label="Factory Workshop / Lab Collaboration Photo"
+                description="Upload quality testing / engineering photo."
+                value={localAbout.workshopImage}
+                onChange={(newUrl) => setLocalAbout({ ...localAbout, workshopImage: newUrl })}
+                aspectRatio="portrait"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          TAB 5: FACILITIES SECTION
+         ======================================================== */}
+      {activeTab === 'facilities' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Factory className="w-5 h-5 text-[#4E9F76]" />
+                  <span>5. Manufacturing Facilities & Production Hubs</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Corona California US distribution hub, heavy manufacturing plants, machinery capabilities, and annual capacity metrics.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home & Facilities
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Facilities Section Title
+                </label>
+                <input
+                  type="text"
+                  value={localFacilities.title}
+                  onChange={(e) => setLocalFacilities({ ...localFacilities, title: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Facilities Subtitle Description
+                </label>
+                <input
+                  type="text"
+                  value={localFacilities.subtitle}
+                  onChange={(e) => setLocalFacilities({ ...localFacilities, subtitle: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                Machinery & Engineering Narrative
+              </label>
+              <textarea
+                rows={2}
+                value={localFacilities.storySnippet || ''}
+                onChange={(e) => setLocalFacilities({ ...localFacilities, storySnippet: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                placeholder="From automated ultrasonic welding to high-definition 8-color flexographic printing..."
+              />
+            </div>
+
+            {/* 3 Capacity Metrics */}
+            <div className="p-4 rounded-2xl bg-[#F4F9F5] border border-[#B2E2C5]/40 space-y-3">
+              <h4 className="text-xs font-black text-[#166534] uppercase tracking-wider">
+                Industrial Capacity & Certification Metrics
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">Annual Capacity</label>
+                  <input
+                    type="text"
+                    value={localFacilities.annualCapacity}
+                    onChange={(e) => setLocalFacilities({ ...localFacilities, annualCapacity: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76]"
+                    placeholder="50,000,000+ Units / Year"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">Quality Standards</label>
+                  <input
+                    type="text"
+                    value={localFacilities.certificationsMetric}
+                    onChange={(e) => setLocalFacilities({ ...localFacilities, certificationsMetric: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76]"
+                    placeholder="ISO 9001:2015 & ASTM D6400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">Active Production Lines</label>
+                  <input
+                    type="text"
+                    value={localFacilities.activeLinesMetric}
+                    onChange={(e) => setLocalFacilities({ ...localFacilities, activeLinesMetric: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-white focus:outline-none focus:border-[#4E9F76]"
+                    placeholder="14 High-Speed Extrusion Lines"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 2 Facility Hub Cards */}
+            <div>
+              <h4 className="text-xs font-black text-[#166534] uppercase tracking-wider mb-3">
+                Manufacturing & Distribution Hub Locations
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {(localFacilities.hubs || []).map((hub, idx) => (
+                  <div key={idx} className="p-5 rounded-2xl border border-slate-200 bg-white shadow-xs space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-[#4E9F76] uppercase tracking-wider">
+                        Hub #{idx + 1}: {idx === 0 ? 'US Headquarters' : 'Heavy Industrial Plant'}
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Facility Name</label>
+                      <input
+                        type="text"
+                        value={hub.name}
+                        onChange={(e) => {
+                          const newHubs = [...localFacilities.hubs];
+                          newHubs[idx] = { ...newHubs[idx], name: e.target.value };
+                          setLocalFacilities({ ...localFacilities, hubs: newHubs });
+                        }}
+                        className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Physical Address</label>
+                      <input
+                        type="text"
+                        value={hub.address}
+                        onChange={(e) => {
+                          const newHubs = [...localFacilities.hubs];
+                          newHubs[idx] = { ...newHubs[idx], address: e.target.value };
+                          setLocalFacilities({ ...localFacilities, hubs: newHubs });
+                        }}
+                        className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Key Capabilities (comma separated)</label>
+                      <input
+                        type="text"
+                        value={(hub.capabilities || []).join(', ')}
+                        onChange={(e) => {
+                          const newHubs = [...localFacilities.hubs];
+                          newHubs[idx] = { 
+                            ...newHubs[idx], 
+                            capabilities: e.target.value.split(',').map(s => s.trim()).filter(Boolean) 
+                          };
+                          setLocalFacilities({ ...localFacilities, hubs: newHubs });
+                        }}
+                        className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700"
+                      />
+                    </div>
+
+                    <div className="pt-2">
+                      <ImageUploader
+                        label="Hub Photo"
+                        value={hub.image}
+                        onChange={(newUrl) => {
+                          const newHubs = [...localFacilities.hubs];
+                          newHubs[idx] = { ...newHubs[idx], image: newUrl };
+                          setLocalFacilities({ ...localFacilities, hubs: newHubs });
+                        }}
+                        aspectRatio="wide"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          TAB 6: CONTACT SECTION
+         ======================================================== */}
+      {activeTab === 'contact' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
+                  <Phone className="w-5 h-5 text-[#4E9F76]" />
+                  <span>6. Contact Us & Factory Location (Footer Inquiries)</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Direct telephone numbers, sales desk email, California address, and Google Maps integration.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live on Home & Contact
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Direct Sales Email
+                </label>
+                <input
+                  type="email"
+                  value={localContact.email}
+                  onChange={(e) => setLocalContact({ ...localContact, email: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="orders@ecotexinc.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Primary Customer Service & Orders Phone
+                </label>
+                <input
+                  type="text"
+                  value={localContact.phone}
+                  onChange={(e) => setLocalContact({ ...localContact, phone: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#0f172a] bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="+1 (951) 450-9773"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Secondary Phone / Toll-Free Desk
+                </label>
+                <input
+                  type="text"
+                  value={localContact.secondaryPhone || ''}
+                  onChange={(e) => setLocalContact({ ...localContact, secondaryPhone: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="(951) 555-ECOTEX"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                  Google Maps Directions Link
+                </label>
+                <input
+                  type="text"
+                  value={localContact.googleMapsUrl || ''}
+                  onChange={(e) => setLocalContact({ ...localContact, googleMapsUrl: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                  placeholder="https://maps.google.com/?q=..."
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0f172a] mb-1.5">
+                Physical Distribution Facility Address (Corona, CA)
+              </label>
+              <input
+                type="text"
+                value={localContact.facilityAddress}
+                onChange={(e) => setLocalContact({ ...localContact, facilityAddress: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-[#4E9F76]"
+                placeholder="1200 Industrial Parkway, Corona, CA 92881"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          BOTTOM SAVE BAR
+         ======================================================== */}
+      <div className="flex items-center justify-between pt-6 border-t border-slate-200 bg-transparent">
+        <p className="text-xs text-slate-500 font-medium">
+          Sabhi changes database aur browser storage mein foran live sync ho jayenge.
+        </p>
+
+        <button
+          type="button"
+          onClick={handleSaveAll}
+          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+        >
+          {saveSuccess ? (
+            <>
+              <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+              <span>Published Live!</span>
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" />
+              <span>Save & Publish Live</span>
+            </>
+          )}
+        </button>
+      </div>
+
+    </div>
+  );
+};
+
+export default HomepageManager;

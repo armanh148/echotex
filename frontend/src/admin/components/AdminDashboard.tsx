@@ -5,6 +5,7 @@ import { useStore } from '../../store/useStore';
 import { AdminSidebar, AdminSection } from './AdminSidebar';
 import { AdminTopBar } from './AdminTopBar';
 import { DashboardOverview } from './DashboardOverview';
+import { HomepageManager } from './HomepageManager';
 import { HeroBannerManager } from './HeroBannerManager';
 import { CategoriesManager } from './CategoriesManager';
 import { ProductCatalogManager } from './ProductCatalogManager';
@@ -73,6 +74,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const getSectionTitle = (section: AdminSection): string => {
     switch (section) {
       case 'overview': return 'Operations Dashboard';
+      case 'homepage': return 'Homepage Master CMS (All 6 Sections)';
       case 'hero': return 'Homepage Banner & 3D Showcase';
       case 'categories': return 'Product Categories & Taxonomy';
       case 'products': return 'Products & Wholesale Catalog';
@@ -159,6 +161,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
           {activeSection === 'overview' && (
             <DashboardOverview onNavigateToSection={(sec) => setActiveSection(sec)} />
+          )}
+
+          {activeSection === 'homepage' && (
+            <HomepageManager onNavigateToSection={(sec) => setActiveSection(sec as any)} />
           )}
 
           {activeSection === 'hero' && (
