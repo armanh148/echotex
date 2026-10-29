@@ -541,10 +541,10 @@ export const ProductCatalogManager: React.FC = () => {
     <div className="space-y-6">
       
       {/* Top Banner / Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
-          <h2 className="text-xl font-black text-[#0f172a] flex items-center gap-2">
-            <Package className="w-6 h-6 text-[#166534]" />
+          <h2 className="text-lg xs:text-xl font-black text-[#0f172a] flex items-center gap-2">
+            <Package className="w-5 h-5 sm:w-6 sm:h-6 text-[#166534] shrink-0" />
             <span>Product Catalog & Single Page Manager</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -554,7 +554,7 @@ export const ProductCatalogManager: React.FC = () => {
 
         <button
           onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-extrabold transition-all shadow-md shadow-[#166534]/20 cursor-pointer self-start sm:self-auto hover:scale-[1.02] active:scale-[0.98]"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-extrabold transition-all shadow-md shadow-[#166534]/20 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>Add New Product</span>
@@ -606,8 +606,113 @@ export const ProductCatalogManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Products Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
+      {/* Products View: Mobile Card List (block md:hidden) */}
+      <div className="block md:hidden space-y-3">
+        {filteredProducts.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center text-slate-400 font-medium">
+            No products found matching filters.
+          </div>
+        ) : (
+          filteredProducts.map((p) => {
+            const isProdInStock = p.inStock && (p.stockQuantity === undefined || p.stockQuantity > 0);
+            return (
+              <div key={p.id} className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-16 h-16 rounded-xl bg-slate-50 border border-slate-200 p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                      src={p.image || '/images/bag-green.png'}
+                      alt={p.name}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/bag-green.png';
+                      }}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-extrabold text-[#0f172a] text-xs truncate max-w-[170px]">{p.name}</span>
+                      {p.badge && (
+                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 shrink-0">
+                          {p.badge}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[11px] text-slate-400 font-medium block mt-0.5">{p.categoryLabel || p.category}</span>
+                    <div className="flex items-center gap-2 mt-1 text-[11px] font-mono">
+                      <span className="font-bold text-slate-700">{p.articleNo || `EP-${p.id.slice(0, 6).toUpperCase()}`}</span>
+                      <span className="text-slate-400">·</span>
+                      <span className="text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded font-bold">{p.pcsPerBox || 200} pcs/box</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs">
+                  <div>
+                    <span className="text-slate-400 text-[10px] block uppercase font-bold tracking-wider">Wholesale Price</span>
+                    <div className="font-black text-[#166534] text-sm font-mono">
+                      ${p.pricePerUnit.toFixed(2)}
+                      {p.originalPrice && (
+                        <span className="text-[10px] text-slate-400 line-through ml-1.5 font-normal">
+                          ${p.originalPrice.toFixed(2)}
+                        </span>
+                      )}
+                      <span className="text-[10px] text-slate-400 font-normal"> /box</span>
+                    </div>
+                  </div>
+
+                  {/* Stock Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={() => toggleProductStock(p.id)}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                      isProdInStock
+                        ? 'bg-emerald-100/80 text-emerald-800 border border-emerald-200'
+                        : 'bg-rose-100/80 text-rose-800 border border-rose-200'
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${isProdInStock ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    <span>
+                      {isProdInStock
+                        ? `${typeof p.stockQuantity === 'number' ? `${p.stockQuantity} boxes` : 'In Stock'}`
+                        : 'Sold Out'}
+                    </span>
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                  <span className="text-[10px] text-slate-400">
+                    {isProdInStock ? 'Purchasing Active' : 'Ordering Closed'}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditModal(p)}
+                      className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[#d97706] border border-amber-200/80 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-95"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit Single Page</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductToDelete(p);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                      title="Delete Product"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Desktop Products Table (hidden md:block) */}
+      <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#f8faf9] border-b border-slate-200/80 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
@@ -1035,7 +1140,7 @@ export const ProductCatalogManager: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
                             Wholesale MOQ (Boxes) *
