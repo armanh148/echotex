@@ -50,94 +50,18 @@
       ],
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
+          "hex": "#86C59E",
+          "name": "Eco Green"
+        },
+        {
           "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "name": "Pure White"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#0f172a",
+          "name": "Deep Slate"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.31,
-      "retailPricePerUnit": 0.36,
-      "retailOriginalPrice": 0.45,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "prod-1791786437631",
@@ -187,95 +111,18 @@
       ],
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
+          "hex": "#86C59E",
+          "name": "Eco Green"
+        },
+        {
           "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "name": "Pure White"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#0f172a",
+          "name": "Deep Slate"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.31,
-      "retailPricePerUnit": 0.36,
-      "retailOriginalPrice": 0.45,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "prod-1791183909856",
@@ -309,95 +156,18 @@
       "categoryLabel": "Slider Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
+          "hex": "#36BF40",
+          "name": "Eco Green"
+        },
+        {
           "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "name": "Pure White"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#0f172a",
+          "name": "Deep Slate"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.31,
-      "retailPricePerUnit": 0.36,
-      "retailOriginalPrice": 0.45,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-muqua379",
@@ -423,95 +193,10 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
-        },
-        {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
           "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "name": "Ecotex Forest"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.44,
-      "retailPricePerUnit": 0.51,
-      "retailOriginalPrice": 0.64,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-tshirt-grocery",
@@ -548,94 +233,18 @@
       "stockQuantity": 100,
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#1b4329",
+          "name": "Forest Green"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
+          "hex": "#7ea242",
+          "name": "Olive Green"
         },
         {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#e8e2d5",
+          "name": "Natural Sand"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.22,
-      "retailPricePerUnit": 0.26,
-      "retailOriginalPrice": 0.33,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-tshirt-supermarket",
@@ -669,95 +278,14 @@
       "categoryLabel": "T-Shirt Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#ffffff",
+          "name": "Pure White"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#1b4329",
+          "name": "Eco Green"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.28,
-      "retailPricePerUnit": 0.32,
-      "retailOriginalPrice": 0.4,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-loop-classic",
@@ -791,95 +319,18 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
-        },
-        {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
           "hex": "#166534",
-          "stockQuantity": 50
+          "name": "Ecotex Forest"
         },
         {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
+          "hex": "#1e3a5f",
+          "name": "Navy Blue"
         },
         {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#f0ece1",
+          "name": "Cream"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.31,
-      "retailPricePerUnit": 0.36,
-      "retailOriginalPrice": 0.45,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-soft-laminated",
@@ -913,95 +364,14 @@
       "categoryLabel": "Non-Woven Totes",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#ffffff",
+          "name": "Gloss White"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#111827",
+          "name": "Obsidian Black"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 1.19,
-      "retailPricePerUnit": 1.38,
-      "retailOriginalPrice": 1.72,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-dcut-heavy",
@@ -1035,95 +405,14 @@
       "categoryLabel": "D-Cut Punch Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#c2410c",
+          "name": "Terracotta Orange"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#78350f",
+          "name": "Earth Clay"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.69,
-      "retailPricePerUnit": 0.8,
-      "retailOriginalPrice": 1.0,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-dcut-boutique",
@@ -1157,95 +446,14 @@
       "categoryLabel": "D-Cut Punch Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#1e293b",
+          "name": "Matte Black"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "hex": "#475569",
+          "name": "Graphite Grey"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.6,
-      "retailPricePerUnit": 0.7,
-      "retailOriginalPrice": 0.88,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-slider-eva",
@@ -1279,95 +487,14 @@
       "categoryLabel": "Slider Zipper Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#e2e8f0",
+          "name": "Frosted Clear"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
-          "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
           "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "name": "Sky Blue Tint"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 0.85,
-      "retailPricePerUnit": 0.99,
-      "retailOriginalPrice": 1.24,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     },
     {
       "id": "eco-food-cooler",
@@ -1401,95 +528,14 @@
       "categoryLabel": "Food Item Bags",
       "availableColors": [
         {
-          "id": "white",
-          "name": "White",
-          "hex": "#FFFFFF",
-          "stockQuantity": 25
+          "hex": "#d97706",
+          "name": "Amber Orange"
         },
         {
-          "id": "black",
-          "name": "Black",
-          "hex": "#18181b",
-          "stockQuantity": 50
-        },
-        {
-          "id": "royal-blue",
-          "name": "Royal Blue",
-          "hex": "#2563eb",
-          "stockQuantity": 30
-        },
-        {
-          "id": "red",
-          "name": "Red",
-          "hex": "#dc2626",
-          "stockQuantity": 20
-        },
-        {
-          "id": "dark-green",
-          "name": "Dark Green",
           "hex": "#166534",
-          "stockQuantity": 50
-        },
-        {
-          "id": "navy-blue",
-          "name": "Navy Blue",
-          "hex": "#1e3a8a",
-          "stockQuantity": 40
-        },
-        {
-          "id": "yellow",
-          "name": "Yellow",
-          "hex": "#eab308",
-          "stockQuantity": 15
-        },
-        {
-          "id": "orange",
-          "name": "Orange",
-          "hex": "#ea580c",
-          "stockQuantity": 20
-        },
-        {
-          "id": "sky-blue",
-          "name": "Sky Blue",
-          "hex": "#38bdf8",
-          "stockQuantity": 25
-        },
-        {
-          "id": "beige-cream",
-          "name": "Beige / Cream",
-          "hex": "#f5ecd7",
-          "stockQuantity": 35
+          "name": "Deep Green"
         }
-      ],
-      "checkoutButtonText": "\u2192 Express Checkout",
-      "outOfStockButtonText": "Purchases Temporarily Closed (Sold Out)",
-      "retailTabLabel": "Retail Order",
-      "wholesaleTabLabel": "Wholesale Order",
-      "specsHeading": "Description",
-      "relatedTag": "Explore More Options",
-      "relatedTitle": "Related Products",
-      "relatedSubtitle": "Frequently ordered together or alternative sizing options for your business.",
-      "relatedBackBtnText": "View Full Catalog",
-      "originalPrice": 1.44,
-      "retailPricePerUnit": 1.67,
-      "retailOriginalPrice": 2.09,
-      "wholesaleMoq": 5,
-      "retailMaxBoxes": 5,
-      "pcsPerBox": 200,
-      "retailPolicyText": "Retail order policy: 1 se 5 boxes maximum. Agar aapko 5 se zyada quantity chahiye, toh barah-e-karam upar Wholesale Order select karein.",
-      "wholesalePolicyText": "Wholesale order: starting 5 boxes se hai aur sabhi orders 5 ke multiples mein place hote hain (5, 10, 15, 20...).",
-      "colorStock": {
-        "white": 25,
-        "black": 50,
-        "royal-blue": 30,
-        "red": 20,
-        "dark-green": 50,
-        "navy-blue": 40,
-        "yellow": 15,
-        "orange": 20,
-        "sky-blue": 25,
-        "beige-cream": 35
-      }
+      ]
     }
   ],
   "categories": [
@@ -1562,7 +608,7 @@
     {
       "id": "ECX-615695",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1582,7 +628,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1605,12 +651,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-355978",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1630,7 +676,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1653,12 +699,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-479597",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1678,7 +724,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1701,12 +747,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-408248",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1726,7 +772,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1749,12 +795,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-545603",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1774,7 +820,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1797,12 +843,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-373334",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1822,7 +868,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1845,12 +891,12 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-964340",
       "zip": "75820",
-      "city": "\u06a9\u0631\u0627\u0686\u06cc",
+      "city": "کراچی",
       "date": "2026-10-28",
       "email": "arman.naqvi@kyneticwear.com",
       "items": [
@@ -1870,7 +916,7 @@
       "state": "CA",
       "total": 50.261,
       "status": "Pending",
-      "address": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820",
+      "address": "5-d, کراچی, CA 75820",
       "shipping": 50,
       "subtotal": 0.261,
       "buyerName": "Arman Naqvi",
@@ -1893,7 +939,7 @@
         }
       },
       "customerCompany": "kynetic wear",
-      "shippingAddress": "5-d, \u06a9\u0631\u0627\u0686\u06cc, CA 75820"
+      "shippingAddress": "5-d, کراچی, CA 75820"
     },
     {
       "id": "ECX-174201",
@@ -3319,7 +2365,7 @@
       "badgeTrust": "Trusted by 21,000+ People",
       "badgeDoctor": "Recommended by doctors",
       "casePackSize": 1000,
-      "productImage": "",
+      "productImage": "/images/bag-black.png",
       "showcasePrice": 0.25,
       "backgroundImage": "/uploads/Gemini_Generated_Image_syieb6s-1793100472147-uspvk.jpg"
     },
@@ -3492,10 +2538,10 @@
     },
     "companyName": "Ecotex Inc.",
     "aboutMission": "Empowering commercial enterprises and supermarket chains with certified non-woven and compostable packaging that drastically reduces carbon footprints without sacrificing load capacity.",
-    "announcement": "\ud83c\udf31 Certified Recycled & Compostable Wholesale Packaging \u00b7 Direct from Corona, CA Facility",
+    "announcement": "🌱 Certified Recycled & Compostable Wholesale Packaging · Direct from Corona, CA Facility",
     "footerConfig": {
       "tagline": "Direct manufacturer of certified circular non-woven, compostable bio-PLA, and insulated wholesale packaging for global commercial enterprise.",
-      "copyrightNotice": "Copyright 2026 \u00a9 Ecotex Inc. All rights reserved.",
+      "copyrightNotice": "Copyright 2026 © Ecotex Inc. All rights reserved.",
       "newsletterTitle": "Subscribe To Our Quarterly Newsletter",
       "newsletterBgImage": "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=80",
       "newsletterSubtitle": "Receive direct mill pricing updates, material innovation whitepapers, and California SB 54 regulatory packaging briefs."
@@ -3504,7 +2550,7 @@
     "navbarConfig": {
       "phoneDisplay": "(951) 555-ECOTEX",
       "ctaButtonText": "START SH",
-      "announcementText": "\ud83c\udf31 Certified Recycled & Compostable Wholesale Packaging \u00b7 Direct from Corona, CA Facility",
+      "announcementText": "🌱 Certified Recycled & Compostable Wholesale Packaging · Direct from Corona, CA Facility",
       "announcementActive": false
     },
     "plantAddress": "Sector 15, Korangi Industrial Area, Karachi, PK",
@@ -3512,7 +2558,7 @@
     "contactConfig": {
       "email": "orders@ecotexinc.com",
       "phone": "(951) 555-ECOTEX",
-      "headline": "Let\u2019s Engineer Your Sustainable Wholesale Packaging Solution",
+      "headline": "Let’s Engineer Your Sustainable Wholesale Packaging Solution",
       "twitterUrl": "https://twitter.com",
       "facebookUrl": "https://facebook.com",
       "linkedinUrl": "https://linkedin.com",
@@ -3530,7 +2576,7 @@
     "minOrderNotice": "Free pallet freight on continental US orders over $1,000",
     "secondaryPhone": "+92 332 8784015",
     "whatsappNumber": "+1 (951) 450-9773",
-    "copyrightNotice": "Copyright 2026 \u00a9 Ecotex Inc. All rights reserved.",
+    "copyrightNotice": "Copyright 2026 © Ecotex Inc. All rights reserved.",
     "facilityAddress": "1200 Industrial Parkway, Corona, CA 92881",
     "metaDescription": "Vertically integrated manufacturer of circular non-woven polypropylene bags, compostable blends, and reusable commercial textiles. Direct from Corona, CA.",
     "quoteCalcConfig": {
@@ -3585,8 +2631,8 @@
       "emailEnabled": true,
       "whatsappNumber": "",
       "whatsappEnabled": true,
-      "emailSubjectTemplate": "\ud83d\uded2 New Order {{orderId}} \u2014 {{customerName}} ({{total}})",
-      "whatsappMessageTemplate": "\ud83d\udce6 *New Order Received!*\n\n*Order ID:* {{orderId}}\n*Customer:* {{customerName}}\n*Company:* {{companyName}}\n*Total:* {{total}}\n*Items:* {{itemsSummary}}\n\nPlease log in to the Ecotex admin panel to review and process this order."
+      "emailSubjectTemplate": "🛒 New Order {{orderId}} — {{customerName}} ({{total}})",
+      "whatsappMessageTemplate": "📦 *New Order Received!*\n\n*Order ID:* {{orderId}}\n*Customer:* {{customerName}}\n*Company:* {{companyName}}\n*Total:* {{total}}\n*Items:* {{itemsSummary}}\n\nPlease log in to the Ecotex admin panel to review and process this order."
     },
     "orderNotifications": {
       "emailEnabled": false,
