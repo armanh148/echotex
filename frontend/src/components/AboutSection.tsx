@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { 
   Recycle, 
   Sliders, 
@@ -12,7 +12,8 @@ import {
   Linkedin, 
   Twitter, 
   Mail,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft
 } from 'lucide-react';
 import { ActiveSection } from '../types';
 import { useStore } from '../store/useStore';
@@ -25,6 +26,28 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
   const { siteSettings } = useStore();
   const currentSettings = siteSettings;
   const aConfig = siteSettings?.aboutConfig;
+
+  // Mobile horizontal slider controls for Team section
+  const teamSliderRef = useRef<HTMLDivElement>(null);
+  const [activeTeamIndex, setActiveTeamIndex] = useState(0);
+
+  const scrollTeam = (direction: 'left' | 'right') => {
+    if (teamSliderRef.current) {
+      const scrollAmount = teamSliderRef.current.clientWidth * 0.75;
+      teamSliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleTeamScroll = () => {
+    if (teamSliderRef.current) {
+      const { scrollLeft, clientWidth } = teamSliderRef.current;
+      const index = Math.round(scrollLeft / (clientWidth * 0.75));
+      setActiveTeamIndex(Math.max(0, index));
+    }
+  };
 
   const defaultFeatures = [
     {
@@ -66,7 +89,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
       }))
     : defaultFeatures;
 
-  const teamMembers = aConfig?.teamMembers || [
+  const teamMembers = (aConfig?.teamMembers && aConfig.teamMembers.length > 0)
+    ? aConfig.teamMembers
+    : [
     {
       id: 'tm1',
       name: 'Rashid Mahmood',
@@ -319,78 +344,144 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
       </section>
 
       {/* ========================================================
-          4. "MEET OUR TEAM" LEADERSHIP CARDS (FULL WIDTH SPAN)
+          4. "MEET OUR TEAM" LEADERSHIP CARDS (1-LINE MOBILE SLIDER / 3-COL DESKTOP)
          ======================================================== */}
-      <section className="py-16 sm:py-24 lg:py-32 w-full max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
+      <section className="py-14 sm:py-24 lg:py-32 w-full max-w-[1820px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs sm:text-sm font-extrabold tracking-[0.25em] uppercase text-[#166534] block mb-2">
-            | LEADERSHIP & VISION |
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0f172a] uppercase">
-            {aConfig?.teamSectionTitle || 'Meet Our Team'}
-          </h2>
-          <p className="mt-3 text-sm sm:text-base lg:text-lg text-[#475569]">
-            {aConfig?.teamSectionSubtitle || 'The experts behind global sustainable packaging.'}
-          </p>
+        {/* Section Header with Mobile Navigation Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-14 gap-4">
+          <div className="text-center sm:text-left">
+            <span className="text-xs sm:text-sm font-extrabold tracking-[0.25em] uppercase text-[#166534] block mb-2">
+              | LEADERSHIP & VISION |
+            </span>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0f172a] uppercase">
+              {aConfig?.teamSectionTitle || 'Meet Our Team'}
+            </h2>
+            <p className="mt-2 text-xs sm:text-base text-[#475569] max-w-xl">
+              {aConfig?.teamSectionSubtitle || 'The experts behind global sustainable packaging.'}
+            </p>
+          </div>
+
+          {/* Mobile Navigation Arrows (Visible only on mobile/tablet) */}
+          {teamMembers.length > 1 && (
+            <div className="flex md:hidden items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollTeam('left')}
+                className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50 transition-all"
+                aria-label="Previous Team Member"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTeam('right')}
+                className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50 transition-all"
+                aria-label="Next Team Member"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* 3-Column Responsive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 xl:gap-14">
+        {/* 1-Line Horizontal Swipeable Carousel on Mobile / 3-Column Grid on Desktop */}
+        <div 
+          ref={teamSliderRef}
+          onScroll={handleTeamScroll}
+          className="flex md:grid overflow-x-auto md:overflow-x-visible pb-4 md:pb-0 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 snap-x snap-mandatory md:snap-none scrollbar-none md:grid-cols-3 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+        >
           {teamMembers.map((member, index) => (
             <div 
-              key={index}
-              className="group relative flex flex-col items-center"
+              key={member.id || index}
+              className="group relative flex flex-col items-center shrink-0 w-[78vw] xs:w-[68vw] sm:w-[320px] md:w-auto snap-center md:snap-align-none"
             >
               {/* Photo Container */}
-              <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden bg-slate-100 shadow-xl border border-slate-200">
+              <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden bg-slate-100 shadow-lg border border-slate-200">
                 <img 
                   src={member.image} 
                   alt={member.name} 
-                  className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-out"
+                  className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-out select-none"
+                  draggable={false}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=85';
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none" />
               </div>
 
               {/* Floating Bottom White Badge */}
-              <div className="relative -mt-16 w-[90%] bg-white p-6 rounded-2xl shadow-xl border border-slate-200 text-center transition-transform duration-300 group-hover:-translate-y-1.5">
+              <div className="relative -mt-14 w-[90%] bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-slate-200 text-center transition-transform duration-300 group-hover:-translate-y-1.5">
                 <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#0f172a]">
                   {member.name}
                 </h3>
-                <p className="text-xs sm:text-sm font-semibold text-[#166534] mt-1 tracking-wide">
+                <p className="text-xs sm:text-sm font-semibold text-[#166534] mt-0.5 tracking-wide">
                   {member.role}
                 </p>
 
-                {/* Micro Social Icons on Hover */}
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-center gap-3.5 text-slate-400">
-                  <a 
-                    href={member.linkedin}
-                    className="p-2 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
-                    aria-label={`${member.name} LinkedIn`}
-                  >
-                    <Linkedin className="w-4 h-4" />
-                  </a>
-                  <a 
-                    href={member.twitter}
-                    className="p-2 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
-                    aria-label={`${member.name} Twitter`}
-                  >
-                    <Twitter className="w-4 h-4" />
-                  </a>
-                  <a 
-                    href={`mailto:${member.email}`}
-                    className="p-2 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
-                    aria-label={`Email ${member.name}`}
-                  >
-                    <Mail className="w-4 h-4" />
-                  </a>
+                {/* Micro Social Icons */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-center gap-3 text-slate-400">
+                  {member.linkedin && member.linkedin !== '#' && (
+                    <a 
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
+                      aria-label={`${member.name} LinkedIn`}
+                    >
+                      <Linkedin className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.twitter && member.twitter !== '#' && (
+                    <a 
+                      href={member.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
+                      aria-label={`${member.name} Twitter`}
+                    >
+                      <Twitter className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.email && (
+                    <a 
+                      href={`mailto:${member.email}`}
+                      className="p-1.5 rounded-full hover:bg-[#dcfce7] hover:text-[#166534] transition-colors"
+                      aria-label={`Email ${member.name}`}
+                    >
+                      <Mail className="w-4 h-4" />
+                    </a>
+                  )}
                 </div>
               </div>
 
             </div>
           ))}
         </div>
+
+        {/* Mobile Indicator Dots */}
+        {teamMembers.length > 1 && (
+          <div className="flex md:hidden items-center justify-center gap-1.5 mt-4">
+            {teamMembers.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  if (teamSliderRef.current) {
+                    const target = teamSliderRef.current.children[idx] as HTMLElement;
+                    target?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                  }
+                }}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  activeTeamIndex === idx
+                    ? 'w-6 bg-[#166534]'
+                    : 'w-1.5 bg-stone-300 hover:bg-stone-400'
+                }`}
+                aria-label={`Go to team member ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
 
         {/* CTA banner below team */}
         <div className="mt-20 p-8 sm:p-12 lg:p-14 rounded-3xl bg-gradient-to-r from-[#166534] to-[#15803d] text-white flex flex-col sm:flex-row items-center justify-between gap-8 shadow-2xl">

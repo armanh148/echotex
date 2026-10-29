@@ -20,6 +20,7 @@ import {
   Lock,
   Sparkles
 } from 'lucide-react';
+import { useStore } from '../store/useStore';
 import { DYE_COLORS, DyeColor } from '../data/colors';
 
 interface ProductDetailModalProps {
