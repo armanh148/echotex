@@ -769,7 +769,7 @@ export const OffersDealsManager: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-slate-950 font-black text-xs sm:text-sm tracking-wide uppercase transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap text-center"
+            className="w-full sm:w-auto shrink-0 px-6 sm:px-8 py-3 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-slate-950 font-black text-xs sm:text-sm tracking-wide uppercase transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap text-center"
           >
             {saveSuccess ? 'OFFER PUBLISHED!' : 'PUBLISH OFFER NOW'}
           </button>

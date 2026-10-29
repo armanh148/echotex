@@ -525,7 +525,7 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className={`w-full sm:w-auto justify-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`w-full sm:w-auto shrink-0 whitespace-nowrap justify-center inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
               hasUnpublishedChanges
                 ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
                 : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
@@ -533,12 +533,12 @@ export const PageContentEditor: React.FC = () => {
           >
             {saveSuccess ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-[#B2E2C5]" />
+                <CheckCircle2 className="w-4 h-4 text-[#B2E2C5] shrink-0" />
                 <span>Saved & Live!</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 shrink-0" />
                 <span>Save All Changes</span>
               </>
             )}
@@ -630,13 +630,13 @@ export const PageContentEditor: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-start sm:self-auto">
+                <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
                   <button
                     type="button"
                     onClick={() => handleSave()}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#166534] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#166534] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    <Save className="w-3.5 h-3.5" />
+                    <Save className="w-3.5 h-3.5 shrink-0" />
                     <span>Save {currentTab?.label.split(' ')[0]}</span>
                   </button>
                 </div>
@@ -2848,20 +2848,20 @@ export const PageContentEditor: React.FC = () => {
       </div>
 
       {/* Floating Save Actions Bar at Bottom */}
-      <div className="sticky bottom-4 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#B2E2C5]/50 shadow-xl">
+      <div className="sticky bottom-4 z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#B2E2C5]/50 shadow-xl">
         <div className="flex items-center gap-2">
-          <div className={`w-2.5 h-2.5 rounded-full ${hasUnpublishedChanges ? 'bg-amber-500 animate-pulse' : 'bg-[#86C59E]'}`} />
+          <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${hasUnpublishedChanges ? 'bg-amber-500 animate-pulse' : 'bg-[#86C59E]'}`} />
           <span className="text-xs font-bold text-slate-600">
             {hasUnpublishedChanges ? 'Unpublished draft changes. Click "Publish All Changes Now" to update storefront.' : 'Storefront is synchronized with the latest published content.'}
           </span>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full sm:w-auto justify-end">
           {hasUnpublishedChanges && (
             <button
               type="button"
               onClick={handleDiscardDraft}
-              className="px-3.5 py-2 rounded-xl text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs font-bold transition-all cursor-pointer"
+              className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
               Discard Changes
             </button>
@@ -2869,14 +2869,14 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={handleResetToDefaults}
-            className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0"
           >
             Reset All
           </button>
           <button
             type="button"
             onClick={() => handleSave()}
-            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer whitespace-nowrap shrink-0 ${
               hasUnpublishedChanges
                 ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
                 : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'
@@ -2884,12 +2884,12 @@ export const PageContentEditor: React.FC = () => {
           >
             {saveSuccess ? (
               <>
-                <Check className="w-4 h-4 text-[#B2E2C5]" />
+                <Check className="w-4 h-4 text-[#B2E2C5] shrink-0" />
                 <span>Saved & Published!</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 shrink-0" />
                 <span>Save All Changes</span>
               </>
             )}
