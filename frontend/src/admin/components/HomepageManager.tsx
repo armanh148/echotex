@@ -391,8 +391,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'hero' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Sliders className="w-5 h-5 text-[#4E9F76]" />
@@ -402,7 +402,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Customise the large opening visual at the very top of your homepage.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home
               </span>
             </div>
@@ -411,7 +411,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
               {/* Form Controls */}
               <div className="lg:col-span-7 space-y-5">
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1 mb-1.5">
                     <label className="block text-xs font-bold text-[#0f172a]">
                       Hero Main Headline (Title)
                     </label>
@@ -522,8 +522,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'sustainable-fashion' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-[#4E9F76]" />
@@ -533,7 +533,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Section heading, subtitle, and 4 feature value proposition cards.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home
               </span>
             </div>
@@ -628,8 +628,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'versatility' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Layers className="w-5 h-5 text-[#4E9F76]" />
@@ -639,7 +639,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Large photographic panoramic banner and 4 bottom trust badges.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home
               </span>
             </div>
