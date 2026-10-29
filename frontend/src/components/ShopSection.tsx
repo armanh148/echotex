@@ -888,30 +888,9 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
           {/* On Shop Page (!isHome): Category Filter Pills, Search Bar & Sort Dropdown */}
           {!isHome && (
             <div className="mb-6 sm:mb-8 space-y-4">
-              {/* Category Pills Navigation with Integrated Filter Button */}
+              {/* Category Pills Navigation */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
-                
-                {/* 1. Dedicated Filter Trigger Pill */}
-                <button
-                  type="button"
-                  onClick={() => setIsFilterDrawerOpen(true)}
-                  className={`px-4 py-2 rounded-full text-xs font-black whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs active:scale-95 ${
-                    activeFilterCount > 0
-                      ? 'bg-[#0d3419] text-white ring-2 ring-[#0d3419]/30'
-                      : 'bg-stone-900 text-white hover:bg-stone-800'
-                  }`}
-                  aria-label="Open filter panel"
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                  <span>Filter</span>
-                  {activeFilterCount > 0 && (
-                    <span className="w-4.5 h-4.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black flex items-center justify-center shrink-0">
-                      {activeFilterCount}
-                    </span>
-                  )}
-                </button>
-
-                {/* 2. All Products */}
+                {/* All Products */}
                 <button
                   type="button"
                   onClick={() => setActiveCategory('all')}
