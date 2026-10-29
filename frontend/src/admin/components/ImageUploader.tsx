@@ -163,7 +163,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className={`space-y-2 select-none ${className}`}>
       {/* Label & Switcher */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-1.5">
         <div>
           <label className="block text-xs font-bold text-[#0f172a]">
             {label}
@@ -227,9 +227,29 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 }}
                 className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-300"
               />
+
+              {/* Mobile Quick Action Buttons (Always visible on touch / sm:hidden) */}
+              <div className="sm:hidden absolute top-2 right-2 flex items-center gap-1.5 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-sm border border-slate-200/80">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-[#B2E2C5] text-slate-700 hover:text-[#4E9F76] text-xs font-bold transition-all cursor-pointer"
+                  title="Replace File"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRemove}
+                  className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition-all cursor-pointer"
+                  title="Remove Image"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
               
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+              {/* Desktop Overlay on hover */}
+              <div className="hidden sm:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center gap-3 p-4">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}

@@ -116,7 +116,7 @@ export const MediaLibraryManager: React.FC = () => {
           </p>
         </div>
 
-        <label className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#86C59E] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+        <label className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#86C59E] text-white text-xs font-bold transition-all shadow-md shadow-[#4E9F76]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full sm:w-auto">
           <Upload className="w-4 h-4" />
           <span>Upload Media Assets</span>
           <input
@@ -158,9 +158,27 @@ export const MediaLibraryManager: React.FC = () => {
               loading="lazy"
             />
 
+            {/* Mobile Touch Quick Action (Visible on mobile screens) */}
+            <div 
+              className="sm:hidden absolute top-2 right-2 flex items-center gap-1 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-xs border border-slate-200/80"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopyUrl(asset);
+                }}
+                className="p-1 text-slate-600 hover:text-[#166534]"
+                title="Copy Image URL"
+              >
+                {copiedId === asset.id ? <Check className="w-3.5 h-3.5 text-[#166534]" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+
             {/* Subtle Hover Action Overlay */}
             <div 
-              className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2 p-2"
+              className="hidden sm:flex absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center gap-2 p-2"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -234,7 +252,7 @@ export const MediaLibraryManager: React.FC = () => {
               </button>
             </div>
 
-            <div className="h-80 sm:h-[380px] bg-[#f8faf9] rounded-2xl p-4 flex items-center justify-center border border-slate-100">
+            <div className="h-60 sm:h-80 md:h-[380px] bg-[#f8faf9] rounded-2xl p-4 flex items-center justify-center border border-slate-100">
               <img
                 src={previewAsset.url}
                 alt={previewAsset.name}
@@ -268,7 +286,7 @@ export const MediaLibraryManager: React.FC = () => {
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
                 <button
                   onClick={() => handleCopyUrl(previewAsset)}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"

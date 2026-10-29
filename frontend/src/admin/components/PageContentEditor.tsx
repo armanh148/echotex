@@ -503,12 +503,12 @@ export const PageContentEditor: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full sm:w-auto">
           {hasUnpublishedChanges && (
             <button
               type="button"
               onClick={handleDiscardDraft}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-all cursor-pointer"
+              className="flex-1 sm:flex-initial justify-center inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-all cursor-pointer"
               title="Discard unsaved changes and restore current live content"
             >
               <span>Discard Changes</span>
@@ -517,7 +517,7 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={handleResetToDefaults}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial justify-center inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Defaults</span>
@@ -525,7 +525,7 @@ export const PageContentEditor: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`w-full sm:w-auto justify-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
               hasUnpublishedChanges
                 ? 'bg-[#16a34a] hover:bg-[#15803d] text-white shadow-emerald-600/30 ring-2 ring-[#4ade80]/50 animate-pulse'
                 : 'bg-[#4E9F76] hover:bg-[#86C59E] text-white shadow-[#4E9F76]/20'

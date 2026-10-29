@@ -422,11 +422,11 @@ export const CustomerMessagesManager: React.FC = () => {
         </div>
 
         {/* Quick Connection Action Buttons */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
           <button
             type="button"
             onClick={() => setShowChannelModal(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-200/90 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-all cursor-pointer shadow-2xs hover:border-slate-300"
+            className="flex flex-wrap sm:flex-nowrap items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-slate-200/90 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-all cursor-pointer shadow-2xs hover:border-slate-300 w-full sm:w-auto justify-between sm:justify-start"
             title="Configure Desk WhatsApp & Support Email used by Live Chatbot"
           >
             <div className="flex items-center gap-1.5 text-emerald-700">
@@ -434,7 +434,7 @@ export const CustomerMessagesManager: React.FC = () => {
               <Smartphone className="w-3.5 h-3.5" />
               <span className="font-semibold">{currentWhatsApp}</span>
             </div>
-            <span className="text-slate-300">|</span>
+            <span className="text-slate-300 hidden sm:inline">|</span>
             <div className="flex items-center gap-1.5 text-slate-600">
               <Mail className="w-3.5 h-3.5" />
               <span className="font-semibold">{currentEmail}</span>
@@ -446,7 +446,7 @@ export const CustomerMessagesManager: React.FC = () => {
 
           <button
             onClick={() => setShowNewThreadModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md shadow-[#4E9F76]/20 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md shadow-[#4E9F76]/20 transition-all cursor-pointer w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             <span>New Customer Thread</span>
@@ -898,16 +898,16 @@ export const CustomerMessagesManager: React.FC = () => {
                         handleSendReply();
                       }
                     }}
-                    className="w-full p-3.5 pr-52 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-[#4E9F76] focus:ring-1 focus:ring-[#4E9F76] resize-none transition-all placeholder:text-slate-400"
+                    className="w-full p-3.5 pb-16 sm:pb-3.5 sm:pr-56 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-[#4E9F76] focus:ring-1 focus:ring-[#4E9F76] resize-none transition-all placeholder:text-slate-400"
                   />
                   
-                  <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                  <div className="absolute right-2.5 bottom-2.5 sm:right-3 sm:bottom-3 flex items-center gap-1.5 sm:gap-2">
                     {activeThread.phone && (
                       <button
                         type="button"
                         onClick={() => handleSendReply(undefined, true)}
                         disabled={!replyText.trim()}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:cursor-not-allowed"
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:cursor-not-allowed"
                         title="Send reply to live chat and immediately open WhatsApp chat with customer"
                       >
                         <MessageCircle className="w-3.5 h-3.5" />
@@ -919,7 +919,7 @@ export const CustomerMessagesManager: React.FC = () => {
                     <button
                       onClick={() => handleSendReply()}
                       disabled={!replyText.trim()}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:cursor-not-allowed"
+                      className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:cursor-not-allowed"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>Send</span>
@@ -927,7 +927,7 @@ export const CustomerMessagesManager: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-400 pt-1 gap-1">
                   <span>Press <kbd className="font-mono bg-slate-100 px-1 py-0.5 rounded text-[10px] text-slate-600">Ctrl + Enter</kbd> to quickly send reply</span>
                   <span className="text-emerald-600 font-semibold flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5" />

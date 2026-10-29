@@ -190,11 +190,11 @@ export const OffersDealsManager: React.FC = () => {
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <button
             type="button"
             onClick={handleResetToDefault}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
+            className="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset</span>
@@ -203,7 +203,7 @@ export const OffersDealsManager: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSave()}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#22c55e] hover:from-[#15803d] hover:to-[#16a34a] text-white text-xs font-black tracking-wide uppercase shadow-lg shadow-green-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 cursor-pointer"
+            className="flex-1 sm:flex-initial justify-center px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#22c55e] hover:from-[#15803d] hover:to-[#16a34a] text-white text-xs font-black tracking-wide uppercase shadow-lg shadow-green-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 cursor-pointer text-center"
           >
             {saveSuccess ? (
               <>
@@ -752,9 +752,9 @@ export const OffersDealsManager: React.FC = () => {
         </div>
 
         {/* Bottom Save Bar */}
-        <div className="sticky bottom-6 z-30 bg-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-2xl flex items-center justify-between gap-4 border border-slate-800">
+        <div className="sticky bottom-6 z-30 bg-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -769,7 +769,7 @@ export const OffersDealsManager: React.FC = () => {
 
           <button
             type="submit"
-            className="px-6 sm:px-8 py-3 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-slate-950 font-black text-xs sm:text-sm tracking-wide uppercase transition-all duration-200 shadow-md hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+            className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-slate-950 font-black text-xs sm:text-sm tracking-wide uppercase transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap text-center"
           >
             {saveSuccess ? 'OFFER PUBLISHED!' : 'PUBLISH OFFER NOW'}
           </button>

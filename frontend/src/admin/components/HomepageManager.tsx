@@ -277,7 +277,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
           <button
             type="button"
             onClick={handleResetToDefault}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-bold transition-all cursor-pointer"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-bold transition-all cursor-pointer"
             title="Reset to default text and images"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -288,7 +288,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#B2E2C5] text-[#166534] hover:bg-[#F4F9F5] text-xs font-bold transition-all cursor-pointer"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-[#B2E2C5] text-[#166534] hover:bg-[#F4F9F5] text-xs font-bold transition-all cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>View Live Site</span>
@@ -298,7 +298,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
           <button
             type="button"
             onClick={handleSaveAll}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
           >
             {saveSuccess ? (
               <>
@@ -308,7 +308,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                <span>Save All Homepage Sections</span>
+                <span>Save All Sections</span>
               </>
             )}
           </button>
