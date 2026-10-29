@@ -735,22 +735,22 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <div className="mt-6 pt-5 border-t border-slate-100">
                 <div className="border-b border-slate-100 pb-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#d97706] pb-2 border-b-2 border-[#d97706] inline-block">
-                    Description
+                    {product.specsHeading || 'Description'}
                   </span>
                 </div>
 
                 {/* Specifications Bullet List */}
                 <div className="pt-4 text-xs text-slate-600 leading-relaxed">
                   <ul className="space-y-1.5 font-light">
-                    <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> ECOTEX INC.</li>
-                    <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.gsm} GSM Virgin Non-Woven Polypropylene</li>
+                    <li>• <strong className="font-semibold text-slate-800">BRAND NAME :</strong> {product.brandName || siteSettings?.companyName || 'ECOTEX INC.'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Fabric :</strong> {product.fabricDetails || `${product.gsm || 45} GSM Virgin Non-Woven Polypropylene`}</li>
                     <li>• <strong className="font-semibold text-slate-800">Dimensions :</strong> {product.dimensions || '12"W x 15"H with Reinforced Gusset'}</li>
-                    <li>• <strong className="font-semibold text-slate-800">Handles :</strong> Ultrasonic Thermal Welded Loops</li>
-                    <li>• <strong className="font-semibold text-slate-800">Printing :</strong> High-Precision Flexographic / Gravure Custom Imprint</li>
-                    <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> Certified California SB 270 & ASTM D6400</li>
-                    <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> Export-Grade Heavy Duty Corrugated Cartons</li>
-                    <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> 100% Virgin Grade Recyclable Polypropylene</li>
-                    <li>• <strong className="font-semibold text-slate-800">Enroute to Quality Standard</strong></li>
+                    <li>• <strong className="font-semibold text-slate-800">Handles :</strong> {product.handles || 'Ultrasonic Thermal Welded Loops'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Printing :</strong> {product.printingMethod || 'High-Precision Flexographic / Gravure Custom Imprint'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Compliance :</strong> {product.compliance || 'Certified California SB 270 & ASTM D6400'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Bag & Picture Packing :</strong> {product.packingDetails || 'Export-Grade Heavy Duty Corrugated Cartons'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">Guaranteed Fabric :</strong> {product.guaranteedFabric || '100% Virgin Grade Recyclable Polypropylene'}</li>
+                    <li>• <strong className="font-semibold text-slate-800">{product.enrouteQuality || 'Enroute to Quality Standard'}</strong></li>
                   </ul>
                 </div>
 
@@ -763,7 +763,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <Truck className="w-4 h-4" />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                    Fast Delivery
+                    {product.trustBadge1 || siteSettings?.shopConfig?.trustBar1Title || 'Fast Delivery'}
                   </span>
                 </div>
 
@@ -772,7 +772,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                    Secure Store
+                    {product.trustBadge2 || siteSettings?.shopConfig?.trustBar3Title || 'Secure Store'}
                   </span>
                 </div>
 
@@ -781,7 +781,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <RotateCcw className="w-4 h-4" />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                    Easy Return
+                    {product.trustBadge3 || siteSettings?.shopConfig?.trustBar2Title || 'Easy Return'}
                   </span>
                 </div>
               </div>

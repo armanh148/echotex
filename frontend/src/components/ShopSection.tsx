@@ -24,7 +24,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Lock
+  Lock,
+  X
 } from 'lucide-react';
 
 const SORT_OPTIONS: { id: 'featured' | 'price' | 'moq'; label: string }[] = [
@@ -60,6 +61,14 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   const [sortBy, setSortBy] = useState<'featured' | 'price' | 'moq'>('featured');
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+
+  // Catalog Filter Drawer State
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [filterInStockOnly, setFilterInStockOnly] = useState(false);
+  const [filterDealsOnly, setFilterDealsOnly] = useState(false);
+  const [filterPriceRange, setFilterPriceRange] = useState<{ min: string; max: string }>({ min: '', max: '' });
+  const [selectedMaterial, setSelectedMaterial] = useState<string>('all');
+
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [cartToast, setCartToast] = useState<string | null>(null);
   const [showFullCatalog, setShowFullCatalog] = useState<boolean>(true);
@@ -217,14 +226,42 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     return allProducts;
   }, [allProducts, activeCategory]);
 
+  // Extract unique material tags dynamically from catalog
+  const availableMaterials = React.useMemo(() => {
+    const set = new Set<string>();
+    allProducts.forEach(p => {
+      if (p.material) {
+        const mat = p.material.split('&')[0].split(',')[0].trim();
+        if (mat.length > 2 && mat.length < 35) set.add(mat);
+      }
+    });
+    return Array.from(set).slice(0, 8);
+  }, [allProducts]);
+
+  const activeFilterCount = (filterInStockOnly ? 1 : 0) +
+    (filterDealsOnly ? 1 : 0) +
+    (filterPriceRange.min || filterPriceRange.max ? 1 : 0) +
+    (selectedMaterial !== 'all' ? 1 : 0);
+
+  const clearAllFilters = () => {
+    setFilterInStockOnly(false);
+    setFilterDealsOnly(false);
+    setFilterPriceRange({ min: '', max: '' });
+    setSelectedMaterial('all');
+    setActiveCategory('all');
+    setSearchQuery('');
+  };
+
   // Dynamic Filtering for Full Catalog
   const filteredProducts = allProducts.filter(p => {
+    // 1. Category filter
     const activeCatLower = activeCategory.toLowerCase();
     const matchesCat = activeCategory === 'all' || 
       p.category?.toLowerCase() === activeCatLower ||
       (p.categoryLabel && p.categoryLabel.toLowerCase() === activeCatLower) ||
       (p.categoryLabel && p.categoryLabel.toLowerCase().includes(activeCatLower));
     
+    // 2. Search query filter
     const q = searchQuery.toLowerCase().trim();
     const matchesQuery = !q || 
       p.name.toLowerCase().includes(q) ||
@@ -232,6 +269,29 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
       (p.categoryLabel && p.categoryLabel.toLowerCase().includes(q)) ||
       (p.material && p.material.toLowerCase().includes(q)) ||
       (p.description && p.description.toLowerCase().includes(q));
+
+    // 3. Stock availability filter
+    const isOutOfStock = p.inStock === false || (typeof p.stockQuantity === 'number' && p.stockQuantity <= 0);
+    if (filterInStockOnly && isOutOfStock) return false;
+
+    // 4. Special promotions / Deals only filter
+    if (filterDealsOnly) {
+      const hasDeal = !!p.badge || (p.originalPrice && p.originalPrice > p.pricePerUnit);
+      if (!hasDeal) return false;
+    }
+
+    // 5. Custom price range filter
+    const minP = parseFloat(filterPriceRange.min);
+    const maxP = parseFloat(filterPriceRange.max);
+    if (!isNaN(minP) && p.pricePerUnit < minP) return false;
+    if (!isNaN(maxP) && p.pricePerUnit > maxP) return false;
+
+    // 6. Material filter
+    if (selectedMaterial !== 'all') {
+      if (!p.material || !p.material.toLowerCase().includes(selectedMaterial.toLowerCase())) {
+        return false;
+      }
+    }
 
     return matchesCat && matchesQuery;
   });
@@ -886,51 +946,275 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                   )}
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-3 text-xs text-stone-500">
-                  <span className="font-medium">
+                <div className="flex items-center justify-between sm:justify-end gap-2.5 text-xs text-stone-500">
+                  <span className="font-medium truncate">
                     Showing <strong className="text-stone-900">{displayedProducts.length}</strong> {displayedProducts.length === 1 ? 'item' : 'items'}
                   </span>
 
-                  {/* Custom Styled Sort Dropdown */}
-                  <div ref={sortRef} className="relative">
+                  <div className="flex items-center gap-2 shrink-0">
+                    {/* Filter Button with Active Badge */}
                     <button
                       type="button"
-                      onClick={() => setIsSortOpen((prev) => !prev)}
-                      className="bg-white border border-stone-200 hover:border-stone-300 rounded-xl px-3 py-1.5 text-xs font-bold text-stone-800 flex items-center gap-2 shadow-2xs hover:shadow-xs transition-all cursor-pointer select-none"
-                      aria-haspopup="listbox"
-                      aria-expanded={isSortOpen}
+                      onClick={() => setIsFilterDrawerOpen(true)}
+                      className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs hover:shadow-xs select-none ${
+                        activeFilterCount > 0
+                          ? 'bg-[#0d3419] text-white border-[#0d3419] shadow-xs'
+                          : 'bg-white text-stone-800 border-stone-200 hover:border-stone-300'
+                      }`}
+                      aria-label="Filter products"
                     >
-                      <span className="text-stone-400 font-semibold text-[11px] hidden xs:inline">Sort:</span>
-                      <span>{SORT_OPTIONS.find(o => o.id === sortBy)?.label || 'Featured'}</span>
-                      <ChevronDown className={`w-3.5 h-3.5 text-stone-400 transition-transform duration-200 ${isSortOpen ? 'rotate-180 text-[#0d3419]' : ''}`} />
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                      <span>Filter</span>
+                      {activeFilterCount > 0 && (
+                        <span className="w-4 h-4 rounded-full bg-white text-[#0d3419] text-[10px] font-black flex items-center justify-center shrink-0">
+                          {activeFilterCount}
+                        </span>
+                      )}
                     </button>
 
-                    {isSortOpen && (
-                      <div className="absolute right-0 top-full mt-1.5 w-48 bg-white rounded-2xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-fadeIn overflow-hidden">
-                        {SORT_OPTIONS.map((opt) => {
-                          const isSelected = sortBy === opt.id;
-                          return (
+                    {/* Custom Styled Sort Dropdown */}
+                    <div ref={sortRef} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setIsSortOpen((prev) => !prev)}
+                        className="bg-white border border-stone-200 hover:border-stone-300 rounded-xl px-3 py-1.5 text-xs font-bold text-stone-800 flex items-center gap-2 shadow-2xs hover:shadow-xs transition-all cursor-pointer select-none"
+                        aria-haspopup="listbox"
+                        aria-expanded={isSortOpen}
+                      >
+                        <span className="text-stone-400 font-semibold text-[11px] hidden xs:inline">Sort:</span>
+                        <span>{SORT_OPTIONS.find(o => o.id === sortBy)?.label || 'Featured'}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 text-stone-400 transition-transform duration-200 ${isSortOpen ? 'rotate-180 text-[#0d3419]' : ''}`} />
+                      </button>
+
+                      {isSortOpen && (
+                        <div className="absolute right-0 top-full mt-1.5 w-48 bg-white rounded-2xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-fadeIn overflow-hidden">
+                          {SORT_OPTIONS.map((opt) => {
+                            const isSelected = sortBy === opt.id;
+                            return (
+                              <button
+                                key={opt.id}
+                                type="button"
+                                onClick={() => {
+                                  setSortBy(opt.id);
+                                  setIsSortOpen(false);
+                                }}
+                                className={`w-full px-3.5 py-2 text-left text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-emerald-50 text-emerald-800 font-extrabold'
+                                    : 'text-stone-700 hover:bg-stone-50 hover:text-stone-900'
+                                }`}
+                              >
+                                <span>{opt.label}</span>
+                                {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Active Filter Tags Row */}
+                {activeFilterCount > 0 && (
+                  <div className="flex items-center flex-wrap gap-1.5 pt-1">
+                    <span className="text-[11px] font-semibold text-stone-400">Active Filters:</span>
+                    {filterInStockOnly && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-900">
+                        In Stock
+                        <button type="button" onClick={() => setFilterInStockOnly(false)} className="hover:text-emerald-700 cursor-pointer">✕</button>
+                      </span>
+                    )}
+                    {filterDealsOnly && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-100 text-orange-900">
+                        Deals Only
+                        <button type="button" onClick={() => setFilterDealsOnly(false)} className="hover:text-orange-700 cursor-pointer">✕</button>
+                      </span>
+                    )}
+                    {(filterPriceRange.min || filterPriceRange.max) && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-900">
+                        ${filterPriceRange.min || '0'} - ${filterPriceRange.max || '∞'}
+                        <button type="button" onClick={() => setFilterPriceRange({ min: '', max: '' })} className="hover:text-blue-700 cursor-pointer">✕</button>
+                      </span>
+                    )}
+                    {selectedMaterial !== 'all' && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-900">
+                        {selectedMaterial}
+                        <button type="button" onClick={() => setSelectedMaterial('all')} className="hover:text-purple-700 cursor-pointer">✕</button>
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={clearAllFilters}
+                      className="text-[11px] font-bold text-stone-500 hover:text-stone-800 underline ml-1 cursor-pointer"
+                    >
+                      Reset all
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Filter Slide-over Drawer */}
+          {isFilterDrawerOpen && (
+            <div className="fixed inset-0 z-50 overflow-hidden">
+              {/* Backdrop */}
+              <div 
+                className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+                onClick={() => setIsFilterDrawerOpen(false)}
+              />
+
+              <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+                <div className="w-screen max-w-sm sm:max-w-md bg-white shadow-2xl flex flex-col justify-between">
+                  
+                  {/* Drawer Header */}
+                  <div className="p-5 sm:p-6 border-b border-stone-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="p-2 rounded-xl bg-stone-100 text-[#0d3419]">
+                        <SlidersHorizontal className="w-4 h-4" />
+                      </span>
+                      <div>
+                        <h3 className="font-extrabold text-base text-stone-900">Filter Products</h3>
+                        <p className="text-[11px] text-stone-400">Refine catalog by stock, deals, material & price</p>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsFilterDrawerOpen(false)}
+                      className="p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer"
+                      aria-label="Close filters"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Drawer Body */}
+                  <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+                    
+                    {/* 1. Availability */}
+                    <div className="space-y-3">
+                      <label className="text-xs font-black uppercase tracking-wider text-stone-700 block">
+                        Stock Availability
+                      </label>
+                      <label className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 border border-stone-200/80 cursor-pointer hover:bg-stone-100/60 transition-colors">
+                        <span className="text-xs font-bold text-stone-800">In Stock Ready to Ship</span>
+                        <input
+                          type="checkbox"
+                          checked={filterInStockOnly}
+                          onChange={(e) => setFilterInStockOnly(e.target.checked)}
+                          className="w-4 h-4 rounded text-[#0d3419] accent-[#0d3419] cursor-pointer"
+                        />
+                      </label>
+                    </div>
+
+                    {/* 2. Deals & Badges */}
+                    <div className="space-y-3">
+                      <label className="text-xs font-black uppercase tracking-wider text-stone-700 block">
+                        Special Promotions
+                      </label>
+                      <label className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 border border-stone-200/80 cursor-pointer hover:bg-stone-100/60 transition-colors">
+                        <div className="flex items-center gap-2">
+                          <Flame className="w-4 h-4 text-[#FF5722]" />
+                          <span className="text-xs font-bold text-stone-800">On Sale / Special Deals Only</span>
+                        </div>
+                        <input
+                          type="checkbox"
+                          checked={filterDealsOnly}
+                          onChange={(e) => setFilterDealsOnly(e.target.checked)}
+                          className="w-4 h-4 rounded text-[#FF5722] accent-[#FF5722] cursor-pointer"
+                        />
+                      </label>
+                    </div>
+
+                    {/* 3. Price Range */}
+                    <div className="space-y-3">
+                      <label className="text-xs font-black uppercase tracking-wider text-stone-700 block">
+                        Unit Price Range ($)
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs font-bold">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="Min"
+                            value={filterPriceRange.min}
+                            onChange={(e) => setFilterPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                            className="w-full pl-7 pr-3 py-2 rounded-xl border border-stone-200 text-xs font-bold text-stone-800 focus:outline-none focus:border-[#0d3419]"
+                          />
+                        </div>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs font-bold">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="Max"
+                            value={filterPriceRange.max}
+                            onChange={(e) => setFilterPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                            className="w-full pl-7 pr-3 py-2 rounded-xl border border-stone-200 text-xs font-bold text-stone-800 focus:outline-none focus:border-[#0d3419]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 4. Materials */}
+                    {availableMaterials.length > 0 && (
+                      <div className="space-y-3">
+                        <label className="text-xs font-black uppercase tracking-wider text-stone-700 block">
+                          Fabric & Material
+                        </label>
+                        <div className="flex flex-wrap gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedMaterial('all')}
+                            className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all cursor-pointer ${
+                              selectedMaterial === 'all'
+                                ? 'bg-[#0d3419] text-white shadow-xs'
+                                : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                            }`}
+                          >
+                            All Materials
+                          </button>
+                          {availableMaterials.map((mat) => (
                             <button
-                              key={opt.id}
+                              key={mat}
                               type="button"
-                              onClick={() => {
-                                setSortBy(opt.id);
-                                setIsSortOpen(false);
-                              }}
-                              className={`w-full px-3.5 py-2 text-left text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
-                                isSelected
-                                  ? 'bg-emerald-50 text-emerald-800 font-extrabold'
-                                  : 'text-stone-700 hover:bg-stone-50 hover:text-stone-900'
+                              onClick={() => setSelectedMaterial(mat)}
+                              className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all cursor-pointer ${
+                                selectedMaterial === mat
+                                ? 'bg-[#0d3419] text-white shadow-xs'
+                                : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                               }`}
                             >
-                              <span>{opt.label}</span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />}
+                              {mat}
                             </button>
-                          );
-                        })}
+                          ))}
+                        </div>
                       </div>
                     )}
+
                   </div>
+
+                  {/* Drawer Footer */}
+                  <div className="p-5 sm:p-6 border-t border-stone-100 bg-stone-50/50 flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={clearAllFilters}
+                      className="flex-1 py-3 px-4 rounded-xl border border-stone-200 bg-white hover:bg-stone-100 text-xs font-bold text-stone-700 transition-colors cursor-pointer text-center"
+                    >
+                      Reset All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsFilterDrawerOpen(false)}
+                      className="flex-1 py-3 px-4 rounded-xl bg-[#0d3419] hover:bg-[#15532a] text-white text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center shadow-md active:scale-98"
+                    >
+                      Show {filteredProducts.length} Items
+                    </button>
+                  </div>
+
                 </div>
               </div>
             </div>
