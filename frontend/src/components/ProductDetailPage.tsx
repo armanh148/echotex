@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+
 import { Product, ProductColorVariant } from '../types';
 import { 
   Heart, 
