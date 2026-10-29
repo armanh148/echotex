@@ -238,7 +238,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     return Array.from(set).slice(0, 8);
   }, [allProducts]);
 
-  const activeFilterCount = (filterInStockOnly ? 1 : 0) +
+  const activeFilterCount = (activeCategory !== 'all' ? 1 : 0) +
+    (filterInStockOnly ? 1 : 0) +
     (filterDealsOnly ? 1 : 0) +
     (filterPriceRange.min || filterPriceRange.max ? 1 : 0) +
     (selectedMaterial !== 'all' ? 1 : 0);
@@ -887,12 +888,34 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
           {/* On Shop Page (!isHome): Category Filter Pills, Search Bar & Sort Dropdown */}
           {!isHome && (
             <div className="mb-6 sm:mb-8 space-y-4">
-              {/* Category Pills Navigation */}
+              {/* Category Pills Navigation with Integrated Filter Button */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+                
+                {/* 1. Dedicated Filter Trigger Pill */}
+                <button
+                  type="button"
+                  onClick={() => setIsFilterDrawerOpen(true)}
+                  className={`px-4 py-2 rounded-full text-xs font-black whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs active:scale-95 ${
+                    activeFilterCount > 0
+                      ? 'bg-[#0d3419] text-white ring-2 ring-[#0d3419]/30'
+                      : 'bg-stone-900 text-white hover:bg-stone-800'
+                  }`}
+                  aria-label="Open filter panel"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  <span>Filter</span>
+                  {activeFilterCount > 0 && (
+                    <span className="w-4.5 h-4.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black flex items-center justify-center shrink-0">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* 2. All Products */}
                 <button
                   type="button"
                   onClick={() => setActiveCategory('all')}
-                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                     activeCategory === 'all'
                       ? 'bg-[#0d3419] text-white shadow-xs'
                       : 'bg-white text-stone-600 border border-stone-200/90 hover:bg-stone-50'
@@ -900,6 +923,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 >
                   All Products ({allProducts.length})
                 </button>
+
+                {/* 3. Category Pills */}
                 {displayCategories.map((cat) => {
                   const isCatActive = activeCategory.toLowerCase() === cat.id.toLowerCase() ||
                     activeCategory.toLowerCase() === cat.label.toLowerCase();
@@ -911,8 +936,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                     <button
                       key={cat.id}
                       type="button"
-                      onClick={() => setActiveCategory(cat.id)}
-                      className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                      onClick={() => setActiveCategory(isCatActive ? 'all' : cat.id)}
+                      className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                         isCatActive
                           ? 'bg-[#0d3419] text-white shadow-xs'
                           : 'bg-white text-stone-600 border border-stone-200/90 hover:bg-stone-50'
@@ -1019,6 +1044,12 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 {activeFilterCount > 0 && (
                   <div className="flex items-center flex-wrap gap-1.5 pt-1">
                     <span className="text-[11px] font-semibold text-stone-400">Active Filters:</span>
+                    {activeCategory !== 'all' && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#0d3419] text-white">
+                        {displayCategories.find(c => c.id.toLowerCase() === activeCategory.toLowerCase() || c.label.toLowerCase() === activeCategory.toLowerCase())?.label || activeCategory}
+                        <button type="button" onClick={() => setActiveCategory('all')} className="hover:text-emerald-200 cursor-pointer">✕</button>
+                      </span>
+                    )}
                     {filterInStockOnly && (
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-900">
                         In Stock
