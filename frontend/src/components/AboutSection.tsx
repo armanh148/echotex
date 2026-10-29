@@ -288,23 +288,23 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
               </p>
 
               {/* 6-Item Grid (2 cols x 3 rows - Full Spacious Layout) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 lg:gap-7">
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:gap-7">
                 {features.map((feat, index) => {
                   const Icon = feat.icon;
                   return (
                     <div 
                       key={index}
-                      className="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-[#166534] hover:shadow-lg transition-all duration-300"
+                      className="group p-3 sm:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-[#166534] hover:shadow-lg transition-all duration-300 flex flex-col"
                     >
-                      <div className="flex items-center gap-3.5 mb-3">
-                        <div className="w-11 h-11 rounded-xl bg-[#dcfce7] text-[#166534] flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#166534] group-hover:text-white transition-all duration-300 shadow-2xs">
-                          <Icon className="w-5 h-5 stroke-[2]" />
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3.5 mb-2 sm:mb-3">
+                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#dcfce7] text-[#166534] flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#166534] group-hover:text-white transition-all duration-300 shadow-2xs">
+                          <Icon className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2]" />
                         </div>
-                        <h4 className="text-sm sm:text-base font-bold text-[#0f172a] tracking-tight group-hover:text-[#166534] transition-colors">
+                        <h4 className="text-xs sm:text-base font-bold text-[#0f172a] tracking-tight group-hover:text-[#166534] transition-colors leading-tight">
                           {feat.title}
                         </h4>
                       </div>
-                      <p className="text-xs sm:text-sm text-[#475569] leading-relaxed pl-14">
+                      <p className="text-[11px] sm:text-sm text-[#475569] leading-relaxed sm:pl-14">
                         {feat.description}
                       </p>
                     </div>

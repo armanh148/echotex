@@ -198,6 +198,7 @@ export default function App() {
                 onAddToCart={(p, color, qty) => addToCart(p, color, qty)}
                 onOpenQuoteForProduct={handleOpenQuoteForProduct}
                 onNavigateToShop={() => handleNavigate('shop')}
+                isHomePage={true}
               />
 
               {/* Versatility Banner & Sustainable Fashion Section */}
@@ -230,6 +231,7 @@ export default function App() {
             <ShopSection
               showCategories={false}
               showDeal={false}
+              isHomePage={false}
               onQuickView={handleOpenProductDetail}
               onAddToCart={(p, color, qty) => addToCart(p, color, qty)}
               onOpenQuoteForProduct={handleOpenQuoteForProduct}

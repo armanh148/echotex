@@ -34,6 +34,7 @@ interface ShopSectionProps {
   showCategories?: boolean;
   showDeal?: boolean;
   onNavigateToShop?: () => void;
+  isHomePage?: boolean;
 }
 
 export const ShopSection: React.FC<ShopSectionProps> = ({
@@ -43,8 +44,10 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   showHero = true,
   showCategories = true,
   showDeal = true,
-  onNavigateToShop
+  onNavigateToShop,
+  isHomePage
 }) => {
+  const isHome = isHomePage !== undefined ? isHomePage : (showCategories && !!onNavigateToShop);
   // Category & Filter State
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price' | 'moq'>('featured');
@@ -752,8 +755,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 </button>
               )}
 
-              {/* Mobile Carousel Arrow Controls */}
-              {featuredArrivals.length > 2 && (
+              {/* Mobile Carousel Arrow Controls (Only on Home Page) */}
+              {isHome && featuredArrivals.length > 2 && (
                 <div className="flex sm:hidden items-center gap-1.5 mr-1">
                   <button
                     type="button"
@@ -774,30 +777,35 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 </div>
               )}
 
-              {/* SEE ALL LINK (Lands on Shop page) */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onNavigateToShop) {
-                    onNavigateToShop();
-                  } else {
-                    const shopEl = document.getElementById('shop-categories-section') || document.getElementById('new-arrivals-section');
-                    shopEl?.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-                className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#0d3419] hover:bg-[#165a2d] text-white text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:scale-105 active:scale-95"
-              >
-                <span>See All</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              {/* SEE ALL LINK (Only on Home Page) */}
+              {isHome && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onNavigateToShop) {
+                      onNavigateToShop();
+                    } else {
+                      const shopEl = document.getElementById('shop-categories-section') || document.getElementById('new-arrivals-section');
+                      shopEl?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#0d3419] hover:bg-[#165a2d] text-white text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:scale-105 active:scale-95"
+                >
+                  <span>See All</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* 2 Products per Line on Mobile Touch-Carousel / 4-Col Grid on Desktop */}
+          {/* On Home: 2-per-line touch Carousel on Mobile; On Shop: Standard 2-col on Mobile, 4-col on Desktop Grid */}
           <div
-            ref={newArrivalsSliderRef}
-            onScroll={handleNewArrivalsScroll}
-            className="flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-3 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-2 lg:grid-cols-4 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+            ref={isHome ? newArrivalsSliderRef : undefined}
+            onScroll={isHome ? handleNewArrivalsScroll : undefined}
+            className={isHome 
+              ? "flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-3 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-2 lg:grid-cols-4 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+              : "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8"
+            }
           >
             {featuredArrivals.map((product) => {
               const isWishlisted = !!wishlist[product.id];
@@ -807,7 +815,11 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 <div
                   key={product.id}
                   onClick={() => onQuickView(product)}
-                  className="group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl border border-stone-200/90 p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-8px)] sm:w-auto snap-start sm:snap-align-none"
+                  className={`group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl border border-stone-200/90 p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer ${
+                    isHome 
+                      ? 'shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-8px)] sm:w-auto snap-start sm:snap-align-none' 
+                      : ''
+                  }`}
                 >
                   
                   {/* Top Bar inside Card: NEW/SOLD OUT Badge on left, Heart Icon on right */}
@@ -893,8 +905,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
             })}
           </div>
 
-          {/* Mobile Carousel Indicator Dots */}
-          {featuredArrivals.length > 2 && (
+          {/* Mobile Carousel Indicator Dots (Only on Home Page) */}
+          {isHome && featuredArrivals.length > 2 && (
             <div className="flex sm:hidden justify-center items-center gap-1.5 mt-3.5">
               {Array.from({ length: Math.ceil(featuredArrivals.length / 2) }).map((_, idx) => (
                 <button
