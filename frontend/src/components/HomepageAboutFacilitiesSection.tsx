@@ -282,3 +282,4 @@ export const HomepageAboutFacilitiesSection: React.FC<HomepageAboutFacilitiesSec
 };
 
 export default HomepageAboutFacilitiesSection;
+
