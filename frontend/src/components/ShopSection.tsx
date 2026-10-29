@@ -21,6 +21,7 @@ import {
   Search,
   Sparkles,
   ExternalLink,
+  ChevronLeft,
   ChevronRight,
   Lock
 } from 'lucide-react';
@@ -52,6 +53,27 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
 
   const catalogRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
+  const categorySliderRef = useRef<HTMLDivElement>(null);
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+
+  const scrollCategory = (direction: 'left' | 'right') => {
+    if (categorySliderRef.current) {
+      const scrollAmount = categorySliderRef.current.clientWidth * 0.75;
+      categorySliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleCategoryScroll = () => {
+    if (categorySliderRef.current) {
+      const { scrollLeft, clientWidth } = categorySliderRef.current;
+      const cardWidth = clientWidth * 0.70;
+      const index = Math.round(scrollLeft / (cardWidth || 1));
+      setActiveCategoryIndex(Math.max(0, Math.min(index, displayCategories.length - 1)));
+    }
+  };
 
   // Global Store Data (Direct & Static Synchronized)
   const { products: storeProducts, categories: storeCategories, siteSettings } = useStore();
@@ -376,19 +398,47 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
         {showCategories && (
           <section ref={categoriesRef} id="shop-categories-section" className="mb-16 sm:mb-20">
           
-          {/* Section Heading */}
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
-              {siteSettings?.shopConfig?.categoriesHeading || 'Shop By Category'}
-            </h2>
-            <p className="text-stone-500 text-xs sm:text-sm mt-2 max-w-xl mx-auto font-medium">
-              {siteSettings?.shopConfig?.categoriesSubheading || 'Explore our full range of certified industrial & retail packaging collections.'}
-            </p>
+          {/* Section Heading & Mobile Slider Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
+            <div className="text-center sm:text-left">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
+                {siteSettings?.shopConfig?.categoriesHeading || 'Shop By Category'}
+              </h2>
+              <p className="text-stone-500 text-xs sm:text-sm mt-2 max-w-xl font-medium">
+                {siteSettings?.shopConfig?.categoriesSubheading || 'Explore our full range of certified industrial & retail packaging collections.'}
+              </p>
+            </div>
+
+            {/* Mobile Navigation Arrows */}
+            {displayCategories.length > 1 && (
+              <div className="flex sm:hidden items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollCategory('left')}
+                  className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50 transition-all"
+                  aria-label="Previous Category"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollCategory('right')}
+                  className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 active:scale-95 cursor-pointer hover:bg-stone-50 transition-all"
+                  aria-label="Next Category"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Dynamic Responsive Grid matching whatever categories the admin adds */}
           {displayCategories.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6 lg:gap-8">
+            <div
+              ref={categorySliderRef}
+              onScroll={handleCategoryScroll}
+              className="flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-4 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+            >
               {displayCategories.map((cat) => {
                 const isActive = activeCategory.toLowerCase() === cat.id.toLowerCase() || 
                                  activeCategory.toLowerCase() === cat.label.toLowerCase();
@@ -421,7 +471,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                   <div
                     key={cat.id}
                     onClick={() => handleCategorySelect(cat.id)}
-                    className={`group relative flex flex-col bg-[#F9F7F4] rounded-3xl overflow-hidden border transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl cursor-pointer ${
+                    className={`group relative flex flex-col bg-[#F9F7F4] rounded-3xl overflow-hidden border transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl cursor-pointer shrink-0 w-[72vw] xs:w-[60vw] sm:w-auto snap-center sm:snap-align-none ${
                       isActive
                         ? 'border-[#0d3419] ring-2 ring-[#0d3419]/30 shadow-lg'
                         : 'border-stone-200/90 hover:border-stone-300'
@@ -476,6 +526,35 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 );
               })}
             </div>
+
+            {/* Mobile Indicator Dots & Swipe Helper */}
+            {displayCategories.length > 1 && (
+              <div className="flex sm:hidden flex-col items-center gap-2 mt-4">
+                <div className="flex items-center gap-1.5">
+                  {displayCategories.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        if (categorySliderRef.current) {
+                          const targetCard = categorySliderRef.current.children[idx] as HTMLElement;
+                          targetCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        }
+                      }}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        activeCategoryIndex === idx
+                          ? 'w-6 bg-[#0d3419]'
+                          : 'w-1.5 bg-stone-300 hover:bg-stone-400'
+                      }`}
+                      aria-label={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+                <span className="text-[11px] font-medium text-stone-400">
+                  Swipe horizontally to explore all {displayCategories.length} categories
+                </span>
+              </div>
+            )}
           ) : (
             <div className="text-center py-12 text-sm text-stone-500">
               No categories configured yet. Add categories from the Admin Panel.
