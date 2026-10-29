@@ -37,14 +37,14 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
-import { SiteSettings, LogoConfig, OrderNotificationsConfig } from '../../types';
+import { SiteSettings, LogoConfig, OrderNotificationsConfig, ShippingConfig, FooterConfig } from '../../types';
 import { BASE_URL } from '../../services/apiService';
 
 interface SiteSettingsManagerProps {
   onLogout?: () => void;
 }
 
-type SettingsTab = 'identity' | 'account' | 'notifications' | 'announcement' | 'business' | 'commerce';
+type SettingsTab = 'identity' | 'shipping' | 'footer' | 'commerce' | 'announcement' | 'notifications' | 'business' | 'account';
 
 export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogout }) => {
   const { siteSettings, updateSiteSettings, adminUser, logout } = useStore();
@@ -1362,54 +1362,650 @@ return () => clearTimeout(timer);
       )}
 
       {/* ========================================================
-          TAB 5: COMMERCE & STORE DEFAULTS
+          TAB: SHIPPING & FULFILLMENT
          ======================================================== */}
-      {activeTab === 'commerce' && (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6 animate-fadeIn">
+      {activeTab === 'shipping' && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-8 animate-fadeIn">
           <div>
-            <h3 className="text-base font-bold text-[#0f172a] uppercase tracking-wide">
-              Store & Fulfillment Preferences
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#166534] mb-1">
+              <Truck className="w-4 h-4" />
+              <span>Logistics & Fulfillment</span>
+            </div>
+            <h3 className="text-xl font-black text-[#0f172a] uppercase tracking-tight">
+              Shipping & Delivery Rates
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
-              Default lead times, free shipping qualifications, and minimum wholesale run notices.
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Configure free freight qualifications, standard carrier fees, estimated transit windows, and warehouse dispatch policies.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Warehouse Unbranded Dispatch Lead Time
-              </label>
-              <input
-                type="text"
-                value={formData.leadTimeBlank || '48-72 Hours'}
-                onChange={(e) => handleFieldChange('leadTimeBlank', e.target.value)}
-                className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
-              />
+          {/* Section 1: Freight Pricing Rules */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-[#166534]" />
+              <span>Wholesale Freight & Order Calculations</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Free Shipping Subtotal Threshold ($)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="50"
+                    value={formData.shippingConfig?.freeShippingThreshold ?? 1000}
+                    onChange={(e) => handleShippingChange('freeShippingThreshold', Number(e.target.value))}
+                    className="w-full pl-8 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-slate-800"
+                  />
+                </div>
+                <span className="text-[11px] text-slate-400 mt-1 block">
+                  Orders equal or greater qualify for 100% free pallet freight.
+                </span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Standard Flat Freight Rate ($)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={formData.shippingConfig?.standardShippingRate ?? 50}
+                    onChange={(e) => handleShippingChange('standardShippingRate', Number(e.target.value))}
+                    className="w-full pl-8 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-slate-800"
+                  />
+                </div>
+                <span className="text-[11px] text-slate-400 mt-1 block">
+                  Applied at checkout when cart subtotal is under threshold.
+                </span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Express Expedited Rate ($)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="10"
+                    value={formData.shippingConfig?.expressShippingRate ?? 120}
+                    onChange={(e) => handleShippingChange('expressShippingRate', Number(e.target.value))}
+                    className="w-full pl-8 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-slate-800"
+                  />
+                </div>
+                <span className="text-[11px] text-slate-400 mt-1 block">
+                  For priority freight rush orders requested via quotation.
+                </span>
+              </div>
             </div>
+          </div>
+
+          {/* Section 2: Carriers & Dispatch Origin */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-[#166534]" />
+              <span>Origin Hub & Freight Carriers</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Estimated Delivery / Transit Window
+                </label>
+                <input
+                  type="text"
+                  value={formData.shippingConfig?.estimatedTransitDays ?? '3-5 Business Days (Continental US)'}
+                  onChange={(e) => handleShippingChange('estimatedTransitDays', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="e.g. 3-5 Business Days (Continental US)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Designated Freight Carriers
+                </label>
+                <input
+                  type="text"
+                  value={formData.shippingConfig?.freightCarrier ?? 'Direct LTL Pallet Freight (FedEx Freight / R+L / Old Dominion)'}
+                  onChange={(e) => handleShippingChange('freightCarrier', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="e.g. FedEx Freight, R+L Carriers"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Primary Distribution & Warehouse Hub
+                </label>
+                <input
+                  type="text"
+                  value={formData.shippingConfig?.warehouseHub ?? 'Corona Distribution & Fulfillment Center, 1200 Industrial Parkway, Corona, CA 92881'}
+                  onChange={(e) => handleShippingChange('warehouseHub', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2 flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200">
+                <div>
+                  <span className="font-bold text-xs text-slate-800 block">Allow Free Local Warehouse Dock Pickup (Will-Call)</span>
+                  <span className="text-[11px] text-slate-400">Allows commercial enterprise buyers in Southern California to dispatch their own trucks.</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleShippingChange('localPickupAvailable', !formData.shippingConfig?.localPickupAvailable)}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ${formData.shippingConfig?.localPickupAvailable ? 'bg-[#166534]' : 'bg-slate-300'}`}
+                >
+                  <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${formData.shippingConfig?.localPickupAvailable ? 'translate-x-6' : 'translate-x-0'}`} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Wholesale Freight & Sample Policies */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#166534]" />
+              <span>Freight Policy Notice & Swatch Dispatch</span>
+            </h4>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Wholesale Freight Policy Statement
+                </label>
+                <textarea
+                  rows={3}
+                  value={formData.shippingConfig?.shippingPolicyNotice ?? 'All wholesale pallet orders ship FOB Corona, CA warehouse. Shrink-wrapped with corner guards on 40x48 heat-treated pallets.'}
+                  onChange={(e) => handleShippingChange('shippingPolicyNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none resize-y"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Free Fabric Swatches & Physical Sample Dispatch Notice
+                </label>
+                <input
+                  type="text"
+                  value={formData.shippingConfig?.sampleDispatchNotice ?? 'Free fabric swatches & physical sample bags dispatched within 24 hours via USPS Priority Mail.'}
+                  onChange={(e) => handleShippingChange('sampleDispatchNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+{/* ========================================================
+          TAB: FOOTER & LEGAL
+         ======================================================== */}
+      {activeTab === 'footer' && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-8 animate-fadeIn">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#166534] mb-1">
+              <Layers className="w-4 h-4" />
+              <span>Site-Wide Footer & Legal</span>
+            </div>
+            <h3 className="text-xl font-black text-[#0f172a] uppercase tracking-tight">
+              Footer Configuration & Policies
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Manage the top newsletter CTA banner, footer columns, social channels, legal links, and copyright notices.
+            </p>
+          </div>
+
+          {/* Section 1: Newsletter Subscription Banner */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[#166534]" />
+                  <span>Newsletter Subscription Strip</span>
+                </h4>
+                <span className="text-[11px] text-slate-400">Full-width photographic subscription banner right above the footer columns.</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleFooterChange('newsletterActive', formData.footerConfig?.newsletterActive === false ? true : false)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ${formData.footerConfig?.newsletterActive !== false ? 'bg-[#166534]' : 'bg-slate-300'}`}
+              >
+                <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${formData.footerConfig?.newsletterActive !== false ? 'translate-x-6' : 'translate-x-0'}`} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Banner Headline Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.newsletterTitle ?? 'Subscribe To Our Quarterly Newsletter'}
+                  onChange={(e) => handleFooterChange('newsletterTitle', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Subscribe Button Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.newsletterBtnText ?? 'Subscribe'}
+                  onChange={(e) => handleFooterChange('newsletterBtnText', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Banner Subtitle / Value Proposition
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.newsletterSubtitle ?? 'Receive direct mill pricing updates, material innovation whitepapers, and California SB 54 regulatory packaging briefs.'}
+                  onChange={(e) => handleFooterChange('newsletterSubtitle', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Newsletter Background Image URL
+                </label>
+                <div className="flex gap-3 items-center">
+                  <input
+                    type="text"
+                    value={formData.footerConfig?.newsletterBgImage ?? 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=80'}
+                    onChange={(e) => handleFooterChange('newsletterBgImage', e.target.value)}
+                    className="flex-1 px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  />
+                  {formData.footerConfig?.newsletterBgImage && (
+                    <img
+                      src={formData.footerConfig.newsletterBgImage}
+                      alt="Newsletter preview"
+                      className="w-16 h-10 object-cover rounded-lg border border-slate-200 shrink-0"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Footer Brand Description & Tagline */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-[#166534]" />
+              <span>Footer Brand Mission & Tagline</span>
+            </h4>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Custom Printed Flexography Lead Time
+                Footer Mission / Bio Paragraph
               </label>
-              <input
-                type="text"
-                value={formData.leadTimeCustom || '10-14 Business Days'}
-                onChange={(e) => handleFieldChange('leadTimeCustom', e.target.value)}
-                className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+              <textarea
+                rows={3}
+                value={formData.footerConfig?.tagline ?? formData.tagline ?? 'Direct manufacturer of certified circular non-woven, compostable bio-PLA, and insulated wholesale packaging for global commercial enterprise.'}
+                onChange={(e) => {
+                  handleFooterChange('tagline', e.target.value);
+                  handleFieldChange('tagline', e.target.value);
+                }}
+                className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none resize-y"
               />
+              <span className="text-[11px] text-slate-400 mt-1 block">
+                Appears beneath the EcoTex logo in Column 1 of the footer.
+              </span>
             </div>
+          </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Wholesale Minimum Order Quantity (MOQ) Notice
-              </label>
-              <input
-                type="text"
-                value={formData.minOrderNotice || ''}
-                onChange={(e) => handleFieldChange('minOrderNotice', e.target.value)}
-                className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
-              />
+          {/* Section 3: Navigation Column Headers */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#166534]" />
+              <span>Navigation Column Headers</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Column 2 Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.col1Title ?? 'ECOTEX'}
+                  onChange={(e) => handleFooterChange('col1Title', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Column 3 Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.col2Title ?? 'SERVICES'}
+                  onChange={(e) => handleFooterChange('col2Title', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Column 4 Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.col3Title ?? 'EVENTS'}
+                  onChange={(e) => handleFooterChange('col3Title', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Social Channels */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#166534]" />
+              <span>Social Media Channel Links</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  LinkedIn Profile URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.socialLinkedin ?? formData.contactConfig?.linkedinUrl ?? 'https://linkedin.com'}
+                  onChange={(e) => handleFooterChange('socialLinkedin', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="https://linkedin.com/company/ecotexinc"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Twitter / X URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.socialTwitter ?? formData.contactConfig?.twitterUrl ?? 'https://twitter.com'}
+                  onChange={(e) => handleFooterChange('socialTwitter', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="https://twitter.com/ecotexinc"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Facebook Page URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.socialFacebook ?? formData.contactConfig?.facebookUrl ?? 'https://facebook.com'}
+                  onChange={(e) => handleFooterChange('socialFacebook', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="https://facebook.com/ecotexinc"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Instagram Profile URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.socialInstagram ?? formData.contactConfig?.instagramUrl ?? 'https://instagram.com'}
+                  onChange={(e) => handleFooterChange('socialInstagram', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="https://instagram.com/ecotexinc"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  YouTube Channel URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.socialYoutube ?? 'https://youtube.com'}
+                  onChange={(e) => handleFooterChange('socialYoutube', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="https://youtube.com/@ecotexinc"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 5: Legal & Copyright Notices */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#166534]" />
+              <span>Bottom Legal Bar & Notices</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Official Copyright Notice
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.copyrightNotice ?? formData.copyrightNotice ?? 'Copyright 2026 © Ecotex Inc. All rights reserved.'}
+                  onChange={(e) => {
+                    handleFooterChange('copyrightNotice', e.target.value);
+                    handleFieldChange('copyrightNotice', e.target.value);
+                  }}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-slate-800"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Terms & Conditions Link Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.termsNotice ?? 'TERMS & CONDITIONS'}
+                  onChange={(e) => handleFooterChange('termsNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Privacy Policy Link Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.footerConfig?.privacyNotice ?? 'PRIVACY POLICY'}
+                  onChange={(e) => handleFooterChange('privacyNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+{/* ========================================================
+          TAB 5: COMMERCE & STORE DEFAULTS
+         ======================================================== */}
+      {activeTab === 'commerce' && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-8 animate-fadeIn">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#166534] mb-1">
+              <DollarSign className="w-4 h-4" />
+              <span>Commercial Preferences</span>
+            </div>
+            <h3 className="text-xl font-black text-[#0f172a] uppercase tracking-tight">
+              Store Defaults, Currency & Policies
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Default lead times, wholesale MOQ limits, store currency, sales tax, defect replacement guarantees, and sample swatch rules.
+            </p>
+          </div>
+
+          {/* Section 1: Lead Times & MOQ */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <Truck className="w-4 h-4 text-[#166534]" />
+              <span>Production Lead Times & MOQ</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Warehouse Unbranded Dispatch Lead Time
+                </label>
+                <input
+                  type="text"
+                  value={formData.leadTimeBlank || '2-4 Business Days'}
+                  onChange={(e) => handleFieldChange('leadTimeBlank', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="e.g. 2-4 Business Days"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Custom Printed Flexography Lead Time
+                </label>
+                <input
+                  type="text"
+                  value={formData.leadTimeCustom || '10-14 Business Days'}
+                  onChange={(e) => handleFieldChange('leadTimeCustom', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                  placeholder="e.g. 10-14 Business Days"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Wholesale Minimum Order Quantity (MOQ) Notice
+                </label>
+                <input
+                  type="text"
+                  value={formData.minOrderNotice || ''}
+                  onChange={(e) => handleFieldChange('minOrderNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-medium"
+                  placeholder="e.g. Free pallet freight on continental US orders over $1,000"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Currency & Sales Tax */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-[#166534]" />
+              <span>Currency & Sales Tax Settings</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Currency Symbol
+                </label>
+                <input
+                  type="text"
+                  value={formData.currencySymbol || '$'}
+                  onChange={(e) => handleFieldChange('currencySymbol', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-bold text-center"
+                  placeholder="$"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Currency Code (ISO)
+                </label>
+                <input
+                  type="text"
+                  value={formData.currencyCode || 'USD'}
+                  onChange={(e) => handleFieldChange('currencyCode', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-center uppercase"
+                  placeholder="USD"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Estimated Sales Tax Rate (%)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.25"
+                    value={formData.taxRatePercent ?? 0}
+                    onChange={(e) => handleFieldChange('taxRatePercent', Number(e.target.value))}
+                    className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none font-semibold text-slate-800"
+                  />
+                  <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">%</span>
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Wholesale Tax Exemption & Resale Certificate Policy
+                </label>
+                <input
+                  type="text"
+                  value={formData.taxExemptionNotice || 'Valid California resale certificate required at checkout for wholesale sales tax exemption.'}
+                  onChange={(e) => handleFieldChange('taxExemptionNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Commercial Guarantees & Defect Policy */}
+          <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#166534]" />
+              <span>Manufacturer Guarantees & Sample Kit Rules</span>
+            </h4>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  30-Day Defect Replacement Guarantee Policy
+                </label>
+                <textarea
+                  rows={2}
+                  value={formData.guaranteeNotice || '100% Quality & Defect Replacement Guarantee within 30 days of shipment receipt.'}
+                  onChange={(e) => handleFieldChange('guaranteeNotice', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none resize-y"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Free Sample Swatch & Kit Procurement Policy
+                </label>
+                <textarea
+                  rows={2}
+                  value={formData.sampleKitPolicy || 'Complimentary fabric swatch ring and sample bags available for enterprise retail procurement.'}
+                  onChange={(e) => handleFieldChange('sampleKitPolicy', e.target.value)}
+                  className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:border-[#166534] focus:outline-none resize-y"
+                />
+              </div>
             </div>
           </div>
         </div>
