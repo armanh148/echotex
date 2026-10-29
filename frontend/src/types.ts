@@ -268,6 +268,27 @@ export interface ContactConfig {
   googleMapsEmbedUrl?: string;
 }
 
+export interface FacilityHub {
+  name: string;
+  tag: string;
+  address: string;
+  capabilities: string[];
+  image?: string;
+  googleMapsUrl?: string;
+}
+
+export interface FacilitiesConfig {
+  title: string;
+  subtitle: string;
+  storySnippet?: string;
+  annualCapacity: string;
+  certificationsMetric: string;
+  activeLinesMetric: string;
+  hubs: FacilityHub[];
+  bannerImage?: string;
+  showOnHomepage?: boolean;
+}
+
 export interface FooterConfig {
   newsletterTitle: string;
   newsletterSubtitle?: string;
@@ -391,6 +412,7 @@ export interface SiteSettings {
   sustainabilityConfig?: SustainabilityConfig;
   aboutConfig?: AboutConfig;
   contactConfig?: ContactConfig;
+  facilitiesConfig?: FacilitiesConfig;
   footerConfig?: FooterConfig;
   quoteCalcConfig?: QuoteCalcConfig;
   shopConfig?: ShopConfig;

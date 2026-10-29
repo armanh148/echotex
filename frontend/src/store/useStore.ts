@@ -262,6 +262,34 @@ const INITIAL_SETTINGS: SiteSettings = {
       }
     ]
   },
+  facilitiesConfig: {
+    title: 'State-of-the-Art Manufacturing & Fulfillment Facilities',
+    subtitle: 'Dual-continental operations combining California wholesale fulfillment with high-speed automated manufacturing mills.',
+    storySnippet: 'From automated ultrasonic welding to high-definition 8-color flexographic printing, our facilities are engineered for maximum circularity and zero-landfill compliance.',
+    annualCapacity: '50,000,000+ Units / Year',
+    certificationsMetric: 'ISO 9001:2015 & ASTM D6400',
+    activeLinesMetric: '14 High-Speed Extrusion Lines',
+    showOnHomepage: true,
+    bannerImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=85',
+    hubs: [
+      {
+        name: 'Corona Distribution & Testing Hub',
+        tag: 'US Headquarters & Fulfillment',
+        address: '1200 Industrial Parkway, Corona, CA 92881',
+        capabilities: ['Same-Day Pallet Dispatch', 'ASTM Tensile Testing Lab', 'Custom Sample Prototyping'],
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
+        googleMapsUrl: 'https://maps.google.com/?q=1200+Industrial+Parkway,+Corona,+CA+92881'
+      },
+      {
+        name: 'Primary Manufacturing Plant',
+        tag: 'Heavy Industrial Production',
+        address: 'Sector 15, Korangi Industrial Area, Karachi, PK',
+        capabilities: ['Automated Ultrasonic Welding', '8-Color Flexographic Printing', 'Virgin PP & Bio-PLA Extrusion'],
+        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80',
+        googleMapsUrl: 'https://maps.google.com/?q=Korangi+Industrial+Area+Karachi'
+      }
+    ]
+  },
   contactConfig: {
     headline: 'Let’s Engineer Your Sustainable Wholesale Packaging Solution',
     email: 'orders@ecotexinc.com',
