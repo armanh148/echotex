@@ -73,7 +73,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
       <div className="absolute bottom-0 left-1/4 -z-0 w-[500px] h-[500px] bg-[#86C59E]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Navigation */}
-      <header className="w-full max-w-5xl flex items-center justify-between py-2 relative z-10">
+      <header className="w-full max-w-5xl flex items-center justify-between py-2 relative z-10 gap-2 flex-wrap sm:flex-nowrap">
         <button
           onClick={handleReturnToSite}
           className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#4E9F76] hover:text-[#006e17] bg-white border border-[#B2E2C5]/40 hover:border-[#86C59E] px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-xs hover:shadow-sm hover:scale-[1.02] active:scale-98"
@@ -95,7 +95,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
           {/* Top Brand Accent Bar */}
           <div className="h-2.5 w-full bg-gradient-to-r from-[#4E9F76] via-[#86C59E] to-[#B2E2C5]" />
 
-          <div className="p-8 sm:p-10">
+          <div className="p-5 sm:p-10">
             {/* Header Badge & Brand */}
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-2xl bg-[#D8F3DC] border border-[#B2E2C5]/50 text-[#4E9F76] flex items-center justify-center mx-auto mb-4 shadow-xs">

@@ -176,7 +176,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-[#B2E2C5]/30 p-4 z-50 animate-fadeInUp">
+            <div className="absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-2xl border border-[#B2E2C5]/30 p-4 z-50 animate-fadeInUp">
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="font-bold text-sm text-[#0f172a] flex items-center gap-2">
