@@ -289,12 +289,37 @@ export interface FacilitiesConfig {
   showOnHomepage?: boolean;
 }
 
+export interface ShippingConfig {
+  freeShippingThreshold: number;
+  standardShippingRate: number;
+  expressShippingRate: number;
+  estimatedTransitDays: string;
+  freightCarrier: string;
+  shippingPolicyNotice: string;
+  warehouseHub: string;
+  localPickupAvailable?: boolean;
+  sampleDispatchNotice?: string;
+}
+
 export interface FooterConfig {
   newsletterTitle: string;
   newsletterSubtitle?: string;
   newsletterBgImage?: string;
+  newsletterBtnText?: string;
+  newsletterActive?: boolean;
   tagline: string;
   copyrightNotice: string;
+  col1Title?: string;
+  col2Title?: string;
+  col3Title?: string;
+  socialTwitter?: string;
+  socialFacebook?: string;
+  socialLinkedin?: string;
+  socialInstagram?: string;
+  socialYoutube?: string;
+  termsNotice?: string;
+  privacyNotice?: string;
+  sitemapNotice?: string;
 }
 
 export interface QuoteCalcConfig {
@@ -413,7 +438,14 @@ export interface SiteSettings {
   aboutConfig?: AboutConfig;
   contactConfig?: ContactConfig;
   facilitiesConfig?: FacilitiesConfig;
+  shippingConfig?: ShippingConfig;
   footerConfig?: FooterConfig;
+  currencySymbol?: string;
+  currencyCode?: string;
+  taxRatePercent?: number;
+  taxExemptionNotice?: string;
+  guaranteeNotice?: string;
+  sampleKitPolicy?: string;
   quoteCalcConfig?: QuoteCalcConfig;
   shopConfig?: ShopConfig;
   dealConfig?: DealConfig;
