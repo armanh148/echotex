@@ -135,9 +135,15 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
   // Dynamic Featured / New Arrivals: Real newest products from catalog (newest added first)
   const featuredArrivals: Product[] = React.useMemo(() => {
     if (!allProducts || allProducts.length === 0) return [];
-    // Show newest products at index 0 immediately so user edits are instantly visible
-    return allProducts.slice(0, 8);
-  }, [allProducts]);
+    if (activeCategory !== 'all') {
+      const activeCatLower = activeCategory.toLowerCase();
+      return allProducts.filter(p => 
+        p.category?.toLowerCase() === activeCatLower ||
+        (p.categoryLabel && p.categoryLabel.toLowerCase().includes(activeCatLower))
+      );
+    }
+    return allProducts;
+  }, [allProducts, activeCategory]);
 
   // Dynamic Filtering for Full Catalog
   const filteredProducts = allProducts.filter(p => {
@@ -170,9 +176,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
 
   const handleCategorySelect = (categoryId: string) => {
     setActiveCategory(categoryId);
-    setShowFullCatalog(true);
     setTimeout(() => {
-      catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('new-arrivals-section')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
@@ -620,24 +625,24 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
            ======================================================== */}
         <section id="new-arrivals-section" className="mb-16 sm:mb-20">
           
-          {/* Header Row: Title & View All Link */}
+          {/* Header Row: Title */}
           <div className="flex items-center justify-between mb-10 pb-4 border-b border-stone-200">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
-              {siteSettings?.shopConfig?.newArrivalsHeading || 'New Arrivals'}
-            </h2>
-            <button
-              onClick={() => {
-                setShowFullCatalog(!showFullCatalog);
-                setActiveCategory('all');
-                setTimeout(() => {
-                  catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
-              className="text-sm sm:text-base font-bold text-[#FF5722] hover:text-[#e64a19] flex items-center gap-2 transition-colors cursor-pointer group"
-            >
-              <span>{showFullCatalog ? (siteSettings?.shopConfig?.newArrivalsHideBtnText || 'Hide Full Catalog') : (siteSettings?.shopConfig?.newArrivalsBtnText || 'View All')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-            </button>
+            <div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
+                {activeCategory !== 'all' 
+                  ? (displayCategories.find(c => c.id === activeCategory)?.label || 'Products')
+                  : (siteSettings?.shopConfig?.newArrivalsHeading || 'New Arrivals')}
+              </h2>
+            </div>
+            {activeCategory !== 'all' && (
+              <button
+                type="button"
+                onClick={() => setActiveCategory('all')}
+                className="text-xs font-bold text-[#FF5722] hover:underline cursor-pointer"
+              >
+                Clear Filter (Show All)
+              </button>
+            )}
           </div>
 
           {/* 4 Product Cards Grid - Generous Sizing across 1820px */}
@@ -737,239 +742,6 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
           </div>
 
         </section>
-
-        {/* ========================================================
-            6. EXPANDED CATALOG & WHOLESALE PACKAGING COLLECTION
-               (Appears when "View All" or a specific category is clicked)
-           ======================================================== */}
-        <div ref={catalogRef} id="catalog-full-section">
-          {showFullCatalog && (
-            <section className="bg-white rounded-3xl border border-stone-200/90 p-6 sm:p-10 mb-12 shadow-sm animate-fadeIn">
-              
-              {/* Filter & Search Bar */}
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-6 border-b border-stone-200">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-stone-900">
-                    {siteSettings?.shopConfig?.catalogTitle || 'Full Manufacturing & Retail Catalog'}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-500 mt-1">
-                    {siteSettings?.shopConfig?.catalogSubtitle || `Showing ${sortedProducts.length} items available for direct retail & wholesale bulk dispatch.`}
-                  </p>
-                </div>
-
-                {/* Search & Sort Controls */}
-                <div className="flex flex-wrap items-center gap-3">
-                  {/* Search Input */}
-                  <div className="relative">
-                    <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      placeholder="Search catalog..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9 pr-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-800 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0d3419]/30"
-                    />
-                  </div>
-
-                  {/* Sort Pill Buttons */}
-                  <div className="flex items-center bg-stone-100 rounded-xl p-1 border border-stone-200">
-                    <button
-                      onClick={() => setSortBy('featured')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                        sortBy === 'featured' ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-600'
-                      }`}
-                    >
-                      Featured
-                    </button>
-                    <button
-                      onClick={() => setSortBy('price')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                        sortBy === 'price' ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-600'
-                      }`}
-                    >
-                      Price
-                    </button>
-                    <button
-                      onClick={() => setSortBy('moq')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                        sortBy === 'moq' ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-600'
-                      }`}
-                    >
-                      Lowest MOQ
-                    </button>
-                  </div>
-
-                  {/* Reset Filter Button */}
-                  {(activeCategory !== 'all' || searchQuery) && (
-                    <button
-                      onClick={() => {
-                        setActiveCategory('all');
-                        setSearchQuery('');
-                      }}
-                      className="px-3 py-2 rounded-xl bg-emerald-50 text-[#0d3419] border border-emerald-200 text-xs font-bold hover:bg-emerald-100 transition-colors"
-                    >
-                      Reset All
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Dynamic Category Pill Tabs for Real-Time Catalog Filtering */}
-              <div className="flex flex-wrap items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none">
-                <button
-                  onClick={() => setActiveCategory('all')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                    activeCategory === 'all'
-                      ? 'bg-[#0d3419] text-white shadow-md'
-                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
-                  }`}
-                >
-                  All Collections ({allProducts.length})
-                </button>
-                {displayCategories.map((cat) => {
-                  const isCatActive = activeCategory.toLowerCase() === cat.id.toLowerCase() || 
-                                     activeCategory.toLowerCase() === cat.label.toLowerCase();
-                  const catProductCount = allProducts.filter(p => 
-                    p.category?.toLowerCase() === cat.id.toLowerCase() ||
-                    (p.categoryLabel && p.categoryLabel.toLowerCase() === cat.label.toLowerCase())
-                  ).length;
-
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => setActiveCategory(cat.id)}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-                        isCatActive
-                          ? 'bg-[#0d3419] text-white shadow-md'
-                          : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
-                      }`}
-                    >
-                      <span>{cat.label}</span>
-                      <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
-                        isCatActive ? 'bg-white/20 text-white' : 'bg-stone-200 text-stone-600'
-                      }`}>
-                        {catProductCount}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Grid of All Catalog Products or Empty State */}
-              {sortedProducts.length === 0 ? (
-                <div className="py-16 text-center bg-[#FAF8F5] rounded-3xl border border-stone-200/80 p-8 my-4">
-                  <div className="w-14 h-14 rounded-2xl bg-stone-100 text-stone-400 flex items-center justify-center mx-auto mb-4">
-                    <Search className="w-6 h-6 stroke-[1.5]" />
-                  </div>
-                  <h4 className="text-lg font-bold text-stone-800 mb-1">
-                    No products found in this category
-                  </h4>
-                  <p className="text-xs text-stone-500 mb-5 max-w-md mx-auto">
-                    Any new product added from the Admin Panel under this category will automatically be visible here.
-                  </p>
-                  <button
-                    onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
-                    className="px-5 py-2.5 rounded-xl bg-[#0d3419] text-white text-xs font-bold hover:bg-[#154a25] transition-all cursor-pointer shadow-xs"
-                  >
-                    View All Products ({allProducts.length})
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {sortedProducts.map((prod) => {
-                  const isWishlisted = !!wishlist[prod.id];
-                  const isProdOutOfStock = prod.inStock === false || (typeof prod.stockQuantity === 'number' && prod.stockQuantity <= 0);
-
-                  return (
-                    <div
-                      key={prod.id}
-                      onClick={() => onQuickView(prod)}
-                      className="group relative flex flex-col bg-[#FAF8F5] hover:bg-white rounded-2xl border border-stone-200/90 p-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                    >
-                      {/* Top Bar */}
-                      <div className="flex items-center justify-between w-full mb-3">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                          isProdOutOfStock ? 'bg-rose-600 text-white' : 'bg-[#0d3419] text-white'
-                        }`}>
-                          {isProdOutOfStock ? 'SOLD OUT' : (prod.badge || 'FACTORY DIRECT')}
-                        </span>
-                        <button
-                          onClick={(e) => toggleWishlist(prod.id, e)}
-                          aria-label="Add to wishlist"
-                          className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-stone-500 hover:text-red-500 shadow-2xs border border-stone-200"
-                        >
-                          <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-stone-600'}`} />
-                        </button>
-                      </div>
-
-                      {/* Image */}
-                      <div className="relative w-full aspect-square bg-white rounded-xl flex items-center justify-center p-4 mb-3 overflow-hidden border border-stone-100">
-                        <img
-                          src={prod.image || '/images/bag-green.png'}
-                          alt={prod.name}
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none"
-                          draggable={false}
-                        />
-                      </div>
-
-                      {/* Info */}
-                      <h4 className="font-bold text-sm text-stone-900 truncate mb-1">
-                        {prod.name}
-                      </h4>
-                      <p className="text-[11px] text-stone-500 line-clamp-1 mb-3">
-                        {prod.subtitle}
-                      </p>
-
-                      <div className="mt-auto flex items-center justify-between pt-2 border-t border-stone-200/70">
-                        <div>
-                          <span className="font-black text-base text-stone-900">
-                            ${prod.pricePerUnit.toFixed(2)}
-                          </span>
-                          <span className="text-[10px] text-stone-500 font-medium ml-1">
-                            {prod.moq > 1 ? `(MOQ ${prod.moq})` : '/ unit'}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-1.5">
-                          {prod.moq > 1 && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onOpenQuoteForProduct(prod);
-                              }}
-                              className="px-2.5 py-1.5 rounded-lg bg-emerald-50 text-[#0d3419] border border-emerald-200 text-[10px] font-bold hover:bg-emerald-100 transition-colors"
-                            >
-                              Quote
-                            </button>
-                          )}
-                          {isProdOutOfStock ? (
-                            <button
-                              disabled={true}
-                              title="Sold Out / Out of Stock"
-                              className="w-8 h-8 rounded-lg border border-stone-200 bg-stone-100 text-stone-400 flex items-center justify-center cursor-not-allowed"
-                            >
-                              <Lock className="w-3.5 h-3.5 text-stone-400" />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={(e) => handleQuickAdd(prod, e)}
-                              className="w-8 h-8 rounded-lg border border-stone-300 hover:border-stone-900 hover:bg-stone-900 hover:text-white text-stone-700 flex items-center justify-center transition-colors cursor-pointer"
-                            >
-                              <ShoppingCart className="w-3.5 h-3.5 stroke-[2]" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-                  );
-                })}
-              </div>
-              )}
-
-            </section>
-          )}
-        </div>
 
       </div>
 
