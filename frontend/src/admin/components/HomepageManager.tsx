@@ -727,8 +727,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'about' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Users className="w-5 h-5 text-[#4E9F76]" />
@@ -738,7 +738,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Mission quote, company narrative, founder message, and laboratory certification.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home & About
               </span>
             </div>
@@ -846,8 +846,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'facilities' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Factory className="w-5 h-5 text-[#4E9F76]" />
@@ -857,7 +857,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Corona California US distribution hub, heavy manufacturing plants, machinery capabilities, and annual capacity metrics.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home & Facilities
               </span>
             </div>
@@ -1026,8 +1026,8 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
          ======================================================== */}
       {activeTab === 'contact' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="text-base font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-2">
                   <Phone className="w-5 h-5 text-[#4E9F76]" />
@@ -1037,7 +1037,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
                   Direct telephone numbers, sales desk email, California address, and Google Maps integration.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="self-start sm:self-auto shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Live on Home & Contact
               </span>
             </div>

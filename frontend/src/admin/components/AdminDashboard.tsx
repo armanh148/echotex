@@ -73,15 +73,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const getSectionTitle = (section: AdminSection): string => {
     switch (section) {
       case 'overview': return 'Operations Dashboard';
-      case 'homepage': return 'Homepage Master CMS (All 6 Sections)';
-      case 'hero': return 'Homepage Banner & 3D Showcase';
-      case 'categories': return 'Product Categories & Taxonomy';
-      case 'products': return 'Products & Wholesale Catalog';
-      case 'offers': return 'Special Offers & Flash Deals';
-      case 'content': return 'Website Pages & Content Editor';
-      case 'rfq-orders': return 'Customer Orders & Quote Inquiries';
-      case 'media': return 'Media & Image Library';
-      case 'settings': return 'Site Settings & System Preferences';
+      case 'homepage': return 'Homepage Master CMS';
+      case 'hero': return 'Hero 3D Showcase';
+      case 'categories': return 'Product Categories';
+      case 'products': return 'Products Catalog';
+      case 'offers': return 'Special Offers & Deals';
+      case 'content': return 'Pages Content Editor';
+      case 'rfq-orders': return 'Orders & Quotes';
+      case 'media': return 'Media Library';
+      case 'settings': return 'Site Settings';
       default: return 'Admin Studio';
     }
   };
