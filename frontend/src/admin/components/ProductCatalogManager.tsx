@@ -1242,7 +1242,7 @@ export const ProductCatalogManager: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
                             Retail Max Allowed (Boxes) *
@@ -2134,25 +2134,25 @@ export const ProductCatalogManager: React.FC = () => {
             </form>
 
             {/* Modal Fixed Sticky Footer */}
-            <div className="p-3.5 sm:p-4 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
+            <div className="p-3 sm:p-4 border-t border-slate-100 bg-white flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-2.5 shrink-0">
               <span className="text-[11px] text-slate-400 hidden sm:inline">
                 All changes save directly to the database and sync instantly to the single product page.
               </span>
 
-              <div className="flex items-center gap-2.5 ml-auto">
+              <div className="flex items-center gap-2 xs:ml-auto w-full xs:w-auto">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition-colors cursor-pointer"
+                  className="flex-1 xs:flex-none px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition-colors cursor-pointer text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   form="product-full-form"
-                  className="px-6 py-2 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-bold transition-all shadow-md shadow-amber-600/20 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex-1 xs:flex-none px-6 py-2.5 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-bold transition-all shadow-md shadow-amber-600/20 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
                 >
-                  {editingProduct ? 'Save & Publish Changes' : 'Create Product'}
+                  {editingProduct ? 'Save & Publish' : 'Create Product'}
                 </button>
               </div>
             </div>
