@@ -221,12 +221,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       
       {/* Modal Container */}
       <div 
-        className="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl shadow-black/40 overflow-hidden border border-slate-200 my-auto text-[#111827] max-h-[94vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/40 overflow-hidden border border-slate-200 my-auto text-[#111827] max-h-[94vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         
         {/* Top Header Bar: Breadcrumbs & Close Button */}
-        <div className="px-6 sm:px-10 py-4 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+        <div className="px-4 sm:px-10 py-3.5 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-widest overflow-hidden text-ellipsis whitespace-nowrap">
             <button onClick={onClose} className="hover:text-[#166534] transition-colors cursor-pointer">
               HOME
@@ -251,7 +251,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Scrollable Body: Exactly Matching Reference Image Layout */}
-        <div className="overflow-y-auto px-6 sm:px-10 py-6 sm:py-8">
+        <div className="overflow-y-auto px-4 sm:px-10 py-5 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
             {/* ====================================================

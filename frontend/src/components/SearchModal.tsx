@@ -32,7 +32,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-2.5 sm:p-6 md:p-20">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/75 backdrop-blur-md transition-opacity"
@@ -49,7 +49,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             placeholder="Search bags, compostable materials, GSM weights..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full py-4 pl-3 pr-4 text-sm text-[#142817] placeholder:text-slate-400 focus:outline-none"
+            className="w-full py-3.5 sm:py-4 pl-2.5 pr-3 text-xs sm:text-sm text-[#142817] placeholder:text-slate-400 focus:outline-none"
           />
           <button
             onClick={onClose}

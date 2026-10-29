@@ -233,7 +233,7 @@ export const CustomerChatbot: React.FC = () => {
               setIsOpen(true);
               setHasPromptedBanner(false);
             }}
-            className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full shadow-xl shadow-black/10 border border-[#B2E2C5]/50 text-xs text-[#1c1b18] flex items-center justify-between gap-2.5 animate-fadeIn cursor-pointer hover:border-[#166534] transition-all"
+            className="bg-white/95 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full shadow-xl shadow-black/10 border border-[#B2E2C5]/50 text-xs text-[#1c1b18] flex items-center justify-between gap-2 max-w-[85vw] animate-fadeIn cursor-pointer hover:border-[#166534] transition-all"
           >
             <div className="flex items-center gap-1.5 font-sans font-semibold text-[#166534] text-[11px] select-none">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -282,7 +282,7 @@ export const CustomerChatbot: React.FC = () => {
           2. CHATBOT WINDOW DIALOG
          ======================================================== */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[92vw] sm:w-[410px] h-[590px] max-h-[85vh] bg-white rounded-3xl shadow-2xl shadow-black/25 border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed bottom-18 sm:bottom-24 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[410px] h-[540px] max-h-[82vh] bg-white rounded-3xl shadow-2xl shadow-black/25 border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           
           {/* Header */}
           <div className="bg-gradient-to-r from-[#166534] to-[#14532d] text-white p-4 sm:p-5 flex items-center justify-between shadow-xs shrink-0">
