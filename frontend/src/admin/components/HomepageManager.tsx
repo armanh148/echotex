@@ -240,17 +240,16 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const tabs: { id: HomepageTab; label: string; icon: React.ElementType; badge?: string }[] = [
-    { id: 'hero', label: '1. Hero Section', icon: Sliders, badge: 'Main Banner' },
-    { id: 'sustainable-fashion', label: '2. Sustainable Fashion', icon: Sparkles, badge: '4 Value Cards' },
-    { id: 'versatility', label: '3. Versatility', icon: Layers, badge: 'Panoramic Banner' },
-    { id: 'about', label: '4. About Ecotex', icon: Users, badge: 'Story & Mission' },
-    { id: 'facilities', label: '5. Facilities', icon: Factory, badge: 'Plants & Machinery' },
-    { id: 'contact', label: '6. Contact Section', icon: Phone, badge: 'Direct Mill Hub' },
+  const tabs: { id: HomepageTab; label: string; desc: string; icon: React.ElementType; badge?: string }[] = [
+    { id: 'hero', label: 'Hero Section', desc: 'Headline, subtext & panoramic scene', icon: Sliders, badge: 'Hero' },
+    { id: 'sustainable-fashion', label: 'Sustainable Fashion', desc: '4 value feature proposition cards', icon: Sparkles, badge: 'Cards' },
+    { id: 'versatility', label: 'Versatility Banner', desc: 'Panoramic banner & 4 trust badges', icon: Layers, badge: 'Banner' },
+    { id: 'about', label: 'About Ecotex', desc: 'Brand story, mission & founder portrait', icon: Users, badge: 'Story' },
+    { id: 'facilities', label: 'Facilities & Plants', desc: 'Manufacturing plants, specs & machinery', icon: Factory, badge: 'Hubs' },
+    { id: 'contact', label: 'Contact Section', desc: 'Direct mill sales, phone & Google Maps', icon: Phone, badge: 'Direct' },
   ];
 
   const titleLines = (localHero.title || "It's time to\npack better.").split('\n');
-
   return (
     <div className="space-y-8 animate-fadeInUp pb-16 font-sans text-[#0f172a] select-none">
       
@@ -325,38 +324,69 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
       )}
 
       {/* ========================================================
-          6-SECTION TAB NAVIGATION PILLS
+          2-COLUMN LAYOUT: LEFT CMS SIDEBAR + RIGHT CONTENT AREA
+          (Matches Website Content Layout)
          ======================================================== */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-extrabold transition-all whitespace-nowrap cursor-pointer border ${
-                isActive
-                  ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 scale-[1.02]'
-                  : 'bg-white text-slate-600 hover:text-[#0f172a] hover:bg-slate-50 border-slate-200/80'
-              }`}
-            >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-[#86C59E]' : 'text-slate-400'}`} />
-              <span>{tab.label}</span>
-              {tab.badge && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
-                }`}>
-                  {tab.badge}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        
+        {/* Left Sticky Vertical Navigation Sidebar */}
+        <aside className="w-full lg:w-72 xl:w-80 shrink-0 lg:sticky lg:top-24 space-y-3">
+          <div className="bg-white rounded-3xl p-3.5 sm:p-4 border border-[#B2E2C5]/50 shadow-xs">
+            <div className="px-3 py-2.5 mb-2.5 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                  Homepage CMS
                 </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+                <span className="text-xs font-bold text-slate-900">
+                  Homepage Sections
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#166534] bg-emerald-100/80 border border-emerald-300/60 px-2.5 py-0.5 rounded-full shadow-2xs">
+                {tabs.length} Sections
+              </span>
+            </div>
 
-      {/* ========================================================
+            <nav className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-thin">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer w-full text-left border group ${
+                      isActive
+                        ? 'bg-[#166534] text-white border-[#166534] shadow-md shadow-[#166534]/20 lg:translate-x-1 font-extrabold'
+                        : 'bg-white text-slate-700 border-transparent hover:bg-slate-50 hover:border-slate-200 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                      isActive 
+                        ? 'bg-white/20 text-white shadow-2xs' 
+                        : 'bg-slate-100 text-slate-500 group-hover:bg-[#B2E2C5]/30 group-hover:text-[#166534]'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="truncate flex-1 min-w-0">
+                      <span className="block truncate font-bold text-xs">{tab.label}</span>
+                      <span className={`block text-[10px] font-normal truncate mt-0.5 ${isActive ? 'text-emerald-100' : 'text-slate-400'}`}>
+                        {tab.desc}
+                      </span>
+                    </div>
+                    {isActive && (
+                      <div className="w-1.5 h-6 rounded-full bg-white shrink-0 hidden lg:block" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+
+        {/* Right Content Panel */}
+        <div className="flex-1 min-w-0 w-full space-y-6">
+{/* ========================================================
           TAB 1: HERO SECTION
          ======================================================== */}
       {activeTab === 'hero' && (
@@ -1084,33 +1114,34 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
         </div>
       )}
 
-      {/* ========================================================
-          BOTTOM SAVE BAR
-         ======================================================== */}
-      <div className="flex items-center justify-between pt-6 border-t border-slate-200 bg-transparent">
-        <p className="text-xs text-slate-500 font-medium">
-          Sabhi changes database aur browser storage mein foran live sync ho jayenge.
-        </p>
+      
+          {/* Bottom Save Bar inside Right Content Area */}
+          <div className="flex items-center justify-between pt-6 border-t border-slate-200 bg-white p-6 rounded-3xl shadow-xs">
+            <p className="text-xs text-slate-500 font-medium">
+              Sabhi changes database aur browser storage mein foran live sync ho jayenge.
+            </p>
 
-        <button
-          type="button"
-          onClick={handleSaveAll}
-          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
-        >
-          {saveSuccess ? (
-            <>
-              <CheckCircle2 className="w-4 h-4 text-emerald-200" />
-              <span>Published Live!</span>
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4" />
-              <span>Save & Publish Live</span>
-            </>
-          )}
-        </button>
+            <button
+              type="button"
+              onClick={handleSaveAll}
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#166534] via-[#15803d] to-[#16a34a] hover:from-[#14532d] hover:to-[#15803d] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-98 cursor-pointer"
+            >
+              {saveSuccess ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+                  <span>Published Live!</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  <span>Save & Publish Live</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
       </div>
-
     </div>
   );
 };
