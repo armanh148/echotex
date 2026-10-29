@@ -2150,7 +2150,7 @@ export const ProductCatalogManager: React.FC = () => {
                 <button
                   type="submit"
                   form="product-full-form"
-                  className="flex-1 xs:flex-none px-6 py-2.5 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-bold transition-all shadow-md shadow-amber-600/20 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
+                  className="flex-1 xs:flex-none px-6 py-2.5 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white text-xs font-bold transition-all shadow-md shadow-amber-600/20 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center whitespace-nowrap shrink-0"
                 >
                   {editingProduct ? 'Save & Publish' : 'Create Product'}
                 </button>

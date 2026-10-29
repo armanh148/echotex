@@ -425,9 +425,9 @@ return () => clearTimeout(timer);
             type="button"
             onClick={handleSaveSettings}
             disabled={isSaving}
-            className="flex-1 md:flex-none justify-center flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50"
+            className="flex-1 md:flex-none justify-center flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
           >
-            {isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSaving ? <RefreshCw className="w-4 h-4 animate-spin shrink-0" /> : <Save className="w-4 h-4 shrink-0" />}
             <span>{isSaving ? 'Saving...' : 'Save Settings'}</span>
           </button>
         </div>
@@ -1754,18 +1754,18 @@ return () => clearTimeout(timer);
       )}
 
           {/* Bottom Sticky Action Bar */}
-          <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+          <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <span>Configured settings will instantly apply to both admin and customer storefront.</span>
             </div>
             <button
               type="button"
               onClick={handleSaveSettings}
               disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50"
+              className="w-full sm:w-auto shrink-0 whitespace-nowrap flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50"
             >
-              {isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {isSaving ? <RefreshCw className="w-4 h-4 animate-spin shrink-0" /> : <Save className="w-4 h-4 shrink-0" />}
               <span>{isSaving ? 'Saving Changes...' : 'Save Settings'}</span>
             </button>
           </div>
