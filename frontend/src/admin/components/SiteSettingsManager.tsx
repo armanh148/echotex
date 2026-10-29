@@ -431,6 +431,8 @@ return () => clearTimeout(timer);
     { id: 'notifications', label: 'WhatsApp & Email', desc: 'Chatbot channels & order alerts', icon: Bell },
     { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
     { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
+    { id: 'shipping', label: 'Shipping & Fulfillment', desc: 'Free threshold, rates & logistics', icon: Truck },
+    { id: 'footer', label: 'Footer & Policies', desc: 'Newsletter, links & copyright', icon: Layers },
     { id: 'commerce', label: 'Store Defaults', desc: 'Order limits, plates & lead times', icon: DollarSign }
   ];
 

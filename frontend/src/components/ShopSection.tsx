@@ -220,6 +220,8 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
     return 0;
   });
 
+  const displayedProducts = isHome ? featuredArrivals : sortedProducts;
+
   const scrollToCategories = () => {
     categoriesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -740,7 +742,9 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
                 {activeCategory !== 'all' 
                   ? (displayCategories.find(c => c.id === activeCategory)?.label || 'Products')
-                  : (siteSettings?.shopConfig?.newArrivalsHeading || 'New Arrivals')}
+                  : (isHome 
+                      ? (siteSettings?.shopConfig?.newArrivalsHeading || 'New Arrivals')
+                      : (siteSettings?.shopConfig?.allProductsHeading || 'All Products'))}
               </h2>
             </div>
 
@@ -798,41 +802,152 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
             </div>
           </div>
 
-          {/* On Home: 2-per-line touch Carousel on Mobile; On Shop: Standard 2-col on Mobile, 4-col on Desktop Grid */}
-          <div
-            ref={isHome ? newArrivalsSliderRef : undefined}
-            onScroll={isHome ? handleNewArrivalsScroll : undefined}
-            className={isHome 
-              ? "flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-3 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-2 lg:grid-cols-4 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
-              : "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8"
-            }
-          >
-            {featuredArrivals.map((product) => {
-              const isWishlisted = !!wishlist[product.id];
-              const isProdOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
-
-              return (
-                <div
-                  key={product.id}
-                  onClick={() => onQuickView(product)}
-                  className={`group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl border border-stone-200/90 p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer ${
-                    isHome 
-                      ? 'shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-8px)] sm:w-auto snap-start sm:snap-align-none' 
-                      : ''
+          {/* On Shop Page (!isHome): Category Filter Pills, Search Bar & Sort Dropdown */}
+          {!isHome && (
+            <div className="mb-6 sm:mb-8 space-y-4">
+              {/* Category Pills Navigation */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory('all')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    activeCategory === 'all'
+                      ? 'bg-[#0d3419] text-white shadow-xs'
+                      : 'bg-white text-stone-600 border border-stone-200/90 hover:bg-stone-50'
                   }`}
                 >
-                  
-                  {/* Top Bar inside Card: NEW/SOLD OUT Badge on left, Heart Icon on right */}
-                  <div className="flex items-center justify-between w-full mb-2.5 sm:mb-4 relative z-10">
-                    {isProdOutOfStock ? (
-                      <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-rose-600 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider shadow-2xs">
-                        SOLD OUT
-                      </span>
-                    ) : (
-                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-stone-900 text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider shadow-2xs">
-                        NEW
-                      </span>
-                    )}
+                  All Products ({allProducts.length})
+                </button>
+                {displayCategories.map((cat) => {
+                  const isCatActive = activeCategory.toLowerCase() === cat.id.toLowerCase() ||
+                    activeCategory.toLowerCase() === cat.label.toLowerCase();
+                  const catCount = allProducts.filter(p =>
+                    p.category?.toLowerCase() === cat.id.toLowerCase() ||
+                    (p.categoryLabel && p.categoryLabel.toLowerCase() === cat.label.toLowerCase())
+                  ).length;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                        isCatActive
+                          ? 'bg-[#0d3419] text-white shadow-xs'
+                          : 'bg-white text-stone-600 border border-stone-200/90 hover:bg-stone-50'
+                      }`}
+                    >
+                      {cat.label} ({catCount})
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search & Sort Controls Row */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    type="text"
+                    placeholder="Search products by name, specs, material..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-white border border-stone-200 rounded-xl focus:border-[#0d3419] focus:outline-none"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-xs font-bold p-1"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between sm:justify-end gap-3 text-xs text-stone-500">
+                  <span className="font-medium">
+                    Showing <strong className="text-stone-900">{displayedProducts.length}</strong> {displayedProducts.length === 1 ? 'item' : 'items'}
+                  </span>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-stone-400 font-bold hidden xs:inline">Sort:</span>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-stone-700 focus:outline-none focus:border-[#0d3419]"
+                    >
+                      <option value="featured">Featured</option>
+                      <option value="price">Price: Low to High</option>
+                      <option value="moq">MOQ: Low to High</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Catalog Grid or Empty State */}
+          {displayedProducts.length === 0 ? (
+            <div className="bg-white rounded-3xl p-10 text-center border border-stone-200 my-8">
+              <ShoppingBag className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+              <h3 className="text-base sm:text-lg font-bold text-stone-900">No products found</h3>
+              <p className="text-xs sm:text-sm text-stone-500 mt-1 max-w-sm mx-auto">
+                No items match your active filters or search query.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveCategory('all');
+                  setSearchQuery('');
+                }}
+                className="mt-4 px-4 py-2 rounded-xl bg-[#0d3419] text-white text-xs font-bold hover:bg-[#165a2d] transition-all cursor-pointer"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          ) : (
+            <div
+              ref={isHome ? newArrivalsSliderRef : undefined}
+              onScroll={isHome ? handleNewArrivalsScroll : undefined}
+              className={isHome 
+                ? "flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-3 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-2 lg:grid-cols-4 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+                : "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8"
+              }
+            >
+              {displayedProducts.map((product) => {
+                const isWishlisted = !!wishlist[product.id];
+                const isProdOutOfStock = product.inStock === false || (typeof product.stockQuantity === 'number' && product.stockQuantity <= 0);
+
+                return (
+                  <div
+                    key={product.id}
+                    onClick={() => onQuickView(product)}
+                    className={`group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl border border-stone-200/90 p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer ${
+                      isHome 
+                        ? 'shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-8px)] sm:w-auto snap-start sm:snap-align-none' 
+                        : ''
+                    }`}
+                  >
+                    
+                    {/* Top Bar inside Card: NEW / SOLD OUT / Custom Badge / IN STOCK */}
+                    <div className="flex items-center justify-between w-full mb-2.5 sm:mb-4 relative z-10">
+                      {isProdOutOfStock ? (
+                        <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-rose-600 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                          SOLD OUT
+                        </span>
+                      ) : isHome ? (
+                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-stone-900 text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider shadow-2xs">
+                          NEW
+                        </span>
+                      ) : product.badge ? (
+                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#0d3419] text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider shadow-2xs">
+                          {product.badge}
+                        </span>
+                      ) : (
+                        <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-stone-100 text-stone-700 border border-stone-200 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider">
+                          IN STOCK
+                        </span>
+                      )}
 
                     <button
                       onClick={(e) => toggleWishlist(product.id, e)}
@@ -904,6 +1019,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
               );
             })}
           </div>
+        )}
 
           {/* Mobile Carousel Indicator Dots (Only on Home Page) */}
           {isHome && featuredArrivals.length > 2 && (
