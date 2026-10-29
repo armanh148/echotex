@@ -432,13 +432,14 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
             )}
           </div>
 
-          {/* Dynamic Responsive Grid matching whatever categories the admin adds */}
+          {/* Dynamic Responsive Grid / Mobile Horizontal Slider */}
           {displayCategories.length > 0 ? (
-            <div
-              ref={categorySliderRef}
-              onScroll={handleCategoryScroll}
-              className="flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-4 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
-            >
+            <>
+              <div
+                ref={categorySliderRef}
+                onScroll={handleCategoryScroll}
+                className="flex sm:grid overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 gap-4 sm:gap-6 lg:gap-8 snap-x snap-mandatory sm:snap-none scrollbar-none sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+              >
               {displayCategories.map((cat) => {
                 const isActive = activeCategory.toLowerCase() === cat.id.toLowerCase() || 
                                  activeCategory.toLowerCase() === cat.label.toLowerCase();
@@ -555,6 +556,7 @@ export const ShopSection: React.FC<ShopSectionProps> = ({
                 </span>
               </div>
             )}
+            </>
           ) : (
             <div className="text-center py-12 text-sm text-stone-500">
               No categories configured yet. Add categories from the Admin Panel.
