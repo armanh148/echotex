@@ -120,16 +120,7 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
       const timer = setTimeout(() => {
         setSaveToast(prev => ({ ...prev, show: false }));
       }, 3500);
-      const settingsTabs: { id: SettingsTab; label: string; desc: string; icon: React.ElementType }[] = [
-    { id: 'identity', label: 'Site Identity & SEO', desc: 'Brand title, favicon & SEO meta', icon: Globe },
-    { id: 'account', label: 'Admin Security', desc: 'Password & administrator credentials', icon: User },
-    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Chatbot channels & order alerts', icon: Bell },
-    { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
-    { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
-    { id: 'commerce', label: 'Store Defaults', desc: 'Order limits, plates & lead times', icon: DollarSign }
-  ];
-
-  return () => clearTimeout(timer);
+return () => clearTimeout(timer);
     }
   }, [saveToast.show]);
 
@@ -373,6 +364,15 @@ export const SiteSettingsManager: React.FC<SiteSettingsManagerProps> = ({ onLogo
     setConfirmPassword('');
     setPasswordMessage({ type: 'success', text: 'Password successfully changed! Use your new credentials for next login.' });
   };
+
+  const settingsTabs: { id: SettingsTab; label: string; desc: string; icon: React.ElementType }[] = [
+    { id: 'identity', label: 'Site Identity & SEO', desc: 'Brand title, favicon & SEO meta', icon: Globe },
+    { id: 'account', label: 'Admin Security', desc: 'Password & administrator credentials', icon: User },
+    { id: 'notifications', label: 'WhatsApp & Email', desc: 'Chatbot channels & order alerts', icon: Bell },
+    { id: 'announcement', label: 'Header Announcement', desc: 'Top notice banner & alerts', icon: Megaphone },
+    { id: 'business', label: 'Business & Contacts', desc: 'Facility addresses & phone lines', icon: Building2 },
+    { id: 'commerce', label: 'Store Defaults', desc: 'Order limits, plates & lead times', icon: DollarSign }
+  ];
 
   const currentFavicon = formData.logoConfig?.faviconUrl || '/favicon.ico';
   const currentTitle = formData.siteTitle || formData.companyName || 'Ecotex Inc.';
