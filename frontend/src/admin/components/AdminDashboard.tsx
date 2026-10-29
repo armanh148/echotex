@@ -116,10 +116,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           />
 
           {/* Drawer Content */}
-          <div className="relative w-80 max-w-[85vw] h-full bg-white z-10 shadow-2xl flex flex-col animate-slideInLeft">
+          <div className="relative w-72 xs:w-80 max-w-[85vw] h-full bg-white z-10 shadow-2xl flex flex-col animate-slideInLeft overflow-hidden">
             <button
               onClick={() => setIsMobileSidebarOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-700 bg-slate-100 z-20"
+              className="absolute top-3.5 right-3.5 p-2 rounded-xl text-slate-400 hover:text-slate-700 bg-slate-100 z-20 cursor-pointer"
               aria-label="Close sidebar"
             >
               <X className="w-5 h-5" />

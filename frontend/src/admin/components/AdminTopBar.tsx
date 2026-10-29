@@ -104,10 +104,10 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
   const displayedOrders = filterMode === 'unread' ? pendingOrders : allActiveOrders;
 
   return (
-    <header className="h-20 bg-white border-b border-[#B2E2C5]/25 px-3 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+    <header className="h-16 sm:h-20 bg-white border-b border-[#B2E2C5]/25 px-2.5 xs:px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
       
       {/* Left: Sidebar Toggle Button (Mobile & Desktop) & Active Section Title */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 min-w-0">
         {/* Universal Sidebar Open/Close Toggle Button */}
         <button
           onClick={() => {
@@ -117,15 +117,18 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
               onToggleDesktopSidebar();
             }
           }}
-          className="p-2 sm:p-2.5 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 border border-slate-200/90 transition-all cursor-pointer flex items-center gap-2 group shadow-2xs hover:scale-105 active:scale-95"
-          title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-          aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+          className="p-2 sm:p-2.5 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 border border-slate-200/90 transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 group shadow-2xs hover:scale-105 active:scale-95 shrink-0"
+          title={isSidebarOpen ? "Toggle Sidebar" : "Open Sidebar"}
+          aria-label={isSidebarOpen ? "Toggle sidebar" : "Open sidebar"}
         >
-          {isSidebarOpen ? (
-            <PanelLeftClose className="w-5 h-5 text-slate-500 group-hover:text-[#4E9F76] transition-colors" />
-          ) : (
-            <PanelLeftOpen className="w-5 h-5 text-[#4E9F76]" />
-          )}
+          <Menu className="w-5 h-5 lg:hidden text-slate-700 group-hover:text-[#4E9F76]" />
+          <span className="hidden lg:inline-flex">
+            {isSidebarOpen ? (
+              <PanelLeftClose className="w-5 h-5 text-slate-500 group-hover:text-[#4E9F76] transition-colors" />
+            ) : (
+              <PanelLeftOpen className="w-5 h-5 text-[#4E9F76]" />
+            )}
+          </span>
           {!isSidebarOpen && (
             <span className="hidden sm:inline text-xs font-bold text-[#4E9F76]">
               Open Sidebar
@@ -133,23 +136,34 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
           )}
         </button>
 
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#86C59E] animate-pulse" />
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#4E9F76]">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#86C59E] animate-pulse shrink-0" />
+            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[#4E9F76] truncate">
               Ecotex Studio
             </span>
           </div>
-          <h1 className="text-sm xs:text-base sm:text-xl font-black text-[#0f172a] tracking-tight truncate max-w-[130px] xs:max-w-[200px] sm:max-w-none">
+          <h1 className="text-xs xs:text-sm sm:text-lg lg:text-xl font-black text-[#0f172a] tracking-tight truncate max-w-[150px] xs:max-w-[220px] sm:max-w-none">
             {activeSectionTitle}
           </h1>
         </div>
       </div>
 
       {/* Right: Actions, Notifications & Profile Avatar */}
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
-        {/* View Live Site Button */}
+        {/* View Live Site Button (Mobile Icon / Desktop Full) */}
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex sm:hidden p-2 rounded-xl text-[#4E9F76] bg-[#B2E2C5]/15 border border-[#B2E2C5]/40 hover:bg-[#B2E2C5]/30 transition-all active:scale-95 shadow-xs cursor-pointer"
+          title="View Live Site"
+          aria-label="View Live Site"
+        >
+          <ExternalLink className="w-4 h-4 text-[#86C59E]" />
+        </a>
+
         <a
           href="/"
           target="_blank"
@@ -164,7 +178,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-2.5 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-all border border-slate-200/80 hover:border-[#B2E2C5]/60 cursor-pointer"
+            className="relative p-2 sm:p-2.5 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-all border border-slate-200/80 hover:border-[#B2E2C5]/60 cursor-pointer active:scale-95"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
@@ -176,7 +190,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-2xl border border-[#B2E2C5]/30 p-4 z-50 animate-fadeInUp">
+            <div className="fixed inset-x-3 top-18 sm:static sm:inset-auto sm:absolute sm:right-0 sm:top-full sm:mt-3 sm:w-96 max-w-sm sm:max-w-md mx-auto sm:mx-0 bg-white rounded-2xl shadow-2xl border border-[#B2E2C5]/30 p-4 z-50 animate-fadeInUp">
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="font-bold text-sm text-[#0f172a] flex items-center gap-2">

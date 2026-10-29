@@ -407,11 +407,11 @@ export const RfqOrdersInbox: React.FC = () => {
             <span className="p-1 rounded-lg bg-[#B2E2C5]/20 text-[#4E9F76]">
               <Inbox className="w-4 h-4" />
             </span>
-            <span className="text-xs font-black uppercase tracking-wider text-[#4E9F76]">
+            <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#4E9F76]">
               Procurement & Sales Desk
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-[#0f172a] mt-1">
+          <h2 className="text-lg xs:text-xl sm:text-2xl font-black text-[#0f172a] mt-1">
             RFQ & Production Orders Inbox
           </h2>
           <p className="text-xs text-slate-500">
@@ -420,39 +420,39 @@ export const RfqOrdersInbox: React.FC = () => {
         </div>
 
         {/* Action Buttons: Add Order / Add Quote + Refresh */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2.5 w-full sm:w-auto">
           {activeTab === 'orders' ? (
             <button
               onClick={handleOpenCreateOrder}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 shrink-0" />
               <span>Create Order</span>
             </button>
           ) : (
             <button
               onClick={handleOpenCreateQuote}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold text-xs shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 shrink-0" />
               <span>Create RFQ Quote</span>
             </button>
           )}
 
           {/* Tab Switcher & Manual Refresh */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
+          <div className="flex items-center justify-between gap-1 p-1 bg-slate-100 rounded-2xl flex-1 xs:flex-none">
             <button
               onClick={() => {
                 setActiveTab('orders');
                 setStatusFilter('all');
               }}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'orders'
                   ? 'bg-white text-[#4E9F76] shadow-xs'
                   : 'text-slate-600 hover:text-[#0f172a]'
               }`}
             >
-              <ShoppingBag className="w-3.5 h-3.5" />
+              <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
               <span>Orders</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
                 pendingOrdersCount > 0 ? 'bg-amber-100 text-amber-800' : 'bg-[#B2E2C5]/20 text-[#4E9F76]'
@@ -466,35 +466,35 @@ export const RfqOrdersInbox: React.FC = () => {
                 setActiveTab('quotes');
                 setStatusFilter('all');
               }}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'quotes'
                   ? 'bg-white text-[#4E9F76] shadow-xs'
                   : 'text-slate-600 hover:text-[#0f172a]'
               }`}
             >
-              <FileText className="w-3.5 h-3.5" />
-              <span>RFQ Quotes</span>
+              <FileText className="w-3.5 h-3.5 shrink-0" />
+              <span>Quotes</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
                 newQuotesCount > 0 ? 'bg-blue-100 text-blue-800' : 'bg-[#B2E2C5]/20 text-[#4E9F76]'
               }`}>
                 {quotes.length}
               </span>
             </button>
-          </div>
 
-          <button
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-            title="Refresh Orders from Server"
-            className="p-2.5 rounded-2xl bg-white border border-slate-200 hover:border-[#86C59E] hover:bg-slate-50 text-slate-600 hover:text-[#4E9F76] transition-all shadow-xs cursor-pointer"
-          >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#4E9F76]' : ''}`} />
-          </button>
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              title="Refresh Orders from Server"
+              className="p-2 rounded-xl bg-white border border-slate-200 hover:border-[#86C59E] hover:bg-slate-50 text-slate-600 hover:text-[#4E9F76] transition-all shadow-xs cursor-pointer shrink-0"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#4E9F76]' : ''}`} />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Search & Status Filters */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#B2E2C5]/30 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-[#B2E2C5]/30 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
           <input
@@ -506,243 +506,441 @@ export const RfqOrdersInbox: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <CustomSelect
-            value={statusFilter}
-            onChange={(val) => setStatusFilter(val)}
-            options={
-              activeTab === 'quotes' ? [
-                { value: 'all', label: 'All Statuses' },
-                { value: 'New', label: 'New', dot: 'bg-emerald-500' },
-                { value: 'In Review', label: 'In Review', dot: 'bg-amber-500' },
-                { value: 'Quotation Sent', label: 'Quotation Sent', dot: 'bg-blue-500' },
-                { value: 'Approved', label: 'Approved', dot: 'bg-emerald-600' },
-                { value: 'Declined', label: 'Declined', dot: 'bg-rose-500' }
-              ] : [
-                { value: 'all', label: 'All Statuses' },
-                { value: 'Pending', label: 'Pending', dot: 'bg-amber-500' },
-                { value: 'In Production', label: 'In Production', dot: 'bg-purple-500' },
-                { value: 'Shipped', label: 'Shipped', dot: 'bg-sky-500' },
-                { value: 'Completed', label: 'Completed', dot: 'bg-emerald-500' }
-              ]
-            }
-          />
+        <div className="flex items-center gap-2 shrink-0">
+          <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <div className="w-full sm:w-auto">
+            <CustomSelect
+              value={statusFilter}
+              onChange={(val) => setStatusFilter(val)}
+              options={
+                activeTab === 'quotes' ? [
+                  { value: 'all', label: 'All Statuses' },
+                  { value: 'New', label: 'New', dot: 'bg-emerald-500' },
+                  { value: 'In Review', label: 'In Review', dot: 'bg-amber-500' },
+                  { value: 'Quotation Sent', label: 'Quotation Sent', dot: 'bg-blue-500' },
+                  { value: 'Approved', label: 'Approved', dot: 'bg-emerald-600' },
+                  { value: 'Declined', label: 'Declined', dot: 'bg-rose-500' }
+                ] : [
+                  { value: 'all', label: 'All Statuses' },
+                  { value: 'Pending', label: 'Pending', dot: 'bg-amber-500' },
+                  { value: 'In Production', label: 'In Production', dot: 'bg-purple-500' },
+                  { value: 'Shipped', label: 'Shipped', dot: 'bg-sky-500' },
+                  { value: 'Completed', label: 'Completed', dot: 'bg-emerald-500' }
+                ]
+              }
+            />
+          </div>
         </div>
       </div>
 
-      {/* Tab 1: Quotes Table */}
+      {/* Tab 1: Quotes View (Mobile Cards + Desktop Table) */}
       {activeTab === 'quotes' && (
-        <div className="bg-white rounded-3xl border border-[#B2E2C5]/30 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-black uppercase tracking-wider text-slate-500">
-                  <th className="py-4 px-6">RFQ ID & Date</th>
-                  <th className="py-4 px-6">Buyer & Organization</th>
-                  <th className="py-4 px-6">Product & Volume</th>
-                  <th className="py-4 px-6">Printing Requirement</th>
-                  <th className="py-4 px-6">Status</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs">
-                {filteredQuotes.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400 font-medium">
-                      No quotation requests matching your filter.
-                      <div className="mt-3">
-                        <button
-                          onClick={handleOpenCreateQuote}
-                          className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
-                        >
-                          + Create New Quote
-                        </button>
+        <div className="space-y-4">
+          {/* Mobile Card List (block md:hidden) */}
+          <div className="block md:hidden space-y-3">
+            {filteredQuotes.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-[#B2E2C5]/30 p-8 text-center text-slate-400 font-medium">
+                No quotation requests matching your filter.
+                <div className="mt-3">
+                  <button
+                    onClick={handleOpenCreateQuote}
+                    className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
+                  >
+                    + Create New Quote
+                  </button>
+                </div>
+              </div>
+            ) : (
+              filteredQuotes.map((q) => (
+                <div key={q.id} className="bg-white rounded-3xl border border-[#B2E2C5]/40 p-4 shadow-xs space-y-3">
+                  {/* Card Header */}
+                  <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-100">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-black text-sm text-[#0f172a]">{q.id}</span>
+                        <span className="text-[10px] text-slate-400 font-medium">· {q.date || 'Recent'}</span>
                       </div>
-                    </td>
+                      <div className="font-bold text-xs text-slate-900 mt-0.5 truncate">{q.name}</div>
+                      <div className="text-[11px] text-[#4E9F76] font-semibold truncate">{q.company || 'Enterprise Wholesaler'}</div>
+                    </div>
+                    <div className="shrink-0">
+                      <StatusBadgeDropdown
+                        value={q.status}
+                        onChange={(val) => updateQuoteStatus(q.id, val)}
+                        options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Details Body */}
+                  <div className="p-3 bg-slate-50 rounded-2xl space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 font-medium text-[11px]">Product:</span>
+                      <span className="font-semibold text-slate-800 capitalize truncate max-w-[180px]">{q.category || q.bagType || 'Wholesale Packaging'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 font-medium text-[11px]">Volume:</span>
+                      <span className="font-black text-[#4E9F76]">
+                        {q.volume || (q.quantity ? `${Number(q.quantity).toLocaleString()} units` : '10,000 units')}
+                      </span>
+                    </div>
+                    {q.printing && (
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-200/50">
+                        <span className="text-slate-400 font-medium text-[11px]">Printing:</span>
+                        <span className="text-slate-600 font-medium truncate max-w-[170px]">{q.printing}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Card Actions Footer */}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-slate-400 truncate max-w-[140px] font-medium">{q.email}</span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setSelectedQuote(q)}
+                        className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] bg-slate-100 hover:bg-[#B2E2C5]/20 transition-all cursor-pointer"
+                        title="View Detail"
+                        aria-label="View Detail"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleOpenEditQuote(q)}
+                        className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] bg-slate-100 hover:bg-[#B2E2C5]/20 transition-all cursor-pointer"
+                        title="Edit Quote"
+                        aria-label="Edit Quote"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteQuote(q)}
+                        className="p-2 rounded-xl text-slate-400 hover:text-rose-600 bg-rose-50 hover:bg-rose-100 transition-all cursor-pointer"
+                        title="Delete Quote"
+                        aria-label="Delete Quote"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop Table View (hidden md:block) */}
+          <div className="hidden md:block bg-white rounded-3xl border border-[#B2E2C5]/30 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    <th className="py-4 px-6">RFQ ID & Date</th>
+                    <th className="py-4 px-6">Buyer & Organization</th>
+                    <th className="py-4 px-6">Product & Volume</th>
+                    <th className="py-4 px-6">Printing Requirement</th>
+                    <th className="py-4 px-6">Status</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
-                ) : (
-                  filteredQuotes.map((q) => (
-                    <tr key={q.id} className="hover:bg-slate-50/80 transition-colors">
-                      {/* ID & Date */}
-                      <td className="py-4 px-6">
-                        <div className="font-black text-[#0f172a]">{q.id}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{q.date || 'Recent'}</div>
-                      </td>
-
-                      {/* Buyer */}
-                      <td className="py-4 px-6">
-                        <div className="font-bold text-[#0f172a]">{q.name}</div>
-                        <div className="text-[11px] text-[#4E9F76] font-medium">{q.company || 'Enterprise Wholesaler'}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{q.email}</div>
-                      </td>
-
-                      {/* Product & Volume */}
-                      <td className="py-4 px-6">
-                        <div className="font-semibold text-slate-800 capitalize">
-                          {q.category || q.bagType || 'Wholesale Packaging'}
-                        </div>
-                        <div className="text-[11px] font-black text-[#4E9F76] mt-0.5 flex items-center gap-1">
-                          <span className="text-slate-400 font-normal">Qty:</span>
-                          <span>{q.volume || (q.quantity ? `${Number(q.quantity).toLocaleString()} units` : '10,000 units')}</span>
-                        </div>
-                      </td>
-
-                      {/* Printing */}
-                      <td className="py-4 px-6">
-                        <span className="text-slate-600 font-medium">
-                          {q.printing || 'Custom Flexo Print'}
-                        </span>
-                      </td>
-
-                      {/* Status Selector */}
-                      <td className="py-4 px-6">
-                        <StatusBadgeDropdown
-                          value={q.status}
-                          onChange={(val) => updateQuoteStatus(q.id, val)}
-                          options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
-                        />
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-4 px-6 text-right">
-                        <div className="inline-flex items-center gap-1.5">
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {filteredQuotes.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-slate-400 font-medium">
+                        No quotation requests matching your filter.
+                        <div className="mt-3">
                           <button
-                            onClick={() => setSelectedQuote(q)}
-                            className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
-                            title="View Detail"
+                            onClick={handleOpenCreateQuote}
+                            className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
                           >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleOpenEditQuote(q)}
-                            className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
-                            title="Edit Quote"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteQuote(q)}
-                            className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                            title="Delete Quote"
-                          >
-                            <Trash2 className="w-4 h-4" />
+                            + Create New Quote
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    filteredQuotes.map((q) => (
+                      <tr key={q.id} className="hover:bg-slate-50/80 transition-colors">
+                        {/* ID & Date */}
+                        <td className="py-4 px-6">
+                          <div className="font-black text-[#0f172a]">{q.id}</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{q.date || 'Recent'}</div>
+                        </td>
+
+                        {/* Buyer */}
+                        <td className="py-4 px-6">
+                          <div className="font-bold text-[#0f172a]">{q.name}</div>
+                          <div className="text-[11px] text-[#4E9F76] font-medium">{q.company || 'Enterprise Wholesaler'}</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{q.email}</div>
+                        </td>
+
+                        {/* Product & Volume */}
+                        <td className="py-4 px-6">
+                          <div className="font-semibold text-slate-800 capitalize">
+                            {q.category || q.bagType || 'Wholesale Packaging'}
+                          </div>
+                          <div className="text-[11px] font-black text-[#4E9F76] mt-0.5 flex items-center gap-1">
+                            <span className="text-slate-400 font-normal">Qty:</span>
+                            <span>{q.volume || (q.quantity ? `${Number(q.quantity).toLocaleString()} units` : '10,000 units')}</span>
+                          </div>
+                        </td>
+
+                        {/* Printing */}
+                        <td className="py-4 px-6">
+                          <span className="text-slate-600 font-medium">
+                            {q.printing || 'Custom Flexo Print'}
+                          </span>
+                        </td>
+
+                        {/* Status Selector */}
+                        <td className="py-4 px-6">
+                          <StatusBadgeDropdown
+                            value={q.status}
+                            onChange={(val) => updateQuoteStatus(q.id, val)}
+                            options={['New', 'In Review', 'Quotation Sent', 'Approved', 'Declined']}
+                          />
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-4 px-6 text-right">
+                          <div className="inline-flex items-center gap-1.5">
+                            <button
+                              onClick={() => setSelectedQuote(q)}
+                              className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
+                              title="View Detail"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleOpenEditQuote(q)}
+                              className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
+                              title="Edit Quote"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteQuote(q)}
+                              className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              title="Delete Quote"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Tab 2: Orders Table */}
+      {/* Tab 2: Orders View (Mobile Cards + Desktop Table) */}
       {activeTab === 'orders' && (
-        <div className="bg-white rounded-3xl border border-[#B2E2C5]/30 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-black uppercase tracking-wider text-slate-500">
-                  <th className="py-4 px-6">Order ID & Date</th>
-                  <th className="py-4 px-6">Customer & Company</th>
-                  <th className="py-4 px-6">Items & Quantity</th>
-                  <th className="py-4 px-6">Total & Payment</th>
-                  <th className="py-4 px-6">Production Status</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs">
-                {filteredOrders.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400 font-medium">
-                      No production orders found matching your search.
-                      <div className="mt-3">
-                        <button
-                          onClick={handleOpenCreateOrder}
-                          className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
-                        >
-                          + Create New Order
-                        </button>
+        <div className="space-y-4">
+          {/* Mobile Card List (block md:hidden) */}
+          <div className="block md:hidden space-y-3">
+            {filteredOrders.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-[#B2E2C5]/30 p-8 text-center text-slate-400 font-medium">
+                No production orders found matching your search.
+                <div className="mt-3">
+                  <button
+                    onClick={handleOpenCreateOrder}
+                    className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
+                  >
+                    + Create New Order
+                  </button>
+                </div>
+              </div>
+            ) : (
+              filteredOrders.map((o) => (
+                <div key={o.id} className="bg-white rounded-3xl border border-[#B2E2C5]/40 p-4 shadow-xs space-y-3">
+                  {/* Card Header */}
+                  <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-100">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-black text-sm text-[#0f172a]">{o.id}</span>
+                        <span className="text-[10px] text-slate-400 font-medium">· {o.date || 'Recent'}</span>
                       </div>
-                    </td>
-                  </tr>
-                ) : (
-                  filteredOrders.map((o) => (
-                    <tr key={o.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-4 px-6">
-                        <div className="font-black text-[#0f172a]">{o.id}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{o.date || 'Recent'}</div>
-                      </td>
+                      <div className="font-bold text-xs text-slate-900 mt-0.5 truncate">{o.customerName || o.buyerName || 'Commercial Buyer'}</div>
+                      <div className="text-[11px] text-[#4E9F76] font-semibold truncate">{o.customerCompany || o.companyName || 'Wholesale Client'}</div>
+                    </div>
+                    <div className="shrink-0">
+                      <StatusBadgeDropdown
+                        value={o.status}
+                        onChange={(val) => updateOrderStatus(o.id, val)}
+                        options={['Pending', 'In Production', 'Shipped', 'Completed']}
+                      />
+                    </div>
+                  </div>
 
-                      <td className="py-4 px-6">
-                        <div className="font-bold text-[#0f172a]">{o.customerName || o.buyerName || 'Commercial Buyer'}</div>
-                        <div className="text-[11px] text-[#4E9F76] font-medium">{o.customerCompany || o.companyName || 'Wholesale Client'}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{o.customerEmail || o.email || '—'}</div>
-                      </td>
-
-                      <td className="py-4 px-6">
-                        {o.items && o.items.length > 0 ? (
-                          o.items.map((item, idx) => (
-                            <div key={idx} className="line-clamp-1 font-medium text-slate-700 flex items-center gap-1.5">
-                              <span className="font-bold text-[#4E9F76]">
-                                {(Number(item.quantity) || 1).toLocaleString()}x
-                              </span>
-                              <span>{item.productName || item.name || 'Custom Bag'}</span>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-slate-500 font-medium">Qty: 1,000x Custom Spec Packaging</div>
+                  {/* Order Financials & Line Items */}
+                  <div className="p-3 bg-slate-50 rounded-2xl space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 font-medium text-[11px]">Wholesale Total:</span>
+                      <span className="font-black text-sm text-[#4E9F76]">
+                        ${(o.total || o.totalAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 font-medium">Payment Terms:</span>
+                      <span className="font-medium text-slate-700 truncate max-w-[170px]">{o.paymentTerms || 'Credit Card / Instant ACH'}</span>
+                    </div>
+                    {o.items && o.items.length > 0 && (
+                      <div className="pt-1.5 border-t border-slate-200/60">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Item Summary:</span>
+                        {o.items.slice(0, 2).map((item, idx) => (
+                          <div key={idx} className="line-clamp-1 font-medium text-slate-700 flex items-center gap-1.5 text-[11px]">
+                            <span className="font-bold text-[#4E9F76]">{(Number(item.quantity) || 1).toLocaleString()}x</span>
+                            <span className="truncate">{item.productName || item.name || 'Custom Bag'}</span>
+                          </div>
+                        ))}
+                        {o.items.length > 2 && (
+                          <span className="text-[10px] text-slate-400 font-medium italic">+ {o.items.length - 2} more item(s)</span>
                         )}
-                      </td>
+                      </div>
+                    )}
+                  </div>
 
-                      <td className="py-4 px-6">
-                        <div className="font-black text-[#4E9F76]">
-                          ${(o.total || o.totalAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-0.5">{o.paymentTerms || 'Credit Card / Instant ACH'}</div>
-                      </td>
+                  {/* Card Actions Footer */}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-slate-400 truncate max-w-[140px] font-medium">{o.customerEmail || o.email || '—'}</span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setSelectedOrder(o)}
+                        className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] bg-slate-100 hover:bg-[#B2E2C5]/20 transition-all cursor-pointer"
+                        title="View Detail"
+                        aria-label="View Detail"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleOpenEditOrder(o)}
+                        className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] bg-slate-100 hover:bg-[#B2E2C5]/20 transition-all cursor-pointer"
+                        title="Edit Order"
+                        aria-label="Edit Order"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteOrder(o)}
+                        className="p-2 rounded-xl text-slate-400 hover:text-rose-600 bg-rose-50 hover:bg-rose-100 transition-all cursor-pointer"
+                        title="Delete Order"
+                        aria-label="Delete Order"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
 
-                      <td className="py-4 px-6">
-                        <StatusBadgeDropdown
-                          value={o.status}
-                          onChange={(val) => updateOrderStatus(o.id, val)}
-                          options={['Pending', 'In Production', 'Shipped', 'Completed']}
-                        />
-                      </td>
-
-                      <td className="py-4 px-6 text-right">
-                        <div className="inline-flex items-center gap-1.5">
+          {/* Desktop Table View (hidden md:block) */}
+          <div className="hidden md:block bg-white rounded-3xl border border-[#B2E2C5]/30 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                    <th className="py-4 px-6">Order ID & Date</th>
+                    <th className="py-4 px-6">Customer & Company</th>
+                    <th className="py-4 px-6">Items & Quantity</th>
+                    <th className="py-4 px-6">Total & Payment</th>
+                    <th className="py-4 px-6">Production Status</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {filteredOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-slate-400 font-medium">
+                        No production orders found matching your search.
+                        <div className="mt-3">
                           <button
-                            onClick={() => setSelectedOrder(o)}
-                            className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
-                            title="View Detail"
+                            onClick={handleOpenCreateOrder}
+                            className="px-4 py-2 bg-[#4E9F76] text-white rounded-xl text-xs font-bold"
                           >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleOpenEditOrder(o)}
-                            className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
-                            title="Edit Order"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteOrder(o)}
-                            className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                            title="Delete Order"
-                          >
-                            <Trash2 className="w-4 h-4" />
+                            + Create New Order
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    filteredOrders.map((o) => (
+                      <tr key={o.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-4 px-6">
+                          <div className="font-black text-[#0f172a]">{o.id}</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{o.date || 'Recent'}</div>
+                        </td>
+
+                        <td className="py-4 px-6">
+                          <div className="font-bold text-[#0f172a]">{o.customerName || o.buyerName || 'Commercial Buyer'}</div>
+                          <div className="text-[11px] text-[#4E9F76] font-medium">{o.customerCompany || o.companyName || 'Wholesale Client'}</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{o.customerEmail || o.email || '—'}</div>
+                        </td>
+
+                        <td className="py-4 px-6">
+                          {o.items && o.items.length > 0 ? (
+                            o.items.map((item, idx) => (
+                              <div key={idx} className="line-clamp-1 font-medium text-slate-700 flex items-center gap-1.5">
+                                <span className="font-bold text-[#4E9F76]">
+                                  {(Number(item.quantity) || 1).toLocaleString()}x
+                                </span>
+                                <span>{item.productName || item.name || 'Custom Bag'}</span>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-slate-500 font-medium">Qty: 1,000x Custom Spec Packaging</div>
+                          )}
+                        </td>
+
+                        <td className="py-4 px-6">
+                          <div className="font-black text-[#4E9F76]">
+                            ${(o.total || o.totalAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </div>
+                          <div className="text-[11px] text-slate-500 mt-0.5">{o.paymentTerms || 'Credit Card / Instant ACH'}</div>
+                        </td>
+
+                        <td className="py-4 px-6">
+                          <StatusBadgeDropdown
+                            value={o.status}
+                            onChange={(val) => updateOrderStatus(o.id, val)}
+                            options={['Pending', 'In Production', 'Shipped', 'Completed']}
+                          />
+                        </td>
+
+                        <td className="py-4 px-6 text-right">
+                          <div className="inline-flex items-center gap-1.5">
+                            <button
+                              onClick={() => setSelectedOrder(o)}
+                              className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
+                              title="View Detail"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleOpenEditOrder(o)}
+                              className="p-2 rounded-xl text-slate-600 hover:text-[#4E9F76] hover:bg-[#B2E2C5]/15 transition-colors cursor-pointer"
+                              title="Edit Order"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteOrder(o)}
+                              className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              title="Delete Order"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -775,7 +973,7 @@ export const RfqOrdersInbox: React.FC = () => {
             </div>
 
             <div className="space-y-3.5 text-xs">
-              <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl">
                 <div>
                   <span className="text-slate-400 font-semibold block">Buyer Name</span>
                   <span className="font-bold text-[#0f172a] text-sm">{selectedQuote.name}</span>
@@ -882,7 +1080,7 @@ export const RfqOrdersInbox: React.FC = () => {
             </div>
 
             <div className="space-y-4 text-xs">
-              <div className="p-4 bg-slate-50 rounded-2xl grid grid-cols-2 gap-3">
+              <div className="p-4 bg-slate-50 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <span className="text-slate-400 font-semibold block">Customer Name</span>
                   <span className="font-bold text-[#0f172a]">{selectedOrder.customerName || selectedOrder.buyerName || 'Commercial Buyer'}</span>
@@ -899,7 +1097,7 @@ export const RfqOrdersInbox: React.FC = () => {
                   <span className="text-slate-400 font-semibold block">Payment Terms</span>
                   <span className="text-slate-600 font-semibold">{selectedOrder.paymentTerms || 'Credit Card / Instant ACH'}</span>
                 </div>
-                <div className="col-span-2 pt-2 border-t border-slate-200/60">
+                <div className="sm:col-span-2 pt-2 border-t border-slate-200/60">
                   <span className="text-slate-400 font-semibold block">Shipping Destination</span>
                   <span className="text-slate-700 font-medium">{selectedOrder.shippingAddress || selectedOrder.address || 'Standard Freight Dispatch'}</span>
                 </div>
@@ -1006,7 +1204,7 @@ export const RfqOrdersInbox: React.FC = () => {
             </div>
 
             <form onSubmit={handleSaveOrder} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
                     Customer / Buyer Name *
@@ -1034,7 +1232,7 @@ export const RfqOrdersInbox: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
                     Email Address
@@ -1096,7 +1294,7 @@ export const RfqOrdersInbox: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <div>
                     <label className="block text-slate-600 mb-1 font-semibold">
                       Quantity (pcs)
@@ -1160,17 +1358,17 @@ export const RfqOrdersInbox: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-4 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsOrderModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all cursor-pointer text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold transition-all shadow-md cursor-pointer"
+                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#4E9F76] hover:bg-[#3d8560] text-white font-bold transition-all shadow-md cursor-pointer"
                 >
                   <Save className="w-3.5 h-3.5" />
                   <span>{editingOrder ? 'Update Order' : 'Create Order'}</span>
