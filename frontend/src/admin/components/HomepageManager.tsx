@@ -57,7 +57,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
     siteSettings, 
     updateSiteSettings,
     siteImages,
-    updateSiteImages
+    updateSiteImage
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<HomepageTab>('hero');
@@ -202,7 +202,7 @@ export const HomepageManager: React.FC<HomepageManagerProps> = () => {
 
     // Also update bannerImage in siteImages if changed
     if (localVersatility.bannerImage) {
-      updateSiteImages({ facilityPhoto: localVersatility.bannerImage });
+      updateSiteImage('facilityPhoto', localVersatility.bannerImage);
     }
 
     // Trigger cross-window live update
